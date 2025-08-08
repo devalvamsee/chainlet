@@ -7,8 +7,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/crypto-org-chain/cronos/versiondb"
-	"github.com/crypto-org-chain/cronos/versiondb/tsrocksdb"
+	"github.com/devalvamsee/chainlet/versiondb"
+	"github.com/devalvamsee/chainlet/versiondb/tsrocksdb"
 
 	storetypes "cosmossdk.io/store/types"
 )
@@ -35,7 +35,7 @@ func (app *App) setupVersionDB(
 		exposedKeys = append(exposedKeys, key)
 	}
 
-	// see: https://github.com/crypto-org-chain/cronos/issues/1683
+	// see: https://github.com/devalvamsee/chainlet/issues/1683
 	versionDB.SetSkipVersionZero(true)
 
 	app.CommitMultiStore().AddListeners(exposedKeys)

@@ -3,8 +3,8 @@ package store
 import (
 	"path/filepath"
 
-	"github.com/crypto-org-chain/cronos/memiavl"
-	"github.com/crypto-org-chain/cronos/store/rootmulti"
+	"github.com/devalvamsee/chainlet/memiavl"
+	"github.com/devalvamsee/chainlet/store/rootmulti"
 	"github.com/spf13/cast"
 
 	"cosmossdk.io/log"

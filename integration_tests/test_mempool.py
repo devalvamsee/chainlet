@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 from web3 import Web3
 
-from .network import setup_custom_cronos
+from .network import setup_custom_chainlet
 from .utils import (
     ADDRS,
     CONTRACTS,
@@ -18,20 +18,20 @@ pytestmark = pytest.mark.slow
 
 
 @pytest.fixture(scope="module")
-def cronos_mempool(tmp_path_factory):
-    path = tmp_path_factory.mktemp("cronos-mempool")
-    yield from setup_custom_cronos(
+def chainlet_mempool(tmp_path_factory):
+    path = tmp_path_factory.mktemp("chainlet-mempool")
+    yield from setup_custom_chainlet(
         path, 26300, Path(__file__).parent / "configs/long_timeout_commit.jsonnet"
     )
 
 
 @pytest.mark.flaky(max_runs=5)
-def test_mempool(cronos_mempool):
-    w3: Web3 = cronos_mempool.w3
+def test_mempool(chainlet_mempool):
+    w3: Web3 = chainlet_mempool.w3
     filter = w3.eth.filter("pending")
     assert filter.get_new_entries() == []
 
-    cli = cronos_mempool.cosmos_cli(0)
+    cli = chainlet_mempool.cosmos_cli(0)
     # test contract
     wait_for_new_blocks(cli, 1, sleep=0.1)
     block_num_2 = w3.eth.get_block_number()
@@ -75,15 +75,15 @@ def test_mempool(cronos_mempool):
     assert len(all_pending) == 0
 
 
-def test_blocked_address(cronos_mempool):
-    cli = cronos_mempool.cosmos_cli(0)
+def test_blocked_address(chainlet_mempool):
+    cli = chainlet_mempool.cosmos_cli(0)
     rsp = cli.transfer("signer1", cli.address("validator"), "1basecro")
     assert rsp["code"] != 0
     assert "signer is blocked" in rsp["raw_log"]
 
 
 @pytest.mark.flaky(max_runs=3)
-def test_mempool_nonce(cronos_mempool):
+def test_mempool_nonce(chainlet_mempool):
     """
     test the nonce logic in check-tx after new block is created.
 
@@ -97,8 +97,8 @@ def test_mempool_nonce(cronos_mempool):
     bring it back in sync with pending txs, so the client can keep sending new
     transactions with local nonce.
     """
-    w3: Web3 = cronos_mempool.w3
-    cli = cronos_mempool.cosmos_cli(0)
+    w3: Web3 = chainlet_mempool.w3
+    cli = chainlet_mempool.cosmos_cli(0)
     wait_for_new_blocks(cli, 1, sleep=0.1)
     sender = ADDRS["validator"]
     orig_nonce = w3.eth.get_transaction_count(sender)

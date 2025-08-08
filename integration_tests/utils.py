@@ -77,11 +77,11 @@ def contract_path(name, filename):
 
 CONTRACTS = {
     "ModuleCRC20": Path(__file__).parent.parent
-    / "x/cronos/types/contracts/ModuleCRC20.json",
+    / "x/chainlet/types/contracts/ModuleCRC20.json",
     "ModuleCRC21": Path(__file__).parent.parent
-    / "x/cronos/types/contracts/ModuleCRC21.json",
+    / "x/chainlet/types/contracts/ModuleCRC21.json",
     "ModuleCRC20Proxy": Path(__file__).parent.parent
-    / "x/cronos/types/contracts/ModuleCRC20Proxy.json",
+    / "x/chainlet/types/contracts/ModuleCRC20Proxy.json",
     **{
         name: contract_path(name, filename) for name, filename in TEST_CONTRACTS.items()
     },
@@ -214,18 +214,18 @@ def approve_proposal(
         assert proposal["status"] == "PROPOSAL_STATUS_REJECTED", proposal
 
 
-def submit_gov_proposal(cronos, msg, **kwargs):
+def submit_gov_proposal(chainlet, msg, **kwargs):
     proposal_json = {
         "title": "title",
         "summary": "summary",
         "deposit": "1basetcro",
         **kwargs,
     }
-    rsp = cronos.cosmos_cli().submit_gov_proposal(
+    rsp = chainlet.cosmos_cli().submit_gov_proposal(
         "community", "submit-proposal", proposal_json, broadcast_mode="sync"
     )
     assert rsp["code"] == 0, rsp["raw_log"]
-    approve_proposal(cronos, rsp["events"], msg=msg)
+    approve_proposal(chainlet, rsp["events"], msg=msg)
     print("check params have been updated now")
 
 
@@ -457,8 +457,8 @@ def send_transaction(w3, tx, key=KEYS["validator"]):
     return w3.eth.wait_for_transaction_receipt(txhash)
 
 
-def cronos_address_from_mnemonics(mnemonics, prefix=CRONOS_ADDRESS_PREFIX):
-    "return cronos address from mnemonics"
+def chainlet_address_from_mnemonics(mnemonics, prefix=CRONOS_ADDRESS_PREFIX):
+    "return chainlet address from mnemonics"
     acct = Account.from_mnemonic(mnemonics)
     return eth_to_bech32(acct.address, prefix)
 
@@ -584,7 +584,7 @@ def modify_command_in_supervisor_config(ini: Path, fn, **kwargs):
     "replace the first node with the instrumented binary"
     ini.write_text(
         re.sub(
-            r"^command = (cronosd .*$)",
+            r"^command = (chainletd .*$)",
             lambda m: f"command = {fn(m.group(1))}",
             ini.read_text(),
             flags=re.M,
@@ -631,7 +631,7 @@ def build_batch_tx(w3, cli, txs, key=KEYS["validator"]):
 def get_receipts_by_block(w3, blk):
     if isinstance(blk, int):
         blk = hex(blk)
-    rsp = w3.provider.make_request("cronos_getTransactionReceiptsByBlock", [blk])
+    rsp = w3.provider.make_request("chainlet_getTransactionReceiptsByBlock", [blk])
     if "error" not in rsp:
         rsp["result"] = [
             AttributeDict(receipt_formatter(item)) for item in rsp["result"]
@@ -693,31 +693,31 @@ def multiple_send_to_cosmos(gcontract, tcontract, w3, recipient, amount, keys):
     return send_raw_transactions(w3, raw_transactions)
 
 
-def setup_token_mapping(cronos, name, symbol):
+def setup_token_mapping(chainlet, name, symbol):
     # deploy contract
-    w3 = cronos.w3
+    w3 = chainlet.w3
     contract = deploy_contract(w3, CONTRACTS[name])
 
     # setup the contract mapping
-    cronos_cli = cronos.cosmos_cli()
+    chainlet_cli = chainlet.cosmos_cli()
 
     print("contract", contract.address)
-    denom = f"cronos{contract.address}"
+    denom = f"chainlet{contract.address}"
     balance = contract.caller.balanceOf(ADDRS["validator"])
     assert balance == 100000000000000000000000000
 
     print("check the contract mapping not exists yet")
     with pytest.raises(AssertionError):
-        cronos_cli.query_contract_by_denom(denom)
+        chainlet_cli.query_contract_by_denom(denom)
 
-    rsp = cronos_cli.update_token_mapping(
+    rsp = chainlet_cli.update_token_mapping(
         denom, contract.address, symbol, 6, from_="validator"
     )
     assert rsp["code"] == 0, rsp["raw_log"]
-    wait_for_new_blocks(cronos_cli, 1)
+    wait_for_new_blocks(chainlet_cli, 1)
 
     print("check the contract mapping exists now")
-    rsp = cronos_cli.query_denom_by_contract(contract.address)
+    rsp = chainlet_cli.query_denom_by_contract(contract.address)
     assert rsp["denom"] == denom
     return contract, denom
 
@@ -727,9 +727,9 @@ def module_address(name):
     return to_checksum_address(decode_bech32(eth_to_bech32(data)).hex())
 
 
-def submit_any_proposal(cronos):
+def submit_any_proposal(chainlet):
     # governance module account as granter
-    cli = cronos.cosmos_cli()
+    cli = chainlet.cosmos_cli()
     granter_addr = "crc10d07y265gmmuvt4z0w9aw880jnsr700jdufnyd"
     grantee_addr = cli.address("signer1")
 
@@ -756,7 +756,7 @@ def submit_any_proposal(cronos):
         "community", "submit-proposal", proposal_json, broadcast_mode="sync"
     )
     assert rsp["code"] == 0, rsp["raw_log"]
-    approve_proposal(cronos, rsp["events"], msg=msg)
+    approve_proposal(chainlet, rsp["events"], msg=msg)
     grant_detail = cli.query_grant(granter_addr, grantee_addr)
     assert grant_detail["granter"] == granter_addr
     assert grant_detail["grantee"] == grantee_addr

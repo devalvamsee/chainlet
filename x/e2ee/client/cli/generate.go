@@ -30,7 +30,7 @@ func KeygenCommand() *cobra.Command {
 				return err
 			}
 
-			kr, err := keyring.New("cronosd", clientCtx.Keyring.Backend(), clientCtx.HomeDir, os.Stdin)
+			kr, err := keyring.New("chainletd", clientCtx.Keyring.Backend(), clientCtx.HomeDir, os.Stdin)
 			if err != nil {
 				return err
 			}

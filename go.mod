@@ -25,8 +25,8 @@ require (
 	// release/v10.0.x
 	github.com/cosmos/ibc-go/v10 v10.1.1
 	github.com/cosmos/rosetta v0.50.12
-	github.com/crypto-org-chain/cronos/store v0.0.4
-	github.com/crypto-org-chain/cronos/versiondb v0.0.0-00010101000000-000000000000
+	github.com/devalvamsee/chainlet/store v0.0.4
+	github.com/devalvamsee/chainlet/versiondb v0.0.0-00010101000000-000000000000
 	github.com/ethereum/go-ethereum v1.15.5
 	github.com/evmos/ethermint v0.0.0-00010101000000-000000000000
 	github.com/golang/protobuf v1.5.4
@@ -102,7 +102,7 @@ require (
 	github.com/cosmos/rosetta-sdk-go v0.10.0 // indirect
 	github.com/creachadair/atomicfile v0.3.1 // indirect
 	github.com/creachadair/tomledit v0.0.24 // indirect
-	github.com/crypto-org-chain/cronos/memiavl v0.0.4 // indirect
+	github.com/devalvamsee/chainlet/memiavl v0.0.4 // indirect
 	github.com/crypto-org-chain/go-block-stm v0.0.0-20241213061541-7afe924fb4a6 // indirect
 	github.com/danieljoos/wincred v1.2.1 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
@@ -272,9 +272,9 @@ replace (
 )
 
 replace (
-	github.com/crypto-org-chain/cronos/memiavl => ./memiavl
-	github.com/crypto-org-chain/cronos/store => ./store
-	github.com/crypto-org-chain/cronos/versiondb => ./versiondb
+	github.com/devalvamsee/chainlet/memiavl => ./memiavl
+	github.com/devalvamsee/chainlet/store => ./store
+	github.com/devalvamsee/chainlet/versiondb => ./versiondb
 )
 
 replace (

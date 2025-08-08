@@ -4,7 +4,7 @@
 }:
 pkgs.mkShell {
   buildInputs = [
-    (pkgs.callPackage ../. { coverage = true; }) # cronosd
+    (pkgs.callPackage ../. { coverage = true; }) # chainletd
     pkgs.start-scripts
     pkgs.go-ethereum
     pkgs.cosmovisor

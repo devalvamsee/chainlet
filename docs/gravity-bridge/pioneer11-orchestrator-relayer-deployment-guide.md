@@ -19,7 +19,7 @@ You can use a nodes as a service provider as discussed [here](https://ethereum.o
 
 ### Binaries
 
--  `cronosd` version: `0.8.0` , the cronos node binary found at https://github.com/crypto-org-chain/cronos/releases/tag/v0.8.0-gravity-alpha0. You will need to use one of the testnet binaries according to your OS/ Arch.
+-  `cronosd` version: `0.8.0` , the cronos node binary found at https://github.com/devalvamsee/chainlet/releases/tag/v0.8.0-gravity-alpha0. You will need to use one of the testnet binaries according to your OS/ Arch.
 
 - `gorc`, the gravity bridge orchestrator cli, build instructions can be found [here](gorc-build.md). Alternatively, you can download Linux x86_64 binary from [here](https://github.com/crypto-org-chain/gravity-bridge/releases/tag/v2.0.0-cronos-alpha0)
 
@@ -138,7 +138,7 @@ The orchestrator is running now.
 To set up the Orchestrator (and relayer) as a service, you can run:
 
 ```bash
-bash <(curl -s -L https://raw.githubusercontent.com/crypto-org-chain/cronos/main/docs/gravity-bridge/systemd/setup-gorc-service.sh) -t orchestrator
+bash <(curl -s -L https://raw.githubusercontent.com/devalvamsee/chainlet/main/docs/gravity-bridge/systemd/setup-gorc-service.sh) -t orchestrator
 ```
 
 You will be prompted for your key names set up earlier. After the service is created, you can run:
@@ -182,5 +182,5 @@ Here are the deployed token mappings:
    -  https://github.com/crypto-org-chain/gravity-bridge/blob/v2.0.0-cronos-alpha0/solidity/contracts/EthGravityWrapper.sol
 
 3. CroBridge :
-   - https://github.com/crypto-org-chain/cronos/blob/v0.8.0-gravity-alpha0/integration_tests/contracts/contracts/CroBridge.sol
+   - https://github.com/devalvamsee/chainlet/blob/v0.8.0-gravity-alpha0/integration_tests/contracts/contracts/CroBridge.sol
 

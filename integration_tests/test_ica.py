@@ -43,7 +43,7 @@ def test_ica(ibc, order, tmp_path):
     signer = "signer2" if order == ChannelOrder.ORDERED.value else "community"
     connid = "connection-0"
     cli_host = ibc.chainmain.cosmos_cli()
-    cli_controller = ibc.cronos.cosmos_cli()
+    cli_controller = ibc.chainlet.cosmos_cli()
     ica_address, port_id, channel_id = register_acc(
         cli_controller, connid, ordering=order, signer=signer
     )
@@ -52,7 +52,7 @@ def test_ica(ibc, order, tmp_path):
     amount = 1000
     denom = "basecro"
     jsonfile = CONTRACTS["TestICA"]
-    tcontract = deploy_contract(ibc.cronos.w3, jsonfile)
+    tcontract = deploy_contract(ibc.chainlet.w3, jsonfile)
     timeout_in_ns = 6000000000
     seq = 1
     msg_num = 10
@@ -149,7 +149,7 @@ def test_ica(ibc, order, tmp_path):
         )
         assert rsp["code"] == 0, rsp["raw_log"]
         approve_proposal(
-            ibc.cronos, rsp["events"], msg="ibc.core.channel.v1.MsgChannelUpgradeInit"
+            ibc.chainlet, rsp["events"], msg="ibc.core.channel.v1.MsgChannelUpgradeInit"
         )
         wait_for_check_channel_ready(
             cli_controller, connid, channel_id2, "STATE_FLUSHCOMPLETE"

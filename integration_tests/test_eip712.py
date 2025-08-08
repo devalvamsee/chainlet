@@ -14,16 +14,16 @@ from .eip712_utils import (
 from .utils import ADDRS, KEYS
 
 
-def test_native_tx(cronos):
+def test_native_tx(chainlet):
     """
     test eip-712 tx works:
     """
-    cli = cronos.cosmos_cli()
-    w3 = cronos.w3
+    cli = chainlet.cosmos_cli()
+    w3 = chainlet.w3
     chain_id = w3.eth.chain_id
     chain = {
         "chainId": chain_id,
-        "cosmosChainId": f"cronos_{chain_id}-1",
+        "cosmosChainId": f"chainlet_{chain_id}-1",
     }
     src = "community"
     src_addr = cli.address(src)
@@ -68,7 +68,7 @@ def test_native_tx(cronos):
         "tx_bytes": tx_bytes.decode("utf-8"),
         "mode": "BROADCAST_MODE_SYNC",
     }
-    p = ports.api_port(cronos.base_port(0))
+    p = ports.api_port(chainlet.base_port(0))
     url = f"http://127.0.0.1:{p}/cosmos/tx/v1beta1/txs"
     response = requests.post(url, json=body)
     if not response.ok:

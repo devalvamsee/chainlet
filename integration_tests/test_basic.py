@@ -41,15 +41,15 @@ from .utils import (
 )
 
 
-def test_ica_enabled(cronos, tmp_path):
-    cli = cronos.cosmos_cli()
+def test_ica_enabled(chainlet, tmp_path):
+    cli = chainlet.cosmos_cli()
     param0 = cli.query_params("gov")
     param1 = get_expedited_params(param0)
     # governance module account as signer
     authority = module_address("gov")
     msg = "/cosmos.gov.v1.MsgUpdateParams"
     submit_gov_proposal(
-        cronos,
+        chainlet,
         msg,
         messages=[
             {
@@ -69,7 +69,7 @@ def test_ica_enabled(cronos, tmp_path):
     p["controller_enabled"] = False
     msg = "/ibc.applications.interchain_accounts.controller.v1.MsgUpdateParams"
     submit_gov_proposal(
-        cronos,
+        chainlet,
         msg,
         messages=[
             {
@@ -147,8 +147,8 @@ def test_events(cluster, suspend_capture):
         assert topic in bloom
 
 
-def test_minimal_gas_price(cronos):
-    w3 = cronos.w3
+def test_minimal_gas_price(chainlet):
+    w3 = chainlet.w3
     gas_price = w3.eth.gas_price
     tx = {
         "to": "0x0000000000000000000000000000000000000000",
@@ -168,15 +168,15 @@ def test_minimal_gas_price(cronos):
     assert receipt.status == 1
 
 
-def test_native_call(cronos):
+def test_native_call(chainlet):
     """
-    test contract native call on cronos network
+    test contract native call on chainlet network
     - deploy test contract
     - run native call, expect failure, because no native fund in contract
     - send native tokens to contract account
     - run again, expect success and check balance
     """
-    w3 = cronos.w3
+    w3 = chainlet.w3
     contract = deploy_contract(
         w3,
         CONTRACTS["TestERC20A"],
@@ -194,21 +194,21 @@ def test_native_call(cronos):
     assert receipt.status == 0
 
 
-def test_statesync(cronos):
-    # cronos fixture
-    # Load cronos-devnet.yaml
+def test_statesync(chainlet):
+    # chainlet fixture
+    # Load chainlet-devnet.yaml
     # Spawn pystarport with the yaml, port 26650
     # (multiple nodes will be created based on `validators`)
     # Return a Cronos object (Defined in network.py)
-    w3 = cronos.w3
+    w3 = chainlet.w3
 
     # do some transactions
     # DEPRECATED: Do a tx bank transaction
     # from_addr = "crc1q04jewhxw4xxu3vlg3rc85240h9q7ns6hglz0g"
     # to_addr = "crc16z0herz998946wr659lr84c8c556da55dc34hh"
     # coins = "10basetcro"
-    # node = cronos.node_rpc(0)
-    # txhash_0 = cronos.cosmos_cli(0).transfer(from_addr, to_addr, coins)["txhash"]
+    # node = chainlet.node_rpc(0)
+    # txhash_0 = chainlet.cosmos_cli(0).transfer(from_addr, to_addr, coins)["txhash"]
 
     # Do an ethereum transfer
     tx_value = 10000
@@ -227,7 +227,7 @@ def test_statesync(cronos):
     assert w3.eth.get_balance(ADDRS["community"]) == initial_balance + tx_value
 
     # Wait 5 more block (sometimes not enough blocks can not work)
-    cli0 = cronos.cosmos_cli(0)
+    cli0 = chainlet.cosmos_cli(0)
     wait_for_block(cli0, cli0.block_height() + 5)
 
     # Check the transactions are added
@@ -235,11 +235,11 @@ def test_statesync(cronos):
     assert w3.eth.get_transaction(txhash_1) is not None
 
     # add a new state sync node, sync
-    # We can not use the cronos fixture to do statesync, since they are full nodes.
+    # We can not use the chainlet fixture to do statesync, since they are full nodes.
     # We can only create a new node with statesync config
-    data = Path(cronos.base_dir).parent  # Same data dir as cronos fixture
-    chain_id = cronos.config["chain_id"]  # Same chain_id as cronos fixture
-    cmd = "cronosd"
+    data = Path(chainlet.base_dir).parent  # Same data dir as chainlet fixture
+    chain_id = chainlet.config["chain_id"]  # Same chain_id as chainlet fixture
+    cmd = "chainletd"
     # create a clustercli object from ClusterCLI class
     clustercli = cluster.ClusterCLI(data, cmd=cmd, chain_id=chain_id)
     # create a new node with statesync enabled
@@ -303,7 +303,7 @@ def test_statesync(cronos):
     clustercli.supervisor.stopProcess(f"{clustercli.chain_id}-node{i}")
 
 
-def test_local_statesync(cronos, tmp_path_factory):
+def test_local_statesync(chainlet, tmp_path_factory):
     """
     - init a new node, enable versiondb
     - dump snapshot on node0
@@ -315,11 +315,11 @@ def test_local_statesync(cronos, tmp_path_factory):
     - cleanup
     """
     # wait for the network to grow a little bit
-    cli0 = cronos.cosmos_cli(0)
+    cli0 = chainlet.cosmos_cli(0)
     wait_for_block(cli0, 6)
 
     sync_info = get_sync_info(cli0.status())
-    cronos.supervisorctl("stop", "cronos_777-1-node0")
+    chainlet.supervisorctl("stop", "chainlet_777-1-node0")
     tarball = cli0.data_dir / "snapshot.tar.gz"
     height = int(sync_info["latest_block_height"])
     # round down to multiples of memiavl.snapshot-interval
@@ -329,21 +329,21 @@ def test_local_statesync(cronos, tmp_path_factory):
         cli0.export_snapshot(height)
 
     cli0.dump_snapshot(height, tarball)
-    cronos.supervisorctl("start", "cronos_777-1-node0")
-    wait_for_port(ports.evmrpc_port(cronos.base_port(0)))
+    chainlet.supervisorctl("start", "chainlet_777-1-node0")
+    wait_for_port(ports.evmrpc_port(chainlet.base_port(0)))
 
     home = tmp_path_factory.mktemp("local_statesync")
     print("home", home)
 
-    i = len(cronos.config["validators"])
+    i = len(chainlet.config["validators"])
     base_port = 26650 + i * 10
     node_rpc = "tcp://127.0.0.1:%d" % ports.rpc_port(base_port)
     cli = CosmosCLI.init(
         "local_statesync",
         Path(home),
         node_rpc,
-        cronos.chain_binary,
-        "cronos_777-1",
+        chainlet.chain_binary,
+        "chainlet_777-1",
     )
 
     # init the configs
@@ -351,14 +351,14 @@ def test_local_statesync(cronos, tmp_path_factory):
         [
             "tcp://%s@%s:%d"
             % (
-                cronos.cosmos_cli(i).node_id(),
+                chainlet.cosmos_cli(i).node_id(),
                 val["hostname"],
                 ports.p2p_port(val["base_port"]),
             )
-            for i, val in enumerate(cronos.config["validators"])
+            for i, val in enumerate(chainlet.config["validators"])
         ]
     )
-    rpc_servers = ",".join(cronos.node_rpc(i) for i in range(2))
+    rpc_servers = ",".join(chainlet.node_rpc(i) for i in range(2))
     trust_height = int(sync_info["latest_block_height"])
     trust_hash = sync_info["latest_block_hash"]
 
@@ -396,7 +396,7 @@ def test_local_statesync(cronos, tmp_path_factory):
     cli.restore_versiondb(height)
 
     with subprocess.Popen(
-        [cronos.chain_binary, "start", "--home", home],
+        [chainlet.chain_binary, "start", "--home", home],
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
     ):
@@ -411,8 +411,8 @@ def test_local_statesync(cronos, tmp_path_factory):
         assert "collections: not found" in exc_info.value.args[0]
 
 
-def test_transaction(cronos):
-    w3 = cronos.w3
+def test_transaction(chainlet):
+    w3 = chainlet.w3
     gas_price = w3.eth.gas_price
 
     # send transaction
@@ -644,9 +644,9 @@ def test_refund_unused_gas_when_contract_tx_reverted(cluster):
     )
 
 
-def test_message_call(cronos):
+def test_message_call(chainlet):
     "stress test the evm by doing message calls as much as possible"
-    w3 = cronos.w3
+    w3 = chainlet.w3
     contract = deploy_contract(
         w3,
         CONTRACTS["TestMessageCall"],
@@ -694,10 +694,10 @@ def test_suicide(cluster):
     assert len(w3.eth.get_code(destroyee.address)) == 0
 
 
-def test_batch_tx(cronos):
+def test_batch_tx(chainlet):
     "send multiple eth txs in single cosmos tx"
-    w3 = cronos.w3
-    cli = cronos.cosmos_cli()
+    w3 = chainlet.w3
+    cli = chainlet.cosmos_cli()
     sender = ADDRS["validator"]
     recipient = ADDRS["community"]
     nonce = w3.eth.get_transaction_count(sender)
@@ -768,12 +768,12 @@ def test_batch_tx(cronos):
         assert txs[i].transactionIndex == i
 
 
-def test_failed_transfer_tx(cronos):
+def test_failed_transfer_tx(chainlet):
     """
     It's possible to include a failed transfer transaction in batch tx
     """
-    w3 = cronos.w3
-    cli = cronos.cosmos_cli()
+    w3 = chainlet.w3
+    cli = chainlet.cosmos_cli()
     sender = ADDRS["community"]
     recipient = ADDRS["validator"]
     nonce = w3.eth.get_transaction_count(sender)
@@ -804,7 +804,7 @@ def test_failed_transfer_tx(cronos):
     assert receipts[0].status == receipts[1].status == 1
     assert receipts[2].status == 0
 
-    # test the cronos_getTransactionReceiptsByBlock api
+    # test the chainlet_getTransactionReceiptsByBlock api
     rsp = get_receipts_by_block(w3, receipts[0].blockNumber)
     assert "error" not in rsp, rsp["error"]
     assert len(receipts) == len(rsp["result"])
@@ -848,9 +848,9 @@ def test_log0(cluster):
     assert log.data == HexBytes(data)
 
 
-def test_contract(cronos):
+def test_contract(chainlet):
     "test Greeter contract"
-    w3 = cronos.w3
+    w3 = chainlet.w3
     contract = deploy_contract(w3, CONTRACTS["Greeter"])
     assert "Hello" == contract.caller.greet()
 
@@ -869,7 +869,7 @@ origin_cmd = None
 
 @pytest.mark.unmarked
 @pytest.mark.parametrize("max_gas_wanted", [80000000, 40000000, 25000000, 500000, None])
-def test_tx_inclusion(cronos, max_gas_wanted):
+def test_tx_inclusion(chainlet, max_gas_wanted):
     """
     - send multiple heavy transactions at the same time.
     - check they are included in consecutively blocks without failure.
@@ -886,18 +886,18 @@ def test_tx_inclusion(cronos, max_gas_wanted):
         return f"{origin_cmd} --evm.max-tx-gas-wanted {max_gas_wanted}"
 
     modify_command_in_supervisor_config(
-        cronos.base_dir / "tasks.ini",
+        chainlet.base_dir / "tasks.ini",
         lambda cmd: fn(cmd),
     )
-    cronos.supervisorctl("update")
-    wait_for_port(ports.evmrpc_port(cronos.base_port(0)))
+    chainlet.supervisorctl("update")
+    wait_for_port(ports.evmrpc_port(chainlet.base_port(0)))
 
     # reset to origin_cmd only
     if max_gas_wanted is None:
         return
 
-    cli = cronos.cosmos_cli()
-    w3 = cronos.w3
+    cli = chainlet.cosmos_cli()
+    w3 = chainlet.w3
     block_gas_limit = 81500000
     tx_gas_limit = 80000000
     max_tx_in_block = block_gas_limit // min(max_gas_wanted, tx_gas_limit)
@@ -921,8 +921,8 @@ def test_tx_inclusion(cronos, max_gas_wanted):
             assert num == block_nums[0] + 1 or num == block_nums[0] + 2
 
 
-def test_replay_protection(cronos):
-    w3 = cronos.w3
+def test_replay_protection(chainlet):
+    w3 = chainlet.w3
     # https://etherscan.io/tx/0x06d2fa464546e99d2147e1fc997ddb624cec9c8c5e25a050cc381ee8a384eed3
     raw = (
         (
@@ -941,14 +941,14 @@ def test_replay_protection(cronos):
 
 
 @pytest.mark.gov
-def test_submit_any_proposal(cronos):
-    submit_any_proposal(cronos)
+def test_submit_any_proposal(chainlet):
+    submit_any_proposal(chainlet)
 
 
 @pytest.mark.gov
-def test_submit_send_enabled(cronos):
+def test_submit_send_enabled(chainlet):
     # check bank send enable
-    cli = cronos.cosmos_cli()
+    cli = chainlet.cosmos_cli()
     denoms = ["basetcro", "stake"]
     assert len(cli.query_bank_send(*denoms)) == 0, "should be empty"
     send_enable = [
@@ -958,7 +958,7 @@ def test_submit_send_enabled(cronos):
     authority = module_address("gov")
     msg = "/cosmos.bank.v1beta1.MsgSetSendEnabled"
     submit_gov_proposal(
-        cronos,
+        chainlet,
         msg,
         messages=[
             {
@@ -971,13 +971,13 @@ def test_submit_send_enabled(cronos):
     assert cli.query_bank_send(*denoms) == send_enable
 
 
-def test_block_stm_delete(cronos):
+def test_block_stm_delete(chainlet):
     """
     this test case revealed a bug in block-stm,
     see: https://github.com/crypto-org-chain/go-block-stm/pull/11
     """
-    w3 = cronos.w3
-    cli = cronos.cosmos_cli()
+    w3 = chainlet.w3
+    cli = chainlet.cosmos_cli()
     acc = derive_new_account(3)
     sender = acc.address
 
@@ -1008,8 +1008,8 @@ def test_block_stm_delete(cronos):
     w3_wait_for_block(w3, w3.eth.block_number + 3, timeout=30)
 
 
-def test_multi_acc(cronos):
-    cli = cronos.cosmos_cli()
+def test_multi_acc(chainlet):
+    cli = chainlet.cosmos_cli()
     cli.make_multisig("multitest1", "signer1", "signer2")
     multi_addr = cli.address("multitest1")
     signer1 = cli.address("signer1")
@@ -1019,8 +1019,8 @@ def test_multi_acc(cronos):
     assert res["account_address"] == multi_addr
 
 
-def test_textual(cronos):
-    cli = cronos.cosmos_cli()
+def test_textual(chainlet):
+    cli = chainlet.cosmos_cli()
     rsp = cli.transfer(
         cli.address("validator"),
         cli.address("signer2"),

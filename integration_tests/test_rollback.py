@@ -6,7 +6,7 @@ import pytest
 from pystarport import ports
 from pystarport.cluster import SUPERVISOR_CONFIG_FILE
 
-from .network import setup_custom_cronos
+from .network import setup_custom_chainlet
 from .utils import supervisorctl, wait_for_block, wait_for_port
 
 pytestmark = pytest.mark.slow
@@ -17,7 +17,7 @@ def update_node_cmd(path, cmd, i):
     ini = configparser.RawConfigParser()
     ini.read(ini_path)
     for section in ini.sections():
-        if section == f"program:cronos_777-1-node{i}":
+        if section == f"program:chainlet_777-1-node{i}":
             ini[section].update(
                 {
                     "command": f"{cmd} start --home %(here)s/node{i}",
@@ -30,7 +30,7 @@ def update_node_cmd(path, cmd, i):
 
 def post_init(broken_binary):
     def inner(path, base_port, config):
-        chain_id = "cronos_777-1"
+        chain_id = "chainlet_777-1"
         update_node_cmd(path / chain_id, broken_binary, 3)
         update_node_cmd(path / chain_id, broken_binary, 4)
 
@@ -38,20 +38,20 @@ def post_init(broken_binary):
 
 
 @pytest.fixture(scope="module")
-def custom_cronos(tmp_path_factory):
+def custom_chainlet(tmp_path_factory):
     path = tmp_path_factory.mktemp("rollback")
 
     cmd = [
         "nix-build",
         "--no-out-link",
-        Path(__file__).parent / "configs/broken-cronosd.nix",
+        Path(__file__).parent / "configs/broken-chainletd.nix",
     ]
     print(*cmd)
-    broken_binary = Path(subprocess.check_output(cmd).strip().decode()) / "bin/cronosd"
+    broken_binary = Path(subprocess.check_output(cmd).strip().decode()) / "bin/chainletd"
     print(broken_binary)
 
     # init with genesis binary
-    yield from setup_custom_cronos(
+    yield from setup_custom_chainlet(
         path,
         26400,
         Path(__file__).parent / "configs/rollback.jsonnet",
@@ -60,7 +60,7 @@ def custom_cronos(tmp_path_factory):
     )
 
 
-def test_rollback(custom_cronos):
+def test_rollback(custom_chainlet):
     """
     test using rollback command to fix app-hash mismatch situation.
     - the broken node will sync up to block 10 then crash.
@@ -71,14 +71,14 @@ def test_rollback(custom_cronos):
     node4: test iavl node
     """
     nodes = [3, 4]
-    clis = {i: custom_cronos.cosmos_cli(i) for i in nodes}
+    clis = {i: custom_chainlet.cosmos_cli(i) for i in nodes}
     for i, cli in clis.items():
-        wait_for_port(ports.rpc_port(custom_cronos.base_port(i)))
+        wait_for_port(ports.rpc_port(custom_chainlet.base_port(i)))
         print(f"wait for node {i} to sync the first 10 blocks")
         wait_for_block(cli, 10)
 
     print("wait for a few more blocks on the healthy nodes")
-    cli = custom_cronos.cosmos_cli(0)
+    cli = custom_chainlet.cosmos_cli(0)
     wait_for_block(cli, 13)
 
     # (app hash mismatch happens after the 10th block, detected in the 11th block)
@@ -88,20 +88,20 @@ def test_rollback(custom_cronos):
 
         print(f"stop node {i}")
         supervisorctl(
-            custom_cronos.base_dir / "../tasks.ini", "stop", f"cronos_777-1-node{i}"
+            custom_chainlet.base_dir / "../tasks.ini", "stop", f"chainlet_777-1-node{i}"
         )
 
         print(f"do rollback on node{i}")
         cli.rollback()
 
         print("switch to normal binary")
-        update_node_cmd(custom_cronos.base_dir, "cronosd", i)
+        update_node_cmd(custom_chainlet.base_dir, "chainletd", i)
 
-    supervisorctl(custom_cronos.base_dir / "../tasks.ini", "update")
+    supervisorctl(custom_chainlet.base_dir / "../tasks.ini", "update")
 
     for i in clis:
-        wait_for_port(ports.rpc_port(custom_cronos.base_port(i)))
+        wait_for_port(ports.rpc_port(custom_chainlet.base_port(i)))
 
         print(f"check node{i} sync again")
-        cli = custom_cronos.cosmos_cli(i)
+        cli = custom_chainlet.cosmos_cli(i)
         wait_for_block(cli, 15)

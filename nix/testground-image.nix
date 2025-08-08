@@ -1,12 +1,12 @@
 {
   dockerTools,
   runCommandLocal,
-  cronos-matrix,
+  chainlet-matrix,
   benchmark-testcase,
 }:
 let
-  patched-cronosd = cronos-matrix.cronosd.overrideAttrs (oldAttrs: {
-    patches = oldAttrs.patches or [ ] ++ [ ./testground-cronosd.patch ];
+  patched-chainletd = chainlet-matrix.chainletd.overrideAttrs (oldAttrs: {
+    patches = oldAttrs.patches or [ ] ++ [ ./testground-chainletd.patch ];
   });
 in
 let
@@ -15,11 +15,11 @@ let
   '';
 in
 dockerTools.buildLayeredImage {
-  name = "cronos-testground";
+  name = "chainlet-testground";
   created = "now";
   contents = [
     benchmark-testcase
-    patched-cronosd
+    patched-chainletd
     tmpDir
   ];
   config = {

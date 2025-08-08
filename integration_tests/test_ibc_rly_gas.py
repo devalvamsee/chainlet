@@ -29,8 +29,8 @@ records = []
 
 
 def test_ibc(ibc):
-    # chainmain-1 relayer -> cronos_777-1 signer2
-    cli = ibc.cronos.cosmos_cli()
+    # chainmain-1 relayer -> chainlet_777-1 signer2
+    cli = ibc.chainlet.cosmos_cli()
     wait_for_new_blocks(cli, 1)
     ibc_transfer(ibc)
 

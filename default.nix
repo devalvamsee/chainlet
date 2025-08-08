@@ -12,7 +12,7 @@
 }:
 let
   version = "v1.5.0";
-  pname = "cronosd";
+  pname = "chainletd";
   tags = [
     "ledger"
     "netgo"
@@ -23,7 +23,7 @@ let
     "objstore"
   ] ++ lib.optionals nativeByteOrder [ "nativebyteorder" ];
   ldflags = lib.concatStringsSep "\n" ([
-    "-X github.com/cosmos/cosmos-sdk/version.Name=cronos"
+    "-X github.com/cosmos/cosmos-sdk/version.Name=chainlet"
     "-X github.com/cosmos/cosmos-sdk/version.AppName=${pname}"
     "-X github.com/cosmos/cosmos-sdk/version.Version=${version}"
     "-X github.com/cosmos/cosmos-sdk/version.BuildTags=${lib.concatStringsSep "," tags}"
@@ -56,7 +56,7 @@ buildGoApplication rec {
   );
   modules = ./gomod2nix.toml;
   pwd = src; # needed to support replace
-  subPackages = [ "cmd/cronosd" ];
+  subPackages = [ "cmd/chainletd" ];
   buildFlags = lib.optionalString coverage "-cover";
   CGO_ENABLED = "1";
   CGO_LDFLAGS = lib.optionalString (rocksdb != null) (
@@ -69,15 +69,15 @@ buildGoApplication rec {
   );
 
   postFixup = lib.optionalString (stdenv.isDarwin && rocksdb != null) ''
-    ${stdenv.cc.bintools.targetPrefix}install_name_tool -change "@rpath/librocksdb.8.dylib" "${rocksdb}/lib/librocksdb.dylib" $out/bin/cronosd
+    ${stdenv.cc.bintools.targetPrefix}install_name_tool -change "@rpath/librocksdb.8.dylib" "${rocksdb}/lib/librocksdb.dylib" $out/bin/chainletd
   '';
 
   doCheck = false;
   meta = with lib; {
-    description = "Official implementation of the Cronos blockchain protocol";
-    homepage = "https://cronos.org/";
+    description = "Official implementation of the chainlet blockchain protocol";
+    homepage = "https://chainlet.org/";
     license = licenses.asl20;
-    mainProgram = "cronosd" + stdenv.hostPlatform.extensions.executable;
+    mainProgram = "chainletd" + stdenv.hostPlatform.extensions.executable;
     platforms = platforms.all;
   };
 }

@@ -18,9 +18,9 @@ def get_balance(cli, addr, denom):
     return cli.balance(eth_to_bech32(addr), denom)
 
 
-def test_call(cronos):
-    w3 = cronos.w3
-    cli = cronos.cosmos_cli()
+def test_call(chainlet):
+    w3 = chainlet.w3
+    cli = chainlet.cosmos_cli()
     addr = ADDRS["signer1"]
     keys = KEYS["signer1"]
     contract = deploy_contract(w3, CONTRACTS["TestBank"], (), keys)

@@ -24,21 +24,21 @@ def test_ibc(ibc):
     ibc_transfer(ibc)
 
 
-def test_cronos_transfer_timeout(ibc):
+def test_chainlet_transfer_timeout(ibc):
     """
-    test sending basetcro from cronos to crypto-org-chain using cli transfer_tokens.
+    test sending basetcro from chainlet to crypto-org-chain using cli transfer_tokens.
     depends on `test_ibc` to send the original coins.
     """
     dst_addr = ibc.chainmain.cosmos_cli().address("signer2")
     dst_amount = 2
     dst_denom = "basecro"
-    cli = ibc.cronos.cosmos_cli()
+    cli = ibc.chainlet.cosmos_cli()
     src_amount = dst_amount * RATIO  # the decimal places difference
     src_addr = cli.address("signer2")
     src_denom = "basetcro"
 
-    # case 1: use cronos cli
-    old_src_balance = get_balance(ibc.cronos, src_addr, src_denom)
+    # case 1: use chainlet cli
+    old_src_balance = get_balance(ibc.chainlet, src_addr, src_denom)
     old_dst_balance = get_balance(ibc.chainmain, dst_addr, dst_denom)
     rsp = cli.transfer_tokens(
         src_addr,
@@ -48,14 +48,14 @@ def test_cronos_transfer_timeout(ibc):
     assert rsp["code"] == 0, rsp["raw_log"]
 
     def check_balance_change():
-        new_src_balance = get_balance(ibc.cronos, src_addr, src_denom)
+        new_src_balance = get_balance(ibc.chainlet, src_addr, src_denom)
         get_balance(ibc.chainmain, dst_addr, dst_denom)
         return old_src_balance != new_src_balance
 
     wait_for_fn("balance has change", check_balance_change)
 
     def check_no_change():
-        new_src_balance = get_balance(ibc.cronos, src_addr, src_denom)
+        new_src_balance = get_balance(ibc.chainlet, src_addr, src_denom)
         get_balance(ibc.chainmain, dst_addr, dst_denom)
         return old_src_balance == new_src_balance
 

@@ -9,8 +9,8 @@ import (
 	"strconv"
 
 	protoio "github.com/cosmos/gogoproto/io"
-	"github.com/crypto-org-chain/cronos/versiondb"
-	"github.com/crypto-org-chain/cronos/versiondb/tsrocksdb"
+	"github.com/devalvamsee/chainlet/versiondb"
+	"github.com/devalvamsee/chainlet/versiondb/tsrocksdb"
 	"github.com/spf13/cobra"
 
 	cosmossdkio "cosmossdk.io/errors"

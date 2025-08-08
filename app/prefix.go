@@ -1,7 +1,7 @@
 package app
 
 import (
-	cmdcfg "github.com/devalvamsee/chainlet/cmd/cronosd/config"
+	cmdcfg "github.com/devalvamsee/chainlet/cmd/chainletd/config"
 	ethcfg "github.com/evmos/ethermint/cmd/config"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"

@@ -26,11 +26,11 @@ def ibc(request, tmp_path_factory):
 def test_incentivized(ibc):
     connid = "connection-0"
     cli_host = ibc.chainmain.cosmos_cli()
-    cli_controller = ibc.cronos.cosmos_cli()
+    cli_controller = ibc.chainlet.cosmos_cli()
     ica_address, _, channel_id = register_acc(cli_controller, connid)
     relayer = cli_controller.address("signer1")
     balance = funds_ica(cli_host, ica_address)
-    ibc.cronos.supervisorctl("stop", "relayer-demo")
+    ibc.chainlet.supervisorctl("stop", "relayer-demo")
     time.sleep(3)
     port_id = "icahost"
     rsp = cli_host.register_counterparty_payee(
@@ -42,7 +42,7 @@ def test_incentivized(ibc):
         fees="100000000basecro",
     )
     assert rsp["code"] == 0, rsp["raw_log"]
-    ibc.cronos.supervisorctl("start", "relayer-demo")
+    ibc.chainlet.supervisorctl("start", "relayer-demo")
     to = cli_host.address("signer2")
     amount = 1000
     denom = "basecro"
@@ -97,5 +97,5 @@ def test_incentivized(ibc):
     wait_for_fn("wait for relayer to receive the fee", check_fee)
 
     # timeout fee is refunded
-    actual = get_balance(ibc.cronos, sender, fee_denom)
+    actual = get_balance(ibc.chainlet, sender, fee_denom)
     assert actual == old_amt_sender_fee - 20, actual

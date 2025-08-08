@@ -3,7 +3,7 @@ package client
 import (
 	"fmt"
 
-	"github.com/crypto-org-chain/cronos/versiondb/tsrocksdb"
+	"github.com/devalvamsee/chainlet/versiondb/tsrocksdb"
 	"github.com/linxGnu/grocksdb"
 	"github.com/spf13/cobra"
 )

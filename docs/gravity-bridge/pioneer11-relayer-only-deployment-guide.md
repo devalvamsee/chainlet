@@ -56,7 +56,7 @@ The relayer is running now.
 To set up the Relayer as a service, you can run:
 
 ```bash
-bash <(curl -s -L https://raw.githubusercontent.com/crypto-org-chain/cronos/main/docs/gravity-bridge/systemd/setup-gorc-service.sh) -t relayer
+bash <(curl -s -L https://raw.githubusercontent.com/devalvamsee/chainlet/main/docs/gravity-bridge/systemd/setup-gorc-service.sh) -t relayer
 ```
 
 You will be prompted for your ethereum key name set up earlier. After the service is created, you can run:
@@ -100,5 +100,5 @@ Here are the deployed token mappings:
    -  https://github.com/crypto-org-chain/gravity-bridge/blob/v2.0.0-cronos-alpha0/solidity/contracts/EthGravityWrapper.sol
 
 3. CroBridge :
-   - https://github.com/crypto-org-chain/cronos/blob/v0.8.0-gravity-alpha0/integration_tests/contracts/contracts/CroBridge.sol
+   - https://github.com/devalvamsee/chainlet/blob/v0.8.0-gravity-alpha0/integration_tests/contracts/contracts/CroBridge.sol
 

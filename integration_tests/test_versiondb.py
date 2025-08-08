@@ -8,7 +8,7 @@ from .network import Cronos
 from .utils import ADDRS, send_transaction, w3_wait_for_new_blocks, wait_for_port
 
 
-def test_versiondb_migration(cronos: Cronos):
+def test_versiondb_migration(chainlet: Cronos):
     """
     test versiondb migration commands.
     node0 has memiavl and versiondb enabled while node1 don't,
@@ -23,7 +23,7 @@ def test_versiondb_migration(cronos: Cronos):
       - node0 do support historical queries
       - node1 don't support historical queries
     """
-    w3 = cronos.w3
+    w3 = chainlet.w3
     community = ADDRS["community"]
     balance0 = w3.eth.get_balance(community)
     block0 = w3.eth.block_number
@@ -42,17 +42,17 @@ def test_versiondb_migration(cronos: Cronos):
 
     # stop the network first
     print("stop all nodes")
-    print(cronos.supervisorctl("stop", "all"))
-    cli0 = cronos.cosmos_cli(i=0)
-    cli1 = cronos.cosmos_cli(i=1)
+    print(chainlet.supervisorctl("stop", "all"))
+    cli0 = chainlet.cosmos_cli(i=0)
+    cli1 = chainlet.cosmos_cli(i=1)
 
-    changeset_dir = tempfile.mkdtemp(dir=cronos.base_dir)
+    changeset_dir = tempfile.mkdtemp(dir=chainlet.base_dir)
     print("dump to:", changeset_dir)
 
     # only restore to an intermidiate version to test version mismatch behavior
     print(cli1.changeset_dump(changeset_dir, end_version=block1 + 1))
 
-    snapshot_dir = tempfile.mkdtemp(dir=cronos.base_dir)
+    snapshot_dir = tempfile.mkdtemp(dir=chainlet.base_dir)
     print("verify and save to snapshot:", snapshot_dir)
     _, commit_info = cli0.changeset_verify(changeset_dir, save_snapshot=snapshot_dir)
     latest_version = commit_info["version"]
@@ -64,7 +64,7 @@ def test_versiondb_migration(cronos: Cronos):
     print(cli1.changeset_restore_app_db(snapshot_dir, app_db1))
 
     print("restore versiondb for node0")
-    sst_dir = tempfile.mkdtemp(dir=cronos.base_dir)
+    sst_dir = tempfile.mkdtemp(dir=chainlet.base_dir)
     print(cli0.changeset_build_versiondb_sst(changeset_dir, sst_dir))
     # ingest-versiondb-sst expects an empty database
     shutil.rmtree(cli0.data_dir / "data/versiondb")
@@ -79,12 +79,12 @@ def test_versiondb_migration(cronos: Cronos):
 
     print("start all nodes")
     print(
-        cronos.supervisorctl(
-            "start", "cronos_777-1-node0", "cronos_777-1-node1", "cronos_777-1-node2"
+        chainlet.supervisorctl(
+            "start", "chainlet_777-1-node0", "chainlet_777-1-node1", "chainlet_777-1-node2"
         )
     )
-    for i in range(len(cronos.config["validators"])):
-        wait_for_port(ports.evmrpc_port(cronos.base_port(i)))
+    for i in range(len(chainlet.config["validators"])):
+        wait_for_port(ports.evmrpc_port(chainlet.base_port(i)))
 
     assert w3.eth.get_balance(community, block_identifier=block0) == balance0
     assert w3.eth.get_balance(community, block_identifier=block1) == balance1
@@ -92,7 +92,7 @@ def test_versiondb_migration(cronos: Cronos):
 
     # check query still works, node1 don't enable versiondb,
     # so we are testing iavl query here.
-    w3_1 = cronos.node_w3(1)
+    w3_1 = chainlet.node_w3(1)
     assert w3_1.eth.get_balance(community) == balance1
 
     # check the chain is still growing

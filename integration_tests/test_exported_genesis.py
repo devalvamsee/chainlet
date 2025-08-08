@@ -5,23 +5,23 @@ import pytest
 import requests
 from pystarport import ports
 
-from .network import setup_custom_cronos
+from .network import setup_custom_chainlet
 from .utils import ADDRS, CONTRACTS
 
 pytestmark = pytest.mark.slow
 
 
 @pytest.fixture(scope="module")
-def custom_cronos(tmp_path_factory):
-    path = tmp_path_factory.mktemp("cronos")
-    yield from setup_custom_cronos(
+def custom_chainlet(tmp_path_factory):
+    path = tmp_path_factory.mktemp("chainlet")
+    yield from setup_custom_chainlet(
         path, 26000, Path(__file__).parent / "configs/genesis_token_mapping.jsonnet"
     )
 
 
-def test_exported_contract(custom_cronos):
+def test_exported_contract(custom_chainlet):
     "demonstrate that contract state can be deployed in genesis"
-    w3 = custom_cronos.w3
+    w3 = custom_chainlet.w3
     abi = json.loads(CONTRACTS["TestERC20Utility"].read_text())["abi"]
     erc20 = w3.eth.contract(
         address="0x68542BD12B41F5D51D6282Ec7D91D7d0D78E4503", abi=abi
@@ -29,9 +29,9 @@ def test_exported_contract(custom_cronos):
     assert erc20.caller.balanceOf(ADDRS["validator"]) == 100000000000000000000000000
 
 
-def test_exported_token_mapping(custom_cronos):
-    cli = custom_cronos.cosmos_cli(0)
-    port = ports.api_port(custom_cronos.base_port(0))
+def test_exported_token_mapping(custom_chainlet):
+    cli = custom_chainlet.cosmos_cli(0)
+    port = ports.api_port(custom_chainlet.base_port(0))
     for case in [
         {
             "denom": "gravity0x0000000000000000000000000000000000000000",
@@ -51,5 +51,5 @@ def test_exported_token_mapping(custom_cronos):
         denom = case["denom"]
         expected = case["expected"]
         assert cli.query_contract_by_denom(denom) == expected
-        url = f"http://127.0.0.1:{port}/cronos/v1/contract_by_denom?denom={denom}"
+        url = f"http://127.0.0.1:{port}/chainlet/v1/contract_by_denom?denom={denom}"
         assert requests.get(url).json() == expected

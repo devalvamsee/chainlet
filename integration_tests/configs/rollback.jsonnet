@@ -1,7 +1,7 @@
 local config = import 'default.jsonnet';
 
 config {
-  'cronos_777-1'+: {
+  'chainlet_777-1'+: {
     validators: super.validators + [{
       name: 'rollback-test-memiavl',
       'app-config': {

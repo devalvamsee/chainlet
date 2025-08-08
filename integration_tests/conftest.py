@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from .network import setup_cronos, setup_custom_cronos, setup_geth
+from .network import setup_chainlet, setup_custom_chainlet, setup_geth
 
 dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir + "/protobuf")
@@ -59,16 +59,16 @@ def suspend_capture(pytestconfig):
 
 
 @pytest.fixture(scope="session", params=[True])
-def cronos(request, tmp_path_factory):
+def chainlet(request, tmp_path_factory):
     enable_indexer = request.param
     if enable_indexer:
         path = tmp_path_factory.mktemp("indexer")
-        yield from setup_custom_cronos(
+        yield from setup_custom_chainlet(
             path, 27000, Path(__file__).parent / "configs/enable-indexer.jsonnet"
         )
     else:
-        path = tmp_path_factory.mktemp("cronos")
-        yield from setup_cronos(path, 26650)
+        path = tmp_path_factory.mktemp("chainlet")
+        yield from setup_chainlet(path, 26650)
 
 
 @pytest.fixture(scope="session")
@@ -77,19 +77,19 @@ def geth(tmp_path_factory):
     yield from setup_geth(path, 8545)
 
 
-@pytest.fixture(scope="session", params=["cronos", "geth", "cronos-ws"])
-def cluster(request, cronos, geth):
+@pytest.fixture(scope="session", params=["chainlet", "geth", "chainlet-ws"])
+def cluster(request, chainlet, geth):
     """
-    run on both cronos and geth
+    run on both chainlet and geth
     """
     provider = request.param
-    if provider == "cronos":
-        yield cronos
+    if provider == "chainlet":
+        yield chainlet
     elif provider == "geth":
         yield geth
-    elif provider == "cronos-ws":
-        cronos_ws = cronos.copy()
-        cronos_ws.use_websocket()
-        yield cronos_ws
+    elif provider == "chainlet-ws":
+        chainlet_ws = chainlet.copy()
+        chainlet_ws.use_websocket()
+        yield chainlet_ws
     else:
         raise NotImplementedError

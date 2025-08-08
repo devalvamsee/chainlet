@@ -12,7 +12,7 @@ import requests
 from pystarport import ports
 from pystarport.cluster import SUPERVISOR_CONFIG_FILE
 
-from .network import Cronos, setup_custom_cronos
+from .network import Cronos, setup_custom_chainlet
 from .utils import (
     ADDRS,
     CONTRACTS,
@@ -33,8 +33,8 @@ pytestmark = pytest.mark.upgrade
 
 
 @pytest.fixture(scope="module")
-def custom_cronos(tmp_path_factory):
-    yield from setup_cronos_test(tmp_path_factory)
+def custom_chainlet(tmp_path_factory):
+    yield from setup_chainlet_test(tmp_path_factory)
 
 
 def get_txs(base_port, end):
@@ -60,7 +60,7 @@ def post_init(path, base_port, config):
     """
     prepare cosmovisor for each node
     """
-    chain_id = "cronos_777-1"
+    chain_id = "chainlet_777-1"
     data = path / chain_id
     cfg = json.loads((data / "config.json").read_text())
     for i, _ in enumerate(cfg["validators"]):
@@ -73,7 +73,7 @@ def post_init(path, base_port, config):
         lambda i, _: {
             "command": f"cosmovisor run start --home %(here)s/node{i}",
             "environment": (
-                "DAEMON_NAME=cronosd,"
+                "DAEMON_NAME=chainletd,"
                 "DAEMON_SHUTDOWN_GRACE=1m,"
                 "UNSAFE_SKIP_BACKUP=true,"
                 f"DAEMON_HOME=%(here)s/node{i}"
@@ -82,7 +82,7 @@ def post_init(path, base_port, config):
     )
 
 
-def setup_cronos_test(tmp_path_factory):
+def setup_chainlet_test(tmp_path_factory):
     path = tmp_path_factory.mktemp("upgrade")
     port = 26200
     nix_name = "upgrade-test-package"
@@ -104,14 +104,14 @@ def setup_cronos_test(tmp_path_factory):
         d.chmod(mod)
 
     # init with genesis binary
-    with contextmanager(setup_custom_cronos)(
+    with contextmanager(setup_custom_chainlet)(
         path,
         port,
         configdir / f"configs/{cfg_name}.jsonnet",
         post_init=post_init,
-        chain_binary=str(upgrades / "genesis/bin/cronosd"),
-    ) as cronos:
-        yield cronos
+        chain_binary=str(upgrades / "genesis/bin/chainletd"),
+    ) as chainlet:
+        yield chainlet
 
 
 def assert_evm_params(cli, expected, height):
@@ -160,7 +160,7 @@ def exec(c, tmp_path_factory):
         fp.flush()
 
     c.supervisorctl(
-        "start", "cronos_777-1-node0", "cronos_777-1-node1", "cronos_777-1-node2"
+        "start", "chainlet_777-1-node0", "chainlet_777-1-node1", "chainlet_777-1-node2"
     )
     wait_for_port(ports.evmrpc_port(base_port))
     wait_for_new_blocks(cli, 1)
@@ -208,7 +208,7 @@ def exec(c, tmp_path_factory):
 
         # update cli chain binary
         c.chain_binary = (
-            Path(c.chain_binary).parent.parent.parent / f"{plan_name}/bin/cronosd"
+            Path(c.chain_binary).parent.parent.parent / f"{plan_name}/bin/chainletd"
         )
         # block should pass the target height
         wait_for_block(c.cosmos_cli(), target + 2, timeout=480)
@@ -292,7 +292,7 @@ def exec(c, tmp_path_factory):
         file = c.cosmos_cli(i).data_dir / "config/genesis.json"
         file.write_text(json.dumps(genesis))
     c.supervisorctl(
-        "start", "cronos_777-1-node0", "cronos_777-1-node1", "cronos_777-1-node2"
+        "start", "chainlet_777-1-node0", "chainlet_777-1-node1", "chainlet_777-1-node2"
     )
     wait_for_new_blocks(c.cosmos_cli(), 1)
 
@@ -303,11 +303,11 @@ def exec(c, tmp_path_factory):
 
     gov_param = cli.query_params("gov")
 
-    c.supervisorctl("stop", "cronos_777-1-node0")
+    c.supervisorctl("stop", "chainlet_777-1-node0")
     time.sleep(3)
     cli.changeset_fixdata(f"{c.base_dir}/node0/data/versiondb")
     print(cli.changeset_fixdata(f"{c.base_dir}/node0/data/versiondb", dry_run=True))
-    c.supervisorctl("start", "cronos_777-1-node0")
+    c.supervisorctl("start", "chainlet_777-1-node0")
     wait_for_port(ports.evmrpc_port(c.base_port(0)))
 
     to = "0x2D5B6C193C39D2AECb4a99052074E6F325258a0f"
@@ -337,5 +337,5 @@ def exec(c, tmp_path_factory):
     assert tx_af.get("result") == tx_bf.get("result"), tx_af
 
 
-def test_cosmovisor_upgrade(custom_cronos: Cronos, tmp_path_factory):
-    exec(custom_cronos, tmp_path_factory)
+def test_cosmovisor_upgrade(custom_chainlet: Cronos, tmp_path_factory):
+    exec(custom_chainlet, tmp_path_factory)

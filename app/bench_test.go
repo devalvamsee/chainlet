@@ -14,8 +14,8 @@ import (
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	tmtypes "github.com/cometbft/cometbft/types"
 	dbm "github.com/cosmos/cosmos-db"
-	memiavlstore "github.com/crypto-org-chain/cronos/store"
-	"github.com/devalvamsee/chainlet/x/cronos/types"
+	memiavlstore "github.com/devalvamsee/chainlet/store"
+	"github.com/devalvamsee/chainlet/x/chainlet/types"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/evmos/ethermint/crypto/ethsecp256k1"
@@ -190,7 +190,7 @@ func benchmarkERC20Transfer(b *testing.B, db dbm.DB, appOpts servertypes.AppOpti
 		contractAddr, err = app.CronosKeeper.DeployModuleCRC21(ctx, "test")
 		require.NoError(b, err)
 		for _, acc := range testAccounts {
-			_, err = app.CronosKeeper.CallModuleCRC21(ctx, contractAddr, "mint_by_cronos_module", acc.Address, big.NewInt(amount))
+			_, err = app.CronosKeeper.CallModuleCRC21(ctx, contractAddr, "mint_by_chainlet_module", acc.Address, big.NewInt(amount))
 			require.NoError(b, err)
 		}
 		write()

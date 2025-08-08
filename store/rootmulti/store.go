@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	dbm "github.com/cosmos/cosmos-db"
-	"github.com/crypto-org-chain/cronos/memiavl"
-	"github.com/crypto-org-chain/cronos/store/cachemulti"
-	"github.com/crypto-org-chain/cronos/store/memiavlstore"
+	"github.com/devalvamsee/chainlet/memiavl"
+	"github.com/devalvamsee/chainlet/store/cachemulti"
+	"github.com/devalvamsee/chainlet/store/memiavlstore"
 
 	"cosmossdk.io/errors"
 	"cosmossdk.io/log"

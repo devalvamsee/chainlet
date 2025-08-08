@@ -14,13 +14,13 @@ from .utils import supervisorctl, w3_wait_for_block, wait_for_port
 
 
 class Cronos:
-    def __init__(self, base_dir, chain_binary="cronosd"):
+    def __init__(self, base_dir, chain_binary="chainletd"):
         self._w3 = None
         self.base_dir = base_dir
         self.config = json.loads((base_dir / "config.json").read_text())
         self.enable_auto_deployment = json.loads(
             (base_dir / "genesis.json").read_text()
-        )["app_state"]["cronos"]["params"]["enable_auto_deployment"]
+        )["app_state"]["chainlet"]["params"]["enable_auto_deployment"]
         self._use_websockets = False
         self.chain_binary = chain_binary
 
@@ -94,13 +94,13 @@ class Geth:
         self.w3 = w3
 
 
-def setup_cronos(path, base_port, enable_auto_deployment=True):
+def setup_chainlet(path, base_port, enable_auto_deployment=True):
     cfg = Path(__file__).parent / (
         "configs/default.jsonnet"
         if enable_auto_deployment
         else "configs/disable_auto_deployment.jsonnet"
     )
-    yield from setup_custom_cronos(path, base_port, cfg)
+    yield from setup_custom_chainlet(path, base_port, cfg)
 
 
 def setup_geth(path, base_port):
@@ -139,18 +139,18 @@ def setup_geth(path, base_port):
 
 
 class GravityBridge:
-    cronos: Cronos
+    chainlet: Cronos
     geth: Geth
     # gravity contract deployed on geth
     contract: web3.contract.Contract
 
-    def __init__(self, cronos, geth, contract):
-        self.cronos = cronos
+    def __init__(self, chainlet, geth, contract):
+        self.chainlet = chainlet
         self.geth = geth
         self.contract = contract
 
 
-def setup_custom_cronos(
+def setup_custom_chainlet(
     path,
     base_port,
     config,
@@ -186,7 +186,7 @@ def setup_custom_cronos(
         if wait_port:
             wait_for_port(ports.evmrpc_port(base_port))
             wait_for_port(ports.evmrpc_ws_port(base_port))
-        c = Cronos(path / "cronos_777-1", chain_binary=chain_binary or "cronosd")
+        c = Cronos(path / "chainlet_777-1", chain_binary=chain_binary or "chainletd")
         w3_wait_for_block(c.w3, 1)
         yield c
     finally:

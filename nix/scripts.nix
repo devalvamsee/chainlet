@@ -1,13 +1,13 @@
 {
   pkgs,
   config,
-  cronos ? (import ../. { inherit pkgs; }),
+  chainlet ? (import ../. { inherit pkgs; }),
 }:
 rec {
-  start-cronos = pkgs.writeShellScriptBin "start-cronos" ''
-    # rely on environment to provide cronosd
+  start-chainlet = pkgs.writeShellScriptBin "start-chainlet" ''
+    # rely on environment to provide chainletd
     export PATH=${pkgs.test-env}/bin:$PATH
-    ${../scripts/start-cronos} ${config.cronos-config} ${config.dotenv} $@
+    ${../scripts/start-chainlet} ${config.chainlet-config} ${config.dotenv} $@
   '';
   start-geth = pkgs.writeShellScriptBin "start-geth" ''
     export PATH=${pkgs.test-env}/bin:${pkgs.go-ethereum}/bin:$PATH
@@ -17,7 +17,7 @@ rec {
   start-scripts = pkgs.symlinkJoin {
     name = "start-scripts";
     paths = [
-      start-cronos
+      start-chainlet
       start-geth
     ];
   };

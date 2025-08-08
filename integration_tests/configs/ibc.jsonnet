@@ -1,7 +1,7 @@
 local config = import 'default.jsonnet';
 
 config {
-  'cronos_777-1'+: {
+  'chainlet_777-1'+: {
     'account-prefix': 'crc',
     'coin-type': 60,
     key_name: 'signer1',
@@ -19,7 +19,7 @@ config {
     },
     genesis+: {
       app_state+: {
-        cronos+: {
+        chainlet+: {
           params+: {
             max_callback_gas: 50000,
           },
@@ -144,7 +144,7 @@ config {
     },
     chains: [
       {
-        id: 'cronos_777-1',
+        id: 'chainlet_777-1',
         max_gas: 2500000,
         gas_multiplier: 1.1,
         address_type: {

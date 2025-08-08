@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	dbm "github.com/cosmos/cosmos-db"
-	"github.com/crypto-org-chain/cronos/versiondb"
+	"github.com/devalvamsee/chainlet/versiondb"
 	"github.com/linxGnu/grocksdb"
 	"github.com/stretchr/testify/require"
 

@@ -15,7 +15,7 @@ import (
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	tmtypes "github.com/cometbft/cometbft/types"
 	dbm "github.com/cosmos/cosmos-db"
-	cronostypes "github.com/devalvamsee/chainlet/x/cronos/types"
+	chainlettypes "github.com/devalvamsee/chainlet/x/chainlet/types"
 	"github.com/evmos/ethermint/app"
 	"github.com/stretchr/testify/require"
 
@@ -43,7 +43,7 @@ import (
 const (
 	SimAppChainID  = "simulation_777-1"
 	SimBlockMaxGas = 815000000
-	TestAppChainID = "cronos_777-1"
+	TestAppChainID = "chainlet_777-1"
 )
 
 var TestEthChainID = big.NewInt(777)
@@ -85,7 +85,7 @@ func setup(withGenesis bool, invCheckPeriod uint) (*App, GenesisState) {
 }
 
 // Setup initializes a new App. A Nop logger is set in App.
-func Setup(t *testing.T, cronosAdmin string) *App {
+func Setup(t *testing.T, chainletAdmin string) *App {
 	t.Helper()
 
 	privVal := mock.NewPV()
@@ -103,25 +103,25 @@ func Setup(t *testing.T, cronosAdmin string) *App {
 		Address: acc.GetAddress().String(),
 		Coins:   sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdkmath.NewInt(100000000000000))),
 	}
-	return SetupWithGenesisValSet(t, cronosAdmin, valSet, []authtypes.GenesisAccount{acc}, balance)
+	return SetupWithGenesisValSet(t, chainletAdmin, valSet, []authtypes.GenesisAccount{acc}, balance)
 }
 
 // SetupWithGenesisValSet initializes a new App with a validator set and genesis accounts
 // that also act as delegators. For simplicity, each validator is bonded with a delegation
 // of one consensus engine unit (10^6) in the default token of the simapp from first genesis
 // account. A Nop logger is set in App.
-func SetupWithGenesisValSet(t *testing.T, cronosAdmin string, valSet *tmtypes.ValidatorSet, genAccs []authtypes.GenesisAccount, balances ...banktypes.Balance) *App {
+func SetupWithGenesisValSet(t *testing.T, chainletAdmin string, valSet *tmtypes.ValidatorSet, genAccs []authtypes.GenesisAccount, balances ...banktypes.Balance) *App {
 	t.Helper()
 
 	app, genesisState := setup(true, 5)
 	genesisState, err := simtestutil.GenesisStateWithValSet(app.AppCodec(), genesisState, valSet, genAccs, balances...)
 	require.NoError(t, err)
 
-	cronosGen := cronostypes.DefaultGenesis()
-	cronosGen.Params.CronosAdmin = cronosAdmin
+	chainletGen := chainlettypes.DefaultGenesis()
+	chainletGen.Params.CronosAdmin = chainletAdmin
 	// enable auto deployment in test genesis
-	cronosGen.Params.EnableAutoDeployment = true
-	genesisState["cronos"] = app.cdc.MustMarshalJSON(cronosGen)
+	chainletGen.Params.EnableAutoDeployment = true
+	genesisState["chainlet"] = app.cdc.MustMarshalJSON(chainletGen)
 
 	// set genesis accounts
 	authGenesis := authtypes.NewGenesisState(authtypes.DefaultParams(), genAccs)

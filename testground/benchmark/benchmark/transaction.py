@@ -74,7 +74,7 @@ TX_TYPES = {
 
 def build_evm_msg_1_3(tx: EthTx):
     """
-    build cronos v1.3 version of MsgEthereumTx
+    build chainlet v1.3 version of MsgEthereumTx
     """
     txn = Transaction.from_bytes(tx.raw)
     return cosmostx.build_any(

@@ -6,7 +6,7 @@ import (
 
 	cmtprotocrypto "github.com/cometbft/cometbft/proto/tendermint/crypto"
 	ics23 "github.com/cosmos/ics23/go"
-	"github.com/crypto-org-chain/cronos/memiavl"
+	"github.com/devalvamsee/chainlet/memiavl"
 
 	"cosmossdk.io/errors"
 	"cosmossdk.io/log"

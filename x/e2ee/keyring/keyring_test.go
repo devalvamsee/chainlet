@@ -12,7 +12,7 @@ import (
 )
 
 func TestKeyring(t *testing.T) {
-	kr, err := New("cronosd", keyring.BackendTest, t.TempDir(), nil)
+	kr, err := New("chainletd", keyring.BackendTest, t.TempDir(), nil)
 	require.NoError(t, err)
 
 	identity, err := age.GenerateX25519Identity()

@@ -41,17 +41,17 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v10/modules/core/exported"
 	ibckeeper "github.com/cosmos/ibc-go/v10/modules/core/keeper"
 	ibctm "github.com/cosmos/ibc-go/v10/modules/light-clients/07-tendermint"
-	memiavlstore "github.com/crypto-org-chain/cronos/store"
+	memiavlstore "github.com/devalvamsee/chainlet/store"
 	"github.com/devalvamsee/chainlet/client/docs"
-	"github.com/devalvamsee/chainlet/x/cronos"
-	cronosclient "github.com/devalvamsee/chainlet/x/cronos/client"
-	cronoskeeper "github.com/devalvamsee/chainlet/x/cronos/keeper"
-	evmhandlers "github.com/devalvamsee/chainlet/x/cronos/keeper/evmhandlers"
-	cronosprecompiles "github.com/devalvamsee/chainlet/x/cronos/keeper/precompiles"
-	"github.com/devalvamsee/chainlet/x/cronos/middleware"
+	"github.com/devalvamsee/chainlet/x/chainlet"
+	chainletclient "github.com/devalvamsee/chainlet/x/chainlet/client"
+	chainletkeeper "github.com/devalvamsee/chainlet/x/chainlet/keeper"
+	evmhandlers "github.com/devalvamsee/chainlet/x/chainlet/keeper/evmhandlers"
+	chainletprecompiles "github.com/devalvamsee/chainlet/x/chainlet/keeper/precompiles"
+	"github.com/devalvamsee/chainlet/x/chainlet/middleware"
 	// force register the extension json-rpc.
-	_ "github.com/devalvamsee/chainlet/x/cronos/rpc"
-	cronostypes "github.com/devalvamsee/chainlet/x/cronos/types"
+	_ "github.com/devalvamsee/chainlet/x/chainlet/rpc"
+	chainlettypes "github.com/devalvamsee/chainlet/x/chainlet/types"
 	e2ee "github.com/devalvamsee/chainlet/x/e2ee"
 	e2eekeeper "github.com/devalvamsee/chainlet/x/e2ee/keeper"
 	e2eekeyring "github.com/devalvamsee/chainlet/x/e2ee/keyring"
@@ -163,7 +163,7 @@ import (
 )
 
 const (
-	Name = "cronos"
+	Name = "chainlet"
 
 	// AddrLen is the allowed length (in bytes) for an address.
 	//
@@ -185,7 +185,7 @@ func getGovProposalHandlers() []govclient.ProposalHandler {
 
 	govProposalHandlers = append(govProposalHandlers,
 		paramsclient.ProposalHandler,
-		cronosclient.ProposalHandler,
+		chainletclient.ProposalHandler,
 		// this line is used by starport scaffolding # stargate/app/govProposalHandler
 	)
 
@@ -207,7 +207,7 @@ var (
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 		icatypes.ModuleName:            nil,
 		evmtypes.ModuleName:            {authtypes.Minter, authtypes.Burner}, // used for secure addition and subtraction of balance using module account
-		cronostypes.ModuleName:         {authtypes.Minter, authtypes.Burner},
+		chainlettypes.ModuleName:         {authtypes.Minter, authtypes.Burner},
 	}
 	// Module configurator
 
@@ -245,7 +245,7 @@ func StoreKeys() (
 		// e2ee keys
 		e2eetypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
-		cronostypes.StoreKey,
+		chainlettypes.StoreKey,
 	}
 	keys := storetypes.NewKVStoreKeys(storeKeys...)
 	tkeys := storetypes.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -311,7 +311,7 @@ type App struct {
 
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
-	CronosKeeper cronoskeeper.Keeper
+	CronosKeeper chainletkeeper.Keeper
 
 	// the module manager
 	ModuleManager      *module.Manager
@@ -355,7 +355,7 @@ func New(
 	{
 		if cast.ToString(appOpts.Get("mode")) == "validator" {
 			krBackend := cast.ToString(appOpts.Get(flags.FlagKeyringBackend))
-			kr, err := e2eekeyring.New("cronosd", krBackend, homePath, os.Stdin)
+			kr, err := e2eekeyring.New("chainletd", krBackend, homePath, os.Stdin)
 			if err != nil {
 				panic(err)
 			}
@@ -631,33 +631,33 @@ func New(
 		evmS,
 		[]evmkeeper.CustomContractFn{
 			func(_ sdk.Context, rules ethparams.Rules) vm.PrecompiledContract {
-				return cronosprecompiles.NewRelayerContract(app.IBCKeeper, appCodec, rules, app.Logger())
+				return chainletprecompiles.NewRelayerContract(app.IBCKeeper, appCodec, rules, app.Logger())
 			},
 			func(ctx sdk.Context, rules ethparams.Rules) vm.PrecompiledContract {
-				return cronosprecompiles.NewIcaContract(ctx, app.ICAControllerKeeper, &app.CronosKeeper, appCodec, gasConfig)
+				return chainletprecompiles.NewIcaContract(ctx, app.ICAControllerKeeper, &app.CronosKeeper, appCodec, gasConfig)
 			},
 		},
 	)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
-	app.CronosKeeper = *cronoskeeper.NewKeeper(
+	app.CronosKeeper = *chainletkeeper.NewKeeper(
 		appCodec,
-		keys[cronostypes.StoreKey],
-		keys[cronostypes.MemStoreKey],
+		keys[chainlettypes.StoreKey],
+		keys[chainlettypes.MemStoreKey],
 		app.BankKeeper,
 		app.TransferKeeper,
 		app.EvmKeeper,
 		app.AccountKeeper,
 		authAddr,
 	)
-	cronosModule := cronos.NewAppModule(app.CronosKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(cronostypes.ModuleName))
+	chainletModule := chainlet.NewAppModule(app.CronosKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(chainlettypes.ModuleName))
 
 	// register the proposal types
 	govRouter := govv1beta1.NewRouter()
 	govRouter.AddRoute(govtypes.RouterKey, govv1beta1.ProposalHandler).
 		AddRoute(paramproposal.RouterKey, params.NewParamChangeProposalHandler(app.ParamsKeeper)).
-		AddRoute(cronostypes.RouterKey, cronos.NewTokenMappingChangeProposalHandler(app.CronosKeeper))
+		AddRoute(chainlettypes.RouterKey, chainlet.NewTokenMappingChangeProposalHandler(app.CronosKeeper))
 
 	govConfig := govtypes.DefaultConfig()
 	/*
@@ -688,7 +688,7 @@ func New(
 		),
 	)
 
-	app.EvmKeeper.SetHooks(cronoskeeper.NewLogProcessEvmHook(
+	app.EvmKeeper.SetHooks(chainletkeeper.NewLogProcessEvmHook(
 		evmhandlers.NewSendToAccountHandler(app.BankKeeper, app.CronosKeeper),
 		evmhandlers.NewSendToIbcHandler(app.BankKeeper, app.CronosKeeper),
 		evmhandlers.NewSendCroToIbcHandler(app.BankKeeper, app.CronosKeeper),
@@ -696,7 +696,7 @@ func New(
 	))
 
 	var icaControllerStack porttypes.IBCModule
-	icaControllerStack = icacontroller.NewIBCMiddleware(app.ICAControllerKeeper) // we don't limit gas usage here, because the cronos keeper will use network parameter to control it.
+	icaControllerStack = icacontroller.NewIBCMiddleware(app.ICAControllerKeeper) // we don't limit gas usage here, because the chainlet keeper will use network parameter to control it.
 	icaControllerStack = ibccallbacks.NewIBCMiddleware(icaControllerStack, app.IBCKeeper.ChannelKeeper, app.CronosKeeper, math.MaxUint64)
 	icaICS4Wrapper, ok := icaControllerStack.(porttypes.ICS4Wrapper)
 	if !ok {
@@ -787,7 +787,7 @@ func New(
 		e2ee.NewAppModule(app.E2EEKeeper),
 
 		// Cronos app modules
-		cronosModule,
+		chainletModule,
 	)
 
 	// BasicModuleManager defines the module BasicManager is in charge of setting up basic,
@@ -827,7 +827,7 @@ func New(
 		feegrant.ModuleName,
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
-		cronostypes.ModuleName,
+		chainlettypes.ModuleName,
 		consensusparamtypes.ModuleName,
 	}
 	endBlockersOrder := []string{
@@ -850,7 +850,7 @@ func New(
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
-		cronostypes.ModuleName,
+		chainlettypes.ModuleName,
 		consensusparamtypes.ModuleName,
 	}
 
@@ -881,7 +881,7 @@ func New(
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
-		cronostypes.ModuleName,
+		chainlettypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		// NOTE: crisis module must go at the end to check for invariants on each module
 		crisistypes.ModuleName,
@@ -1365,7 +1365,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(evmtypes.ModuleName).WithKeyTable(v0evmtypes.ParamKeyTable()) //nolint: staticcheck
 	paramsKeeper.Subspace(feemarkettypes.ModuleName).WithKeyTable(feemarkettypes.ParamKeyTable())
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
-	paramsKeeper.Subspace(cronostypes.ModuleName).WithKeyTable(cronostypes.ParamKeyTable())
+	paramsKeeper.Subspace(chainlettypes.ModuleName).WithKeyTable(chainlettypes.ParamKeyTable())
 
 	return paramsKeeper
 }

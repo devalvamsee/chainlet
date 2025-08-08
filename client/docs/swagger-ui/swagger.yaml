@@ -4,7 +4,7 @@ info:
   description: A REST interface for state queries
   version: 1.0.0
 paths:
-  /cronos/v1/blocklist:
+  /chainlet/v1/blocklist:
     get:
       summary: BlockList
       operationId: BlockList
@@ -214,7 +214,7 @@ paths:
                         }
       tags:
         - Query
-  /cronos/v1/contract_by_denom:
+  /chainlet/v1/contract_by_denom:
     get:
       summary: >-
         ContractByDenom queries contract addresses by native denom from a query
@@ -434,7 +434,7 @@ paths:
           type: string
       tags:
         - Query
-  /cronos/v1/denom_by_contract/{contract}:
+  /chainlet/v1/denom_by_contract/{contract}:
     get:
       summary: DenomByContract queries native denom by contract address
       operationId: DenomByContract
@@ -650,7 +650,7 @@ paths:
           type: string
       tags:
         - Query
-  /cronos/v1/params:
+  /chainlet/v1/params:
     get:
       summary: Params queries all parameters.
       operationId: EvmParams
@@ -669,7 +669,7 @@ paths:
                   ibc_timeout:
                     type: string
                     format: uint64
-                  cronos_admin:
+                  chainlet_admin:
                     type: string
                     title: the admin address who can update token mapping
                   enable_auto_deployment:
@@ -876,7 +876,7 @@ paths:
                         }
       tags:
         - Query
-  /cronos/v1/permissions:
+  /chainlet/v1/permissions:
     get:
       summary: Params queries permissions for a specific address..
       operationId: Permissions
@@ -48058,7 +48058,7 @@ paths:
       tags:
         - Query
 definitions:
-  cronos.ContractByDenomResponse:
+  chainlet.ContractByDenomResponse:
     type: object
     properties:
       contract:
@@ -48066,13 +48066,13 @@ definitions:
       auto_contract:
         type: string
     title: ContractByDenomRequest is the response type of ContractByDenom call
-  cronos.DenomByContractResponse:
+  chainlet.DenomByContractResponse:
     type: object
     properties:
       denom:
         type: string
     title: DenomByContractResponse is the response type of DenomByContract call
-  cronos.Params:
+  chainlet.Params:
     type: object
     properties:
       ibc_cro_denom:
@@ -48080,7 +48080,7 @@ definitions:
       ibc_timeout:
         type: string
         format: uint64
-      cronos_admin:
+      chainlet_admin:
         type: string
         title: the admin address who can update token mapping
       enable_auto_deployment:
@@ -48088,15 +48088,15 @@ definitions:
       max_callback_gas:
         type: string
         format: uint64
-    description: Params defines the parameters for the cronos module.
-  cronos.QueryBlockListResponse:
+    description: Params defines the parameters for the chainlet module.
+  chainlet.QueryBlockListResponse:
     type: object
     properties:
       blob:
         type: string
         format: byte
     title: QueryBlockListResponse
-  cronos.QueryParamsResponse:
+  chainlet.QueryParamsResponse:
     type: object
     properties:
       params:
@@ -48108,7 +48108,7 @@ definitions:
           ibc_timeout:
             type: string
             format: uint64
-          cronos_admin:
+          chainlet_admin:
             type: string
             title: the admin address who can update token mapping
           enable_auto_deployment:
@@ -48117,7 +48117,7 @@ definitions:
             type: string
             format: uint64
     description: QueryParamsResponse is the response type for the Query/Params RPC method.
-  cronos.QueryPermissionsResponse:
+  chainlet.QueryPermissionsResponse:
     type: object
     properties:
       can_change_token_mapping:
@@ -48129,7 +48129,7 @@ definitions:
       RPC
 
       method.
-  cronos.ReplayBlockResponse:
+  chainlet.ReplayBlockResponse:
     type: object
     properties:
       responses:

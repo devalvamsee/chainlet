@@ -44,19 +44,19 @@
         };
       in
       rec {
-        packages = pkgs.cronos-matrix // {
+        packages = pkgs.chainlet-matrix // {
           inherit (pkgs) rocksdb testground-image;
         };
         apps = {
-          cronosd = mkApp packages.cronosd;
-          cronosd-testnet = mkApp packages.cronosd-testnet;
+          chainletd = mkApp packages.chainletd;
+          chainletd-testnet = mkApp packages.chainletd-testnet;
           stateless-testcase = {
             type = "app";
             program = "${pkgs.benchmark-testcase}/bin/stateless-testcase";
           };
         };
-        defaultPackage = packages.cronosd;
-        defaultApp = apps.cronosd;
+        defaultPackage = packages.chainletd;
+        defaultApp = apps.chainletd;
         devShells = rec {
           default = pkgs.mkShell {
             buildInputs = [
@@ -85,7 +85,7 @@
         (final: super: {
           go = super.go_1_23;
           test-env = final.callPackage ./nix/testenv.nix { };
-          cronos-matrix = final.callPackage ./nix/cronos-matrix.nix {
+          chainlet-matrix = final.callPackage ./nix/chainlet-matrix.nix {
             inherit rev;
             bundle-exe = final.pkgsBuildBuild.callPackage nix-bundle-exe { };
           };

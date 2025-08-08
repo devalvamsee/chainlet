@@ -9,7 +9,7 @@ The implementation is inspired by [testground](https://github.com/testground/tes
 
 >  Prerequisites: nix, for macOS also need [linux remote builder](https://nix.dev/manual/nix/2.22/advanced-topics/distributed-builds.html)
 
-You can test with the prebuilt images in [github registry](https://github.com/crypto-org-chain/cronos/pkgs/container/cronos-testground), or build the image locally:
+You can test with the prebuilt images in [github registry](https://github.com/devalvamsee/chainlet/pkgs/container/cronos-testground), or build the image locally:
 
 ```bash
 $ nix build .#testground-image
@@ -17,7 +17,7 @@ $ nix build .#testground-image
 # for x86 mac: nix build .#legacyPackages.x86_64-linux.testground-image
 $ docker load < ./result
 Loaded image: cronos-testground:<imageID>
-$ docker tag cronos-testground:<imageID> ghcr.io/crypto-org-chain/cronos-testground:latest
+$ docker tag cronos-testground:<imageID> ghcr.io/devalvamsee/chainlet-testground:latest
 ```
 
 Or one liner like this:
@@ -26,7 +26,7 @@ Or one liner like this:
 docker load < $(nix build .#legacyPackages.aarch64-linux.testground-image --no-link --print-out-paths) \
   | grep "^Loaded image:" \
   | cut -d ' ' -f 3 \
-  | xargs -I{} docker tag {} ghcr.io/crypto-org-chain/cronos-testground:latest
+  | xargs -I{} docker tag {} ghcr.io/devalvamsee/chainlet-testground:latest
 ```
 
 ## Generate data files locally
@@ -58,7 +58,7 @@ nix run .#stateless-testcase -- gen /tmp/data/out \
 Embed the data directory into the image, it produce a new image:
 
 ```bash
-$ nix run github:crypto-org-chain/cronos#stateless-testcase patchimage cronos-testground:latest /tmp/data/out
+$ nix run github:devalvamsee/chainlet#stateless-testcase patchimage cronos-testground:latest /tmp/data/out
 ```
 
 ## Run With Docker Compose
@@ -75,4 +75,4 @@ It'll collect the node data files to the `/tmp/outputs` directory.
 
 ## Run In Cluster
 
-Please use [cronos-testground](https://github.com/crypto-org-chain/cronos-testground) to run the benchmark in k8s cluster.
+Please use [cronos-testground](https://github.com/devalvamsee/chainlet-testground) to run the benchmark in k8s cluster.

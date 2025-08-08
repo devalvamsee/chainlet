@@ -90,8 +90,8 @@ comma := ,
 build_tags_comma_sep := $(subst $(whitespace),$(comma),$(build_tags))
 
 # process linker flags
-ldflags += -X github.com/cosmos/cosmos-sdk/version.Name=cronos \
-	-X github.com/cosmos/cosmos-sdk/version.AppName=cronosd \
+ldflags += -X github.com/cosmos/cosmos-sdk/version.Name=chainlet \
+	-X github.com/cosmos/cosmos-sdk/version.AppName=chainletd \
 	-X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
 	-X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
 	-X github.com/cosmos/cosmos-sdk/version.BuildTags=$(build_tags_comma_sep)
@@ -104,10 +104,10 @@ endif
 
 all: build
 build: check-network print-ledger go.sum
-	@go build -mod=readonly $(BUILD_FLAGS) -o $(BUILDDIR)/cronosd ./cmd/cronosd
+	@go build -mod=readonly $(BUILD_FLAGS) -o $(BUILDDIR)/chainletd ./cmd/chainletd
 
 install: check-network print-ledger go.sum
-	@go install -mod=readonly $(BUILD_FLAGS) ./cmd/cronosd
+	@go install -mod=readonly $(BUILD_FLAGS) ./cmd/chainletd
 
 test: test-memiavl test-store
 	@go test -tags=objstore -v -mod=readonly $(PACKAGES) -coverprofile=$(COVERAGE) -covermode=atomic
@@ -198,8 +198,8 @@ test-sim-after-import: runsim
 test-sim-custom-genesis-multi-seed: export GOFLAGS=-tags=objstore
 test-sim-custom-genesis-multi-seed: runsim
 	@echo "Running multi-seed custom genesis simulation..."
-	@echo "By default, ${HOME}/.cronosd/config/genesis.json will be used."
-	@$(BINDIR)/runsim -Genesis=${HOME}/.cronosd/config/genesis.json -SimAppPkg=$(SIMAPP) -ExitOnFail 400 5 TestFullAppSimulation
+	@echo "By default, ${HOME}/.chainletd/config/genesis.json will be used."
+	@$(BINDIR)/runsim -Genesis=${HOME}/.chainletd/config/genesis.json -SimAppPkg=$(SIMAPP) -ExitOnFail 400 5 TestFullAppSimulation
 
 test-sim-multi-seed-long: export GOFLAGS=-tags=objstore
 test-sim-multi-seed-long: runsim
@@ -263,18 +263,18 @@ run-integration-tests:
 ###                                Utility                                  ###
 ###############################################################################
 
-test-cronos-contracts:
+test-chainlet-contracts:
 	@git submodule update --init --recursive
-	@nix-shell ./contracts/shell.nix --pure --run ./scripts/test-cronos-contracts
+	@nix-shell ./contracts/shell.nix --pure --run ./scripts/test-chainlet-contracts
 
-gen-cronos-contracts:
+gen-chainlet-contracts:
 	@git submodule update --init --recursive
-	@nix-shell ./contracts/shell.nix --pure --run ./scripts/gen-cronos-contracts
+	@nix-shell ./contracts/shell.nix --pure --run ./scripts/gen-chainlet-contracts
 
 gen-bindings-contracts:
 	@nix-shell ./nix/gen-binding-shell.nix $(GEN_BINDING_FLAGS) --pure --run ./scripts/gen-bindings-contracts
 
-.PHONY: gen-cronos-contracts gen-bindings-contracts test-cronos-contracts
+.PHONY: gen-chainlet-contracts gen-bindings-contracts test-chainlet-contracts
 
 check-network:
 ifeq ($(NETWORK),mainnet)
@@ -293,7 +293,7 @@ endif
 ###                                Protobuf                                 ###
 ###############################################################################
 
-HTTPS_GIT := https://github.com/crypto-org-chain/cronos.git
+HTTPS_GIT := https://github.com/devalvamsee/chainlet.git
 protoVer=0.14.0
 protoImageName=ghcr.io/cosmos/proto-builder:$(protoVer)
 protoImageCi=$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace --user root $(protoImageName)

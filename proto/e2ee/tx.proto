@@ -3,7 +3,7 @@ package e2ee;
 
 import "cosmos/msg/v1/msg.proto";
 
-option go_package = "github.com/devalvamsee/chainlet/x/e2ee/types";
+option go_package = "github.com/devalvamsee/cronos/x/e2ee/types";
 
 // Msg defines the e2ee Msg service
 service Msg {

@@ -106,8 +106,8 @@ def submit_msgs(
     signer="signer2",
 ):
     cli_host = ibc.chainmain.cosmos_cli()
-    cli_controller = ibc.cronos.cosmos_cli()
-    w3 = ibc.cronos.w3
+    cli_controller = ibc.chainlet.cosmos_cli()
+    w3 = ibc.chainlet.w3
     to = cli_host.address(validator)
     # generate msgs send to host chain
     m = gen_send_msg(ica_address, to, denom, amount)
@@ -161,8 +161,8 @@ def submit_msgs(
 def test_call(ibc, order):
     signer = "signer2" if order == Ordering.ORDERED.value else "community"
     cli_host = ibc.chainmain.cosmos_cli()
-    cli_controller = ibc.cronos.cosmos_cli()
-    w3 = ibc.cronos.w3
+    cli_controller = ibc.chainlet.cosmos_cli()
+    w3 = ibc.chainlet.w3
     contract_info = json.loads(CONTRACT_ABIS["IICAModule"].read_text())
     contract = w3.eth.contract(address=CONTRACT, abi=contract_info)
     data = {"from": ADDRS[signer]}
@@ -231,8 +231,8 @@ def wait_for_packet_log(start, event, channel_id, seq, status):
 @pytest.mark.parametrize("order", [Ordering.ORDERED.value, Ordering.UNORDERED.value])
 def test_sc_call(ibc, order):
     cli_host = ibc.chainmain.cosmos_cli()
-    cli_controller = ibc.cronos.cosmos_cli()
-    w3 = ibc.cronos.w3
+    cli_controller = ibc.chainlet.cosmos_cli()
+    w3 = ibc.chainlet.w3
     contract_info = json.loads(CONTRACT_ABIS["IICAModule"].read_text())
     contract = w3.eth.contract(address=CONTRACT, abi=contract_info)
     jsonfile = CONTRACTS["TestICA"]

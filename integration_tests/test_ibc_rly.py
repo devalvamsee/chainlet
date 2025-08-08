@@ -8,8 +8,8 @@ from web3.datastructures import AttributeDict
 from .ibc_utils import (
     RATIO,
     assert_duplicate,
-    cronos_transfer_source_tokens,
-    cronos_transfer_source_tokens_with_proxy,
+    chainlet_transfer_source_tokens,
+    chainlet_transfer_source_tokens_with_proxy,
     hermes_transfer,
     ibc_denom,
     ibc_incentivized_transfer,
@@ -37,7 +37,7 @@ contract_info = json.loads(CONTRACT_ABIS["IRelayerModule"].read_text())
 method_map = get_method_map(contract_info)
 method_name_map = get_method_map(contract_info, by_name=True)
 method_with_seq = ["RecvPacket", "WriteAcknowledgement", "AcknowledgePacket"]
-cronos_signer2 = ADDRS["signer2"]
+chainlet_signer2 = ADDRS["signer2"]
 port_id = "transfer"
 src_amount = 10
 src_denom = "basecro"
@@ -245,16 +245,16 @@ def filter_logs_since(w3, start, name, seq):
 
 
 def test_ibc(ibc):
-    # chainmain-1 relayer -> cronos_777-1 signer2
-    w3 = ibc.cronos.w3
-    wait_for_new_blocks(ibc.cronos.cosmos_cli(), 1)
+    # chainmain-1 relayer -> chainlet_777-1 signer2
+    w3 = ibc.chainlet.w3
+    wait_for_new_blocks(ibc.chainlet.cosmos_cli(), 1)
     start = w3.eth.get_block_number()
     is_hermes = ibc.hermes is not None
 
     if is_hermes:
         ibc_transfer(ibc, hermes_transfer)
         # we don't check the logs for Hermes due to it doesn't sent evm messages
-        # to call the cronos precompiled contract.
+        # to call the chainlet precompiled contract.
     else:
         ibc_transfer(ibc, rly_transfer)
         denom = ibc_denom(channel, src_denom)
@@ -262,52 +262,52 @@ def test_ibc(ibc):
         chainmain_cli = ibc.chainmain.cosmos_cli()
         relayer0 = chainmain_cli.address("relayer")
         relayer = to_checksum_address(bech32_to_eth(relayer0))
-        cronos_addr = module_address("cronos")
+        chainlet_addr = module_address("chainlet")
         transfer_addr = module_address("transfer")
         seq = get_send_packet_seq(chainmain_cli)
         expected = [
             recv_packet(
                 seq,
                 relayer0,
-                cronos_signer2,
+                chainlet_signer2,
                 src_amount,
                 src_denom,
             ),
             send_from_module_to_acc(
                 transfer_addr,
-                cronos_signer2,
+                chainlet_signer2,
                 src_amount,
                 denom,
             ),
             fungible(
-                cronos_signer2,
+                chainlet_signer2,
                 relayer,
                 src_amount,
                 src_denom,
             ),
             send_from_acc_to_module(
-                cronos_signer2,
-                cronos_addr,
+                chainlet_signer2,
+                chainlet_addr,
                 src_amount,
                 denom,
             ),
             send_from_module_to_acc(
-                cronos_addr,
-                cronos_signer2,
+                chainlet_addr,
+                chainlet_signer2,
                 dst_amount,
                 dst_denom,
             ),
             write_ack(
                 seq,
                 relayer0,
-                cronos_signer2,
+                chainlet_signer2,
                 src_amount,
                 src_denom,
             ),
         ]
         assert len(logs) == len(expected)
         height = logs[0]["blockNumber"]
-        assert_duplicate(ibc.cronos.base_port(0), height)
+        assert_duplicate(ibc.chainlet.base_port(0), height)
         for i, log in enumerate(logs):
             method_name, topic = get_topic_data(w3, method_map, contract_info, log)
             assert topic == AttributeDict(expected[i]), [i, method_name]
@@ -326,8 +326,8 @@ def get_escrow_address(cli, channel):
 
 @pytest.mark.skip("skipping due to unsupported precompiled contract in hermes")
 def test_ibc_incentivized_transfer(ibc):
-    w3 = ibc.cronos.w3
-    cli = ibc.cronos.cosmos_cli()
+    w3 = ibc.chainlet.w3
+    cli = ibc.chainlet.cosmos_cli()
     wait_for_new_blocks(cli, 1)
     start = w3.eth.get_block_number()
     amount, seq0, recv_fee, ack_fee = ibc_incentivized_transfer(ibc)
@@ -346,19 +346,19 @@ def test_ibc_incentivized_transfer(ibc):
         *send_coins(feeibc_addr, src_relayer, recv_fee, fee_denom),
         distribute_fee(src_relayer, f"{ack_fee}{fee_denom}"),
         *send_coins(feeibc_addr, src_relayer, ack_fee, fee_denom),
-        distribute_fee(cronos_signer2, ""),
-        *send_coins(feeibc_addr, cronos_signer2, 0, fee_denom),
-        fungible(checksum_dst_adr, cronos_signer2, amount, dst_denom),
-        recv_packet(seq1, dst_adr, cronos_signer2, amount, transfer_denom),
-        *send_coins(escrow, cronos_signer2, amount, dst_denom),
+        distribute_fee(chainlet_signer2, ""),
+        *send_coins(feeibc_addr, chainlet_signer2, 0, fee_denom),
+        fungible(checksum_dst_adr, chainlet_signer2, amount, dst_denom),
+        recv_packet(seq1, dst_adr, chainlet_signer2, amount, transfer_denom),
+        *send_coins(escrow, chainlet_signer2, amount, dst_denom),
         fungible(
-            cronos_signer2,
+            chainlet_signer2,
             checksum_dst_adr,
             amount,
             dst_denom,
             [AttributeDict({"portId": port_id, "channelId": channel})],
         ),
-        write_ack(seq1, dst_adr, cronos_signer2, amount, transfer_denom),
+        write_ack(seq1, dst_adr, chainlet_signer2, amount, transfer_denom),
     ]
     assert len(logs) == len(expected)
     for i, log in enumerate(logs):
@@ -373,43 +373,43 @@ def test_ibc_incentivized_transfer(ibc):
 
 
 def assert_transfer_source_tokens_topics(ibc, fn):
-    cli = ibc.cronos.cosmos_cli()
+    cli = ibc.chainlet.cosmos_cli()
     wait_for_new_blocks(cli, 1)
-    w3 = ibc.cronos.w3
+    w3 = ibc.chainlet.w3
     start = w3.eth.get_block_number()
     amount, contract = fn(ibc)
     logs = get_logs_since(w3, CONTRACT, start)
     escrow = get_escrow_address(cli, channel)
     dst_adr = ibc.chainmain.cosmos_cli().address("signer2")
     seq0 = get_send_packet_seq(
-        ibc.cronos.cosmos_cli(),
+        ibc.chainlet.cosmos_cli(),
         criteria="message.action='/ethermint.evm.v1.MsgEthereumTx'",
     )
     seq1 = get_send_packet_seq(ibc.chainmain.cosmos_cli())
     checksum_dst_adr = to_checksum_address(bech32_to_eth(dst_adr))
-    cronos_addr = module_address("cronos")
-    cronos_denom = f"cronos{contract}"
-    transfer_denom = f"{port_id}/{channel}/{cronos_denom}"
+    chainlet_addr = module_address("chainlet")
+    chainlet_denom = f"chainlet{contract}"
+    transfer_denom = f"{port_id}/{channel}/{chainlet_denom}"
     expected = [
         acknowledge_packet(seq0),
-        fungible(checksum_dst_adr, ADDRS["validator"], amount, cronos_denom),
-        recv_packet(seq1, dst_adr, cronos_signer2, amount, transfer_denom),
-        *send_coins(escrow, cronos_signer2, amount, cronos_denom),
+        fungible(checksum_dst_adr, ADDRS["validator"], amount, chainlet_denom),
+        recv_packet(seq1, dst_adr, chainlet_signer2, amount, transfer_denom),
+        *send_coins(escrow, chainlet_signer2, amount, chainlet_denom),
         fungible(
-            cronos_signer2,
+            chainlet_signer2,
             checksum_dst_adr,
             amount,
-            cronos_denom,
+            chainlet_denom,
             [AttributeDict({"portId": port_id, "channelId": channel})],
         ),
-        *send_coins(cronos_signer2, cronos_addr, amount, cronos_denom),
-        coin_spent(cronos_addr, amount, cronos_denom),
-        burn(cronos_addr, amount, cronos_denom),
-        write_ack(seq1, dst_adr, cronos_signer2, amount, transfer_denom),
+        *send_coins(chainlet_signer2, chainlet_addr, amount, chainlet_denom),
+        coin_spent(chainlet_addr, amount, chainlet_denom),
+        burn(chainlet_addr, amount, chainlet_denom),
+        write_ack(seq1, dst_adr, chainlet_signer2, amount, transfer_denom),
     ]
     assert len(logs) == len(expected)
     height = logs[0]["blockNumber"]
-    assert_duplicate(ibc.cronos.base_port(0), height)
+    assert_duplicate(ibc.chainlet.base_port(0), height)
     for i, log in enumerate(logs):
         method_name, topic = get_topic_data(w3, method_map, contract_info, log)
         assert topic == AttributeDict(expected[i]), [i, method_name]
@@ -422,13 +422,13 @@ def assert_transfer_source_tokens_topics(ibc, fn):
 
 
 @pytest.mark.skip("skipping due to unsupported precompiled contract in hermes")
-def test_cronos_transfer_source_tokens(ibc):
-    assert_transfer_source_tokens_topics(ibc, cronos_transfer_source_tokens)
+def test_chainlet_transfer_source_tokens(ibc):
+    assert_transfer_source_tokens_topics(ibc, chainlet_transfer_source_tokens)
 
 
 @pytest.mark.skip("skipping due to unsupported precompiled contract in hermes")
-def test_cronos_transfer_source_tokens_with_proxy(ibc):
-    assert_transfer_source_tokens_topics(ibc, cronos_transfer_source_tokens_with_proxy)
+def test_chainlet_transfer_source_tokens_with_proxy(ibc):
+    assert_transfer_source_tokens_topics(ibc, chainlet_transfer_source_tokens_with_proxy)
 
 
 def test_ibc_multi(ibc):

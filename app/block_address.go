@@ -3,7 +3,7 @@ package app
 import (
 	"fmt"
 
-	"github.com/devalvamsee/chainlet/x/cronos/types"
+	"github.com/devalvamsee/chainlet/x/chainlet/types"
 
 	"cosmossdk.io/errors"
 
