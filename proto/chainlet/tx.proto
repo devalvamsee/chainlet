@@ -1,25 +1,25 @@
 syntax = "proto3";
-package cronos;
+package chainlet;
 
 // this line is used by starport scaffolding # proto/tx/import
 
 import "cosmos/msg/v1/msg.proto";
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
-import "cronos/cronos.proto";
+import "chainlet/chainlet.proto";
 
-option go_package = "github.com/devalvamsee/cronos/x/cronos/types";
+option go_package = "github.com/devalvamsee/chainlet/x/chainlet/types";
 
 // Msg defines the Cronos Msg service
 service Msg {
   option (cosmos.msg.v1.service) = true;
   // this line is used by starport scaffolding # proto/tx/rpc
 
-  // ConvertVouchers defines a method for converting ibc voucher to cronos evm
+  // ConvertVouchers defines a method for converting ibc voucher to chainlet evm
   // coins.
   rpc ConvertVouchers(MsgConvertVouchers) returns (MsgConvertVouchersResponse);
 
-  // TransferTokens defines a method to transfer cronos evm coins to another
+  // TransferTokens defines a method to transfer chainlet evm coins to another
   // chain through IBC
   rpc TransferTokens(MsgTransferTokens) returns (MsgTransferTokensResponse);
 
@@ -29,10 +29,10 @@ service Msg {
   // TurnBridge defines a method to disable or enable the gravity bridge
   rpc TurnBridge(MsgTurnBridge) returns (MsgTurnBridgeResponse);
 
-  // UpdateParams defines a method to update cronos module params
+  // UpdateParams defines a method to update chainlet module params
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 
-  // UpdatePermissions defines a method to update cronos admins permissions
+  // UpdatePermissions defines a method to update chainlet admins permissions
   rpc UpdatePermissions(MsgUpdatePermissions) returns (MsgUpdatePermissionsResponse);
 
   // StoreBlockList
@@ -40,7 +40,7 @@ service Msg {
 }
 
 // MsgConvertVouchers represents a message to convert ibc voucher coins to
-// cronos evm coins.
+// chainlet evm coins.
 message MsgConvertVouchers {
   option (cosmos.msg.v1.signer)           = "address";
   string   address                        = 1;
@@ -48,7 +48,7 @@ message MsgConvertVouchers {
       [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
 }
 
-// MsgTransferTokens represents a message to transfer cronos evm coins through
+// MsgTransferTokens represents a message to transfer chainlet evm coins through
 // ibc.
 message MsgTransferTokens {
   option (cosmos.msg.v1.signer)           = "from";
@@ -70,7 +70,7 @@ message MsgUpdateTokenMapping {
   string sender                 = 1;
   string denom                  = 2;
   string contract               = 3;
-  // only when updating cronos (source) tokens
+  // only when updating chainlet (source) tokens
   string symbol  = 4;
   uint32 decimal = 5;
 }
@@ -88,7 +88,7 @@ message MsgTurnBridge {
 // MsgTurnBridgeResponse defines the response type
 message MsgTurnBridgeResponse {}
 
-// MsgUpdateParams defines the request type for updating cronos params.
+// MsgUpdateParams defines the request type for updating chainlet params.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
   // authority is the address of the governance account.
@@ -101,7 +101,7 @@ message MsgUpdateParams {
 // MsgUpdateParamsResponse defines the response type.
 message MsgUpdateParamsResponse {}
 
-// MsgUpdatePermissions defines the request type for updating cronos
+// MsgUpdatePermissions defines the request type for updating chainlet
 // permissions.
 message MsgUpdatePermissions {
   option (cosmos.msg.v1.signer) = "from";
