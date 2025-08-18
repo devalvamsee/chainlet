@@ -23,7 +23,7 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 				Params: types.Params{
 					IbcCroDenom:          types.IbcCroDenomDefaultValue,
 					IbcTimeout:           10,
-					CronosAdmin:          sdk.AccAddress(suite.address.Bytes()).String(),
+					ChainletAdmin:          sdk.AccAddress(suite.address.Bytes()).String(),
 					EnableAutoDeployment: true,
 				},
 			},
@@ -41,11 +41,11 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 		{
 			name: "set invalid ibc cro denomination",
 			req: &types.MsgUpdateParams{
-				Authority: suite.app.CronosKeeper.GetAuthority(),
+				Authority: suite.app.ChainletKeeper.GetAuthority(),
 				Params: types.Params{
 					IbcCroDenom:          "foo",
 					IbcTimeout:           10,
-					CronosAdmin:          sdk.AccAddress(suite.address.Bytes()).String(),
+					ChainletAdmin:          sdk.AccAddress(suite.address.Bytes()).String(),
 					EnableAutoDeployment: true,
 				},
 			},
@@ -55,11 +55,11 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 		{
 			name: "set invalid chainlet admin address",
 			req: &types.MsgUpdateParams{
-				Authority: suite.app.CronosKeeper.GetAuthority(),
+				Authority: suite.app.ChainletKeeper.GetAuthority(),
 				Params: types.Params{
 					IbcCroDenom:          types.IbcCroDenomDefaultValue,
 					IbcTimeout:           10,
-					CronosAdmin:          "foo",
+					ChainletAdmin:          "foo",
 					EnableAutoDeployment: true,
 				},
 			},
@@ -70,7 +70,7 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			msgServer := chainletmodulekeeper.NewMsgServerImpl(suite.app.CronosKeeper)
+			msgServer := chainletmodulekeeper.NewMsgServerImpl(suite.app.ChainletKeeper)
 			_, err := msgServer.UpdateParams(suite.ctx, tc.req)
 			if tc.expectErr {
 				suite.Require().Error(err)

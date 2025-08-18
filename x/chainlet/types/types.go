@@ -32,19 +32,19 @@ func IsValidGravityDenom(denom string) bool {
 	return len(denom) == gravityDenomLen && strings.HasPrefix(denom, gravityDenomPrefix)
 }
 
-// IsValidCronosDenom returns true if denom is a valid chainlet denom
-func IsValidCronosDenom(denom string) bool {
+// IsValidChainletDenom returns true if denom is a valid chainlet denom
+func IsValidChainletDenom(denom string) bool {
 	return len(denom) == chainletDenomLen && strings.HasPrefix(denom, chainletDenomPrefix)
 }
 
 // IsSourceCoin returns true if denom is a coin originated from chainlet
 func IsSourceCoin(denom string) bool {
-	return IsValidCronosDenom(denom)
+	return IsValidChainletDenom(denom)
 }
 
 // IsValidCoinDenom returns true if it's ok it is a valid coin denom
 func IsValidCoinDenom(denom string) bool {
-	return IsValidIBCDenom(denom) || IsValidGravityDenom(denom) || IsValidCronosDenom(denom)
+	return IsValidIBCDenom(denom) || IsValidGravityDenom(denom) || IsValidChainletDenom(denom)
 }
 
 // GetContractAddressFromDenom get the contract address from the coin denom

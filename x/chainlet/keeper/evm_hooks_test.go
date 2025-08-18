@@ -70,7 +70,7 @@ func (suite *KeeperTestSuite) TestEvmHooks() {
 		{
 			"success send to account",
 			func() {
-				err := suite.app.CronosKeeper.SetExternalContractForDenom(suite.ctx, denom, contract)
+				err := suite.app.ChainletKeeper.SetExternalContractForDenom(suite.ctx, denom, contract)
 				suite.Require().NoError(err)
 				coin := sdk.NewCoin(denom, sdkmath.NewInt(100))
 				err = suite.MintCoins(contract.Bytes(), sdk.NewCoins(coin))
@@ -107,7 +107,7 @@ func (suite *KeeperTestSuite) TestEvmHooks() {
 			"failed send to ibc, invalid ibc denom",
 			func() {
 				suite.SetupTest()
-				// Create Cronos Keeper with mock transfer keeper
+				// Create Chainlet Keeper with mock transfer keeper
 				chainletKeeper := *chainletmodulekeeper.NewKeeper(
 					suite.app.EncodingConfig().Codec,
 					suite.app.GetKey(types.StoreKey),
@@ -118,9 +118,9 @@ func (suite *KeeperTestSuite) TestEvmHooks() {
 					suite.app.AccountKeeper,
 					authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 				)
-				suite.app.CronosKeeper = chainletKeeper
+				suite.app.ChainletKeeper = chainletKeeper
 
-				err := suite.app.CronosKeeper.SetExternalContractForDenom(suite.ctx, denom, contract)
+				err := suite.app.ChainletKeeper.SetExternalContractForDenom(suite.ctx, denom, contract)
 				suite.Require().NoError(err)
 				coin := sdk.NewCoin(denom, sdkmath.NewInt(100))
 				err = suite.MintCoins(contract.Bytes(), sdk.NewCoins(coin))

@@ -13,7 +13,7 @@ from hexbytes import HexBytes
 from web3._utils.transactions import fill_nonce, fill_transaction_defaults
 
 DEFAULT_DENOM = "basecro"
-CRONOS_ADDRESS_PREFIX = "crc"
+CHAINLET_ADDRESS_PREFIX = "clt"
 LOCAL_RPC = "http://127.0.0.1:26657"
 LOCAL_JSON_RPC = "http://127.0.0.1:8545"
 
@@ -115,7 +115,7 @@ def bech32_to_eth(addr):
     return decode_bech32(addr).hex()
 
 
-def eth_to_bech32(addr, prefix=CRONOS_ADDRESS_PREFIX):
+def eth_to_bech32(addr, prefix=CHAINLET_ADDRESS_PREFIX):
     bz = bech32.convertbits(HexBytes(addr), 8, 5)
     return bech32.bech32_encode(prefix, bz)
 

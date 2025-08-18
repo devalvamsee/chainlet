@@ -17,7 +17,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-type CronosTestSuite struct {
+type ChainletTestSuite struct {
 	suite.Suite
 
 	ctx     sdk.Context
@@ -25,11 +25,11 @@ type CronosTestSuite struct {
 	address sdk.AccAddress
 }
 
-func TestCronosTestSuite(t *testing.T) {
-	suite.Run(t, new(CronosTestSuite))
+func TestChainletTestSuite(t *testing.T) {
+	suite.Run(t, new(ChainletTestSuite))
 }
 
-func (suite *CronosTestSuite) SetupTest() {
+func (suite *ChainletTestSuite) SetupTest() {
 	checkTx := false
 	privKey, err := ethsecp256k1.GenerateKey()
 	suite.Require().NoError(err)
@@ -38,7 +38,7 @@ func (suite *CronosTestSuite) SetupTest() {
 	suite.ctx = suite.app.NewContext(checkTx).WithBlockHeader(tmproto.Header{Height: 1, ChainID: app.TestAppChainID, Time: time.Now().UTC()})
 }
 
-func (suite *CronosTestSuite) TestMsgConvertVouchers() {
+func (suite *ChainletTestSuite) TestMsgConvertVouchers() {
 	testCases := []struct {
 		name          string
 		msg           *types.MsgConvertVouchers
@@ -67,7 +67,7 @@ func (suite *CronosTestSuite) TestMsgConvertVouchers() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			msgSrv := keeper.NewMsgServerImpl(suite.app.CronosKeeper)
+			msgSrv := keeper.NewMsgServerImpl(suite.app.ChainletKeeper)
 			_, err := msgSrv.ConvertVouchers(suite.ctx, tc.msg)
 			if tc.expectedError != nil {
 				suite.Require().EqualError(err, tc.expectedError.Error())
@@ -78,7 +78,7 @@ func (suite *CronosTestSuite) TestMsgConvertVouchers() {
 	}
 }
 
-func (suite *CronosTestSuite) TestMsgTransferTokens() {
+func (suite *ChainletTestSuite) TestMsgTransferTokens() {
 	testCases := []struct {
 		name          string
 		msg           *types.MsgTransferTokens
@@ -112,7 +112,7 @@ func (suite *CronosTestSuite) TestMsgTransferTokens() {
 	}
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			msgSrv := keeper.NewMsgServerImpl(suite.app.CronosKeeper)
+			msgSrv := keeper.NewMsgServerImpl(suite.app.ChainletKeeper)
 			_, err := msgSrv.TransferTokens(suite.ctx, tc.msg)
 			if tc.expectedError != nil {
 				suite.Require().EqualError(err, tc.expectedError.Error())
@@ -123,17 +123,17 @@ func (suite *CronosTestSuite) TestMsgTransferTokens() {
 	}
 }
 
-func (suite *CronosTestSuite) TestUpdateTokenMapping() {
+func (suite *ChainletTestSuite) TestUpdateTokenMapping() {
 	suite.SetupTest()
 
 	denom := "gravity0x6E7eef2b30585B2A4D45Ba9312015d5354FDB067"
 	contract := "0x57f96e6B86CdeFdB3d412547816a82E3E0EbF9D2"
 
 	msg := types.NewMsgUpdateTokenMapping(suite.address.String(), denom, contract, "", 0)
-	err := suite.app.CronosKeeper.RegisterOrUpdateTokenMapping(suite.ctx, msg)
+	err := suite.app.ChainletKeeper.RegisterOrUpdateTokenMapping(suite.ctx, msg)
 	suite.Require().NoError(err)
 
-	contractAddr, found := suite.app.CronosKeeper.GetContractByDenom(suite.ctx, denom)
+	contractAddr, found := suite.app.ChainletKeeper.GetContractByDenom(suite.ctx, denom)
 	suite.Require().True(found)
 	suite.Require().Equal(contract, contractAddr.Hex())
 }

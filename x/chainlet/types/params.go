@@ -14,8 +14,8 @@ var (
 	KeyIbcCroDenom = []byte("IbcCroDenom")
 	// KeyIbcTimeout is store's key for the IBC Timeout
 	KeyIbcTimeout = []byte("IbcTimeout")
-	// KeyCronosAdmin is store's key for the admin address
-	KeyCronosAdmin = []byte("CronosAdmin")
+	// KeyChainletAdmin is store's key for the admin address
+	KeyChainletAdmin = []byte("ChainletAdmin")
 	// KeyEnableAutoDeployment is store's key for the EnableAutoDeployment
 	KeyEnableAutoDeployment = []byte("EnableAutoDeployment")
 	// KeyMaxCallbackGas is store's key for the MaxCallbackGas
@@ -38,7 +38,7 @@ func NewParams(ibcCroDenom string, ibcTimeout uint64, chainletAdmin string, enab
 	return Params{
 		IbcCroDenom:          ibcCroDenom,
 		IbcTimeout:           ibcTimeout,
-		CronosAdmin:          chainletAdmin,
+		ChainletAdmin:          chainletAdmin,
 		EnableAutoDeployment: enableAutoDeployment,
 		MaxCallbackGas:       maxCallbackGas,
 	}
@@ -49,7 +49,7 @@ func DefaultParams() Params {
 	return Params{
 		IbcCroDenom:          IbcCroDenomDefaultValue,
 		IbcTimeout:           IbcTimeoutDefaultValue,
-		CronosAdmin:          "",
+		ChainletAdmin:          "",
 		EnableAutoDeployment: false,
 		MaxCallbackGas:       MaxCallbackGasDefaultValue,
 	}
@@ -63,8 +63,8 @@ func (p Params) Validate() error {
 	if err := validateIsIbcDenom(p.IbcCroDenom); err != nil {
 		return err
 	}
-	if len(p.CronosAdmin) > 0 {
-		if _, err := sdk.AccAddressFromBech32(p.CronosAdmin); err != nil {
+	if len(p.ChainletAdmin) > 0 {
+		if _, err := sdk.AccAddressFromBech32(p.ChainletAdmin); err != nil {
 			return err
 		}
 	}
@@ -85,7 +85,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 	return paramtypes.ParamSetPairs{
 		paramtypes.NewParamSetPair(KeyIbcCroDenom, &p.IbcCroDenom, validateIsIbcDenom),
 		paramtypes.NewParamSetPair(KeyIbcTimeout, &p.IbcTimeout, validateIsUint64),
-		paramtypes.NewParamSetPair(KeyCronosAdmin, &p.CronosAdmin, validateIsAddress),
+		paramtypes.NewParamSetPair(KeyChainletAdmin, &p.ChainletAdmin, validateIsAddress),
 		paramtypes.NewParamSetPair(KeyEnableAutoDeployment, &p.EnableAutoDeployment, validateIsBool),
 		paramtypes.NewParamSetPair(KeyMaxCallbackGas, &p.MaxCallbackGas, validateIsUint64),
 	}

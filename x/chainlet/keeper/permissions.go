@@ -34,7 +34,7 @@ func (k Keeper) HasPermission(ctx sdk.Context, accounts []sdk.AccAddress, permis
 	if permissionsToCheck == 0 {
 		return true
 	}
-	admin := k.GetParams(ctx).CronosAdmin
+	admin := k.GetParams(ctx).ChainletAdmin
 	for _, account := range accounts {
 		if admin == account.String() {
 			return true

@@ -43,7 +43,7 @@ ACCOUNTS = {
 }
 KEYS = {name: account.key for name, account in ACCOUNTS.items()}
 ADDRS = {name: account.address for name, account in ACCOUNTS.items()}
-CRONOS_ADDRESS_PREFIX = "crc"
+CHAINLET_ADDRESS_PREFIX = "clt"
 TEST_CONTRACTS = {
     "Gravity": "Gravity.sol",
     "Greeter": "Greeter.sol",
@@ -54,7 +54,7 @@ TEST_CONTRACTS = {
     "TestMessageCall": "TestMessageCall.sol",
     "TestBlackListERC20": "TestBlackListERC20.sol",
     "CroBridge": "CroBridge.sol",
-    "CronosGravityCancellation": "CronosGravityCancellation.sol",
+    "ChainletGravityCancellation": "ChainletGravityCancellation.sol",
     "TestCRC20": "TestCRC20.sol",
     "TestCRC20Proxy": "TestCRC20Proxy.sol",
     "TestMaliciousSupply": "TestMaliciousSupply.sol",
@@ -376,7 +376,7 @@ def bech32_to_eth(addr):
     return decode_bech32(addr).hex()
 
 
-def eth_to_bech32(addr, prefix=CRONOS_ADDRESS_PREFIX):
+def eth_to_bech32(addr, prefix=CHAINLET_ADDRESS_PREFIX):
     bz = bech32.convertbits(HexBytes(addr), 8, 5)
     return bech32.bech32_encode(prefix, bz)
 
@@ -457,7 +457,7 @@ def send_transaction(w3, tx, key=KEYS["validator"]):
     return w3.eth.wait_for_transaction_receipt(txhash)
 
 
-def chainlet_address_from_mnemonics(mnemonics, prefix=CRONOS_ADDRESS_PREFIX):
+def chainlet_address_from_mnemonics(mnemonics, prefix=CHAINLET_ADDRESS_PREFIX):
     "return chainlet address from mnemonics"
     acct = Account.from_mnemonic(mnemonics)
     return eth_to_bech32(acct.address, prefix)
@@ -472,7 +472,7 @@ def derive_new_account(n=1):
 
 def send_to_cosmos(gravity_contract, token_contract, w3, recipient, amount, key=None):
     """
-    do approve and sendToCronos on ethereum side
+    do approve and sendToChainlet on ethereum side
     """
     acct = Account.from_key(key)
     txreceipt = send_transaction(
@@ -486,7 +486,7 @@ def send_to_cosmos(gravity_contract, token_contract, w3, recipient, amount, key=
 
     return send_transaction(
         w3,
-        gravity_contract.functions.sendToCronos(
+        gravity_contract.functions.sendToChainlet(
             token_contract.address, HexBytes(recipient), amount
         ).build_transaction({"from": acct.address}),
         key,
@@ -682,7 +682,7 @@ def multiple_send_to_cosmos(gcontract, tcontract, w3, recipient, amount, keys):
         assert txreceipt.status == 1, "approve failed"
 
         # generate the tx
-        tx = gcontract.functions.sendToCronos(
+        tx = gcontract.functions.sendToChainlet(
             tcontract.address, HexBytes(recipient), amount
         ).build_transaction({"from": acct_address})
         signed = sign_transaction(w3, tx, key_from)
@@ -730,7 +730,7 @@ def module_address(name):
 def submit_any_proposal(chainlet):
     # governance module account as granter
     cli = chainlet.cosmos_cli()
-    granter_addr = "crc10d07y265gmmuvt4z0w9aw880jnsr700jdufnyd"
+    granter_addr = "clt10d07y265gmmuvt4z0w9aw880jnsr700jdufnyd"
     grantee_addr = cli.address("signer1")
 
     msg = "/cosmos.feegrant.v1beta1.MsgGrantAllowance"

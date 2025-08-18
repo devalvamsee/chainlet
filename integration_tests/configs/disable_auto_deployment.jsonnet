@@ -18,7 +18,7 @@ config {
       app_state+: {
         chainlet: {
           params: {
-            chainlet_admin: 'crc12luku6uxehhak02py4rcz65zu0swh7wjsrw0pp',
+            chainlet_admin: 'clt12luku6uxehhak02py4rcz65zu0swh7wjsrw0pp',
             enable_auto_deployment: false,
           },
         },

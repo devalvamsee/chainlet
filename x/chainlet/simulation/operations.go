@@ -55,12 +55,12 @@ func SimulateUpdateTokenMapping(ak types.AccountKeeper, bk types.BankKeeper, k *
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-		chainletAdmin := k.GetParams(ctx).CronosAdmin
+		chainletAdmin := k.GetParams(ctx).ChainletAdmin
 		var simAccount simtypes.Account
 
 		if r.Intn(2) > 0 {
 			var found bool
-			simAccount, found = findCronosAdmin(accs, chainletAdmin)
+			simAccount, found = findChainletAdmin(accs, chainletAdmin)
 			if !found {
 				simAccount, _ = simtypes.RandomAcc(r, accs)
 			}
@@ -98,7 +98,7 @@ func SimulateUpdateTokenMapping(ak types.AccountKeeper, bk types.BankKeeper, k *
 	}
 }
 
-func findCronosAdmin(accs []simtypes.Account, chainletAdmin string) (simtypes.Account, bool) {
+func findChainletAdmin(accs []simtypes.Account, chainletAdmin string) (simtypes.Account, bool) {
 	found := false
 	for _, acc := range accs {
 		if acc.Address.String() == chainletAdmin {

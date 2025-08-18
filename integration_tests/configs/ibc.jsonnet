@@ -2,7 +2,7 @@ local config = import 'default.jsonnet';
 
 config {
   'chainlet_777-1'+: {
-    'account-prefix': 'crc',
+    'account-prefix': 'clt',
     'coin-type': 60,
     key_name: 'signer1',
     accounts: super.accounts[:std.length(super.accounts) - 1] + [super.accounts[std.length(super.accounts) - 1] {

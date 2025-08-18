@@ -20,7 +20,7 @@ import (
 
 const (
 	CorrectIbcDenom    = "ibc/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-	CorrectCronosDenom = "chainlet0xc1b37f2abdb778f540fa5db8e1fd2eadfc9a05ed"
+	CorrectChainletDenom = "chainlet0xc1b37f2abdb778f540fa5db8e1fd2eadfc9a05ed"
 )
 
 func (suite *KeeperTestSuite) TestConvertVouchersToEvmCoins() {
@@ -117,9 +117,9 @@ func (suite *KeeperTestSuite) TestConvertVouchersToEvmCoins() {
 				ibcCroCoin := suite.GetBalance(address, CorrectIbcDenom)
 				suite.Require().Equal(sdkmath.NewInt(0), ibcCroCoin.Amount)
 				// Verify CRC20 balance post operation
-				contract, found := suite.app.CronosKeeper.GetContractByDenom(suite.ctx, CorrectIbcDenom)
+				contract, found := suite.app.ChainletKeeper.GetContractByDenom(suite.ctx, CorrectIbcDenom)
 				suite.Require().True(found)
-				ret, err := suite.app.CronosKeeper.CallModuleCRC21(suite.ctx, contract, "balanceOf", common.BytesToAddress(address.Bytes()))
+				ret, err := suite.app.ChainletKeeper.CallModuleCRC21(suite.ctx, contract, "balanceOf", common.BytesToAddress(address.Bytes()))
 				suite.Require().NoError(err)
 				suite.Require().Equal(big.NewInt(123), big.NewInt(0).SetBytes(ret))
 			},
@@ -131,7 +131,7 @@ func (suite *KeeperTestSuite) TestConvertVouchersToEvmCoins() {
 			suite.SetupTest() // reset
 
 			tc.malleate()
-			err := suite.app.CronosKeeper.ConvertVouchersToEvmCoins(suite.ctx, tc.from, tc.coin)
+			err := suite.app.ChainletKeeper.ConvertVouchersToEvmCoins(suite.ctx, tc.from, tc.coin)
 			if tc.expectedError != nil {
 				suite.Require().EqualError(err, tc.expectedError.Error())
 			} else {
@@ -254,7 +254,7 @@ func (suite *KeeperTestSuite) TestIbcTransferCoins() {
 			"channel-0",
 			func() {
 				// Add support for the IBC token
-				suite.app.CronosKeeper.SetAutoContractForDenom(suite.ctx, "incorrect", common.HexToAddress("0x11"))
+				suite.app.ChainletKeeper.SetAutoContractForDenom(suite.ctx, "incorrect", common.HexToAddress("0x11"))
 			},
 			errors.New("the coin incorrect is neither an ibc voucher or a chainlet token"),
 			func() {
@@ -271,7 +271,7 @@ func (suite *KeeperTestSuite) TestIbcTransferCoins() {
 				err := suite.MintCoins(address, sdk.NewCoins(sdk.NewCoin(CorrectIbcDenom, sdkmath.NewInt(123))))
 				suite.Require().NoError(err)
 				// Add support for the IBC token
-				suite.app.CronosKeeper.SetAutoContractForDenom(suite.ctx, CorrectIbcDenom, common.HexToAddress("0x11"))
+				suite.app.ChainletKeeper.SetAutoContractForDenom(suite.ctx, CorrectIbcDenom, common.HexToAddress("0x11"))
 			},
 			nil,
 			func() {
@@ -281,14 +281,14 @@ func (suite *KeeperTestSuite) TestIbcTransferCoins() {
 			"Correct address with incorrect IBC token denom",
 			address.String(),
 			"to",
-			sdk.NewCoins(sdk.NewCoin(CorrectCronosDenom, sdkmath.NewInt(123))),
+			sdk.NewCoins(sdk.NewCoin(CorrectChainletDenom, sdkmath.NewInt(123))),
 			"aaa",
 			func() {
 				// Mint IBC token for user
-				err := suite.MintCoins(address, sdk.NewCoins(sdk.NewCoin(CorrectCronosDenom, sdkmath.NewInt(123))))
+				err := suite.MintCoins(address, sdk.NewCoins(sdk.NewCoin(CorrectChainletDenom, sdkmath.NewInt(123))))
 				suite.Require().NoError(err)
 				// Add support for the IBC token
-				suite.app.CronosKeeper.SetAutoContractForDenom(suite.ctx, CorrectCronosDenom, common.HexToAddress("0x11"))
+				suite.app.ChainletKeeper.SetAutoContractForDenom(suite.ctx, CorrectChainletDenom, common.HexToAddress("0x11"))
 			},
 			errors.New("invalid channel id for ibc transfer of source token"),
 			func() {
@@ -299,7 +299,7 @@ func (suite *KeeperTestSuite) TestIbcTransferCoins() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest() // reset
-			// Create Cronos Keeper with mock transfer keeper
+			// Create Chainlet Keeper with mock transfer keeper
 			chainletKeeper := *chainletmodulekeeper.NewKeeper(
 				suite.app.EncodingConfig().Codec,
 				suite.app.GetKey(types.StoreKey),
@@ -310,10 +310,10 @@ func (suite *KeeperTestSuite) TestIbcTransferCoins() {
 				suite.app.AccountKeeper,
 				authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 			)
-			suite.app.CronosKeeper = chainletKeeper
+			suite.app.ChainletKeeper = chainletKeeper
 
 			tc.malleate()
-			err := suite.app.CronosKeeper.IbcTransferCoins(suite.ctx, tc.from, tc.to, tc.coin, tc.channelId)
+			err := suite.app.ChainletKeeper.IbcTransferCoins(suite.ctx, tc.from, tc.to, tc.coin, tc.channelId)
 			if tc.expectedError != nil {
 				suite.Require().EqualError(err, tc.expectedError.Error())
 			} else {

@@ -311,7 +311,7 @@ type App struct {
 
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
-	CronosKeeper chainletkeeper.Keeper
+	ChainletKeeper chainletkeeper.Keeper
 
 	// the module manager
 	ModuleManager      *module.Manager
@@ -634,14 +634,14 @@ func New(
 				return chainletprecompiles.NewRelayerContract(app.IBCKeeper, appCodec, rules, app.Logger())
 			},
 			func(ctx sdk.Context, rules ethparams.Rules) vm.PrecompiledContract {
-				return chainletprecompiles.NewIcaContract(ctx, app.ICAControllerKeeper, &app.CronosKeeper, appCodec, gasConfig)
+				return chainletprecompiles.NewIcaContract(ctx, app.ICAControllerKeeper, &app.ChainletKeeper, appCodec, gasConfig)
 			},
 		},
 	)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
-	app.CronosKeeper = *chainletkeeper.NewKeeper(
+	app.ChainletKeeper = *chainletkeeper.NewKeeper(
 		appCodec,
 		keys[chainlettypes.StoreKey],
 		keys[chainlettypes.MemStoreKey],
@@ -651,13 +651,13 @@ func New(
 		app.AccountKeeper,
 		authAddr,
 	)
-	chainletModule := chainlet.NewAppModule(app.CronosKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(chainlettypes.ModuleName))
+	chainletModule := chainlet.NewAppModule(app.ChainletKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(chainlettypes.ModuleName))
 
 	// register the proposal types
 	govRouter := govv1beta1.NewRouter()
 	govRouter.AddRoute(govtypes.RouterKey, govv1beta1.ProposalHandler).
 		AddRoute(paramproposal.RouterKey, params.NewParamChangeProposalHandler(app.ParamsKeeper)).
-		AddRoute(chainlettypes.RouterKey, chainlet.NewTokenMappingChangeProposalHandler(app.CronosKeeper))
+		AddRoute(chainlettypes.RouterKey, chainlet.NewTokenMappingChangeProposalHandler(app.ChainletKeeper))
 
 	govConfig := govtypes.DefaultConfig()
 	/*
@@ -670,7 +670,7 @@ func New(
 
 	var transferStack porttypes.IBCModule
 	transferStack = transfer.NewIBCModule(app.TransferKeeper)
-	transferStack = middleware.NewIBCConversionModule(transferStack, app.CronosKeeper)
+	transferStack = middleware.NewIBCConversionModule(transferStack, app.ChainletKeeper)
 
 	govKeeper := govkeeper.NewKeeper(
 		appCodec,
@@ -689,15 +689,15 @@ func New(
 	)
 
 	app.EvmKeeper.SetHooks(chainletkeeper.NewLogProcessEvmHook(
-		evmhandlers.NewSendToAccountHandler(app.BankKeeper, app.CronosKeeper),
-		evmhandlers.NewSendToIbcHandler(app.BankKeeper, app.CronosKeeper),
-		evmhandlers.NewSendCroToIbcHandler(app.BankKeeper, app.CronosKeeper),
-		evmhandlers.NewSendToIbcV2Handler(app.BankKeeper, app.CronosKeeper),
+		evmhandlers.NewSendToAccountHandler(app.BankKeeper, app.ChainletKeeper),
+		evmhandlers.NewSendToIbcHandler(app.BankKeeper, app.ChainletKeeper),
+		evmhandlers.NewSendCroToIbcHandler(app.BankKeeper, app.ChainletKeeper),
+		evmhandlers.NewSendToIbcV2Handler(app.BankKeeper, app.ChainletKeeper),
 	))
 
 	var icaControllerStack porttypes.IBCModule
 	icaControllerStack = icacontroller.NewIBCMiddleware(app.ICAControllerKeeper) // we don't limit gas usage here, because the chainlet keeper will use network parameter to control it.
-	icaControllerStack = ibccallbacks.NewIBCMiddleware(icaControllerStack, app.IBCKeeper.ChannelKeeper, app.CronosKeeper, math.MaxUint64)
+	icaControllerStack = ibccallbacks.NewIBCMiddleware(icaControllerStack, app.IBCKeeper.ChannelKeeper, app.ChainletKeeper, math.MaxUint64)
 	icaICS4Wrapper, ok := icaControllerStack.(porttypes.ICS4Wrapper)
 	if !ok {
 		panic(fmt.Errorf("cannot convert %T to %T", icaControllerStack, icaICS4Wrapper))
@@ -786,7 +786,7 @@ func New(
 		evm.NewAppModule(app.EvmKeeper, app.AccountKeeper, evmS),
 		e2ee.NewAppModule(app.E2EEKeeper),
 
-		// Cronos app modules
+		// Chainlet app modules
 		chainletModule,
 	)
 
@@ -1062,7 +1062,7 @@ func (app *App) setAnteHandler(txConfig client.TxConfig, maxGasWanted uint64, bl
 
 		blockedMap[addr.String()] = struct{}{}
 	}
-	blockAddressDecorator := NewBlockAddressesDecorator(blockedMap, app.CronosKeeper.GetParams)
+	blockAddressDecorator := NewBlockAddressesDecorator(blockedMap, app.ChainletKeeper.GetParams)
 	options := evmante.HandlerOptions{
 		AccountKeeper:          app.AccountKeeper,
 		BankKeeper:             app.BankKeeper,
@@ -1129,7 +1129,7 @@ func (app *App) EndBlocker(ctx sdk.Context) (sdk.EndBlock, error) {
 
 func (app *App) RefreshBlockList(ctx sdk.Context) error {
 	// refresh blocklist
-	return app.blockProposalHandler.SetBlockList(app.CronosKeeper.GetBlockList(ctx))
+	return app.blockProposalHandler.SetBlockList(app.ChainletKeeper.GetBlockList(ctx))
 }
 
 // InitChainer application update at chain initialization

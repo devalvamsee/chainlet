@@ -130,7 +130,7 @@ func (k Keeper) Permissions(goCtx context.Context, req *types.QueryPermissionsRe
 	if err != nil {
 		return nil, err
 	}
-	admin := k.GetParams(ctx).CronosAdmin
+	admin := k.GetParams(ctx).ChainletAdmin
 	if admin == acc.String() {
 		return &types.QueryPermissionsResponse{
 			CanChangeTokenMapping: true,

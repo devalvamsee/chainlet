@@ -4,11 +4,11 @@ import tempfile
 import tomlkit
 from pystarport import ports
 
-from .network import Cronos
+from .network import Chainlet
 from .utils import ADDRS, send_transaction, w3_wait_for_new_blocks, wait_for_port
 
 
-def test_versiondb_migration(chainlet: Cronos):
+def test_versiondb_migration(chainlet: Chainlet):
     """
     test versiondb migration commands.
     node0 has memiavl and versiondb enabled while node1 don't,

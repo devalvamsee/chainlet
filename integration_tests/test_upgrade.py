@@ -12,7 +12,7 @@ import requests
 from pystarport import ports
 from pystarport.cluster import SUPERVISOR_CONFIG_FILE
 
-from .network import Cronos, setup_custom_chainlet
+from .network import Chainlet, setup_custom_chainlet
 from .utils import (
     ADDRS,
     CONTRACTS,
@@ -313,7 +313,7 @@ def exec(c, tmp_path_factory):
     to = "0x2D5B6C193C39D2AECb4a99052074E6F325258a0f"
     with pytest.raises(AssertionError) as err:
         cli.query_account(eth_to_bech32(to))
-    assert "crc194dkcxfu88f2aj62nyzjqa8x7vjjtzs0jwcj06 not found" in str(err.value)
+    assert "clt194dkcxfu88f2aj62nyzjqa8x7vjjtzs0jwcj06 not found" in str(err.value)
     receipt = send_transaction(w3, {"to": to, "value": 10, "gas": 21000})
     method = "debug_traceTransaction"
     params = [receipt["transactionHash"].hex(), {"tracer": "callTracer"}]
@@ -337,5 +337,5 @@ def exec(c, tmp_path_factory):
     assert tx_af.get("result") == tx_bf.get("result"), tx_af
 
 
-def test_cosmovisor_upgrade(custom_chainlet: Cronos, tmp_path_factory):
+def test_cosmovisor_upgrade(custom_chainlet: Chainlet, tmp_path_factory):
     exec(custom_chainlet, tmp_path_factory)

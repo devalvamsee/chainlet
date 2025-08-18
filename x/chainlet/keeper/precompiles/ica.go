@@ -73,14 +73,14 @@ type IcaContract struct {
 	ctx              sdk.Context
 	cdc              codec.Codec
 	controllerKeeper icacontrollerkeeper.Keeper
-	chainletKeeper     types.CronosKeeper
+	chainletKeeper     types.ChainletKeeper
 	kvGasConfig      storetypes.GasConfig
 }
 
 func NewIcaContract(
 	ctx sdk.Context,
 	controllerKeeper icacontrollerkeeper.Keeper,
-	chainletKeeper types.CronosKeeper,
+	chainletKeeper types.ChainletKeeper,
 	cdc codec.Codec,
 	kvGasConfig storetypes.GasConfig,
 ) vm.PrecompiledContract {

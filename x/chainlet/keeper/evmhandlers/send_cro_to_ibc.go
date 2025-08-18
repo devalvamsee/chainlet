@@ -15,10 +15,10 @@ import (
 
 var _ types.EvmLogHandler = SendCroToIbcHandler{}
 
-const SendCroToIbcEventName = "__CronosSendCroToIbc"
+const SendCroToIbcEventName = "__ChainletSendCroToIbc"
 
 // SendCroToIbcEvent represent the signature of
-// `event __CronosSendCroToIbc(string recipient, uint256 amount)`
+// `event __ChainletSendCroToIbc(string recipient, uint256 amount)`
 var SendCroToIbcEvent abi.Event
 
 func init() {
@@ -46,7 +46,7 @@ func init() {
 	)
 }
 
-// SendCroToIbcHandler handles `__CronosSendCroToIbc` log
+// SendCroToIbcHandler handles `__ChainletSendCroToIbc` log
 type SendCroToIbcHandler struct {
 	bankKeeper   types.BankKeeper
 	chainletKeeper chainletkeeper.Keeper

@@ -60,7 +60,7 @@ func (suite *KeeperTestSuite) TestSendToAccountHandler() {
 		{
 			"success send to account",
 			func() {
-				err := suite.app.CronosKeeper.SetExternalContractForDenom(suite.ctx, denom, contract)
+				err := suite.app.ChainletKeeper.SetExternalContractForDenom(suite.ctx, denom, contract)
 				suite.Require().NoError(err)
 				coin := sdk.NewCoin(denom, sdkmath.NewInt(100))
 				err = suite.MintCoins(contract.Bytes(), sdk.NewCoins(coin))
@@ -92,7 +92,7 @@ func (suite *KeeperTestSuite) TestSendToAccountHandler() {
 
 	for _, tc := range testCases {
 		suite.Run(fmt.Sprintf("Case %s", tc.msg), func() {
-			handler := evmhandlers.NewSendToAccountHandler(suite.app.BankKeeper, suite.app.CronosKeeper)
+			handler := evmhandlers.NewSendToAccountHandler(suite.app.BankKeeper, suite.app.ChainletKeeper)
 			tc.malleate()
 			err := handler.Handle(suite.ctx, contract, topics, data, func(contractAddress common.Address, logSig common.Hash, logData []byte) {})
 			if tc.error != nil {
@@ -145,7 +145,7 @@ func (suite *KeeperTestSuite) TestSendToIbcHandler() {
 		{
 			"non IBC denom, expect fail",
 			func() {
-				err := suite.app.CronosKeeper.SetExternalContractForDenom(suite.ctx, invalidDenom, contract)
+				err := suite.app.ChainletKeeper.SetExternalContractForDenom(suite.ctx, invalidDenom, contract)
 				suite.Require().NoError(err)
 				coin := sdk.NewCoin(invalidDenom, sdkmath.NewInt(100))
 				err = suite.MintCoins(contract.Bytes(), sdk.NewCoins(coin))
@@ -170,7 +170,7 @@ func (suite *KeeperTestSuite) TestSendToIbcHandler() {
 		{
 			"success send to ibc",
 			func() {
-				err := suite.app.CronosKeeper.SetExternalContractForDenom(suite.ctx, validDenom, contract)
+				err := suite.app.ChainletKeeper.SetExternalContractForDenom(suite.ctx, validDenom, contract)
 				suite.Require().NoError(err)
 				coin := sdk.NewCoin(validDenom, sdkmath.NewInt(100))
 				err = suite.MintCoins(contract.Bytes(), sdk.NewCoins(coin))
@@ -197,7 +197,7 @@ func (suite *KeeperTestSuite) TestSendToIbcHandler() {
 	for _, tc := range testCases {
 		suite.Run(fmt.Sprintf("Case %s", tc.msg), func() {
 			suite.SetupTest()
-			// Create Cronos Keeper with mock transfer keeper
+			// Create Chainlet Keeper with mock transfer keeper
 			chainletKeeper := *chainletmodulekeeper.NewKeeper(
 				suite.app.EncodingConfig().Codec,
 				suite.app.GetKey(types.StoreKey),
@@ -264,7 +264,7 @@ func (suite *KeeperTestSuite) TestSendToIbcV2Handler() {
 		{
 			"non IBC denom, expect fail",
 			func() {
-				err := suite.app.CronosKeeper.SetExternalContractForDenom(suite.ctx, invalidDenom, contract)
+				err := suite.app.ChainletKeeper.SetExternalContractForDenom(suite.ctx, invalidDenom, contract)
 				suite.Require().NoError(err)
 				coin := sdk.NewCoin(invalidDenom, sdkmath.NewInt(100))
 				err = suite.MintCoins(contract.Bytes(), sdk.NewCoins(coin))
@@ -291,7 +291,7 @@ func (suite *KeeperTestSuite) TestSendToIbcV2Handler() {
 		{
 			"success send to ibc",
 			func() {
-				err := suite.app.CronosKeeper.SetExternalContractForDenom(suite.ctx, validDenom, contract)
+				err := suite.app.ChainletKeeper.SetExternalContractForDenom(suite.ctx, validDenom, contract)
 				suite.Require().NoError(err)
 				coin := sdk.NewCoin(validDenom, sdkmath.NewInt(100))
 				err = suite.MintCoins(contract.Bytes(), sdk.NewCoins(coin))
@@ -320,7 +320,7 @@ func (suite *KeeperTestSuite) TestSendToIbcV2Handler() {
 	for _, tc := range testCases {
 		suite.Run(fmt.Sprintf("Case %s", tc.msg), func() {
 			suite.SetupTest()
-			// Create Cronos Keeper with mock transfer keeper
+			// Create Chainlet Keeper with mock transfer keeper
 			chainletKeeper := *chainletmodulekeeper.NewKeeper(
 				suite.app.EncodingConfig().Codec,
 				suite.app.GetKey(types.StoreKey),
@@ -417,7 +417,7 @@ func (suite *KeeperTestSuite) TestSendCroToIbcHandler() {
 	for _, tc := range testCases {
 		suite.Run(fmt.Sprintf("Case %s", tc.msg), func() {
 			suite.SetupTest()
-			// Create Cronos Keeper with mock transfer keeper
+			// Create Chainlet Keeper with mock transfer keeper
 			chainletKeeper := *chainletmodulekeeper.NewKeeper(
 				suite.app.EncodingConfig().Codec,
 				suite.app.GetKey(types.StoreKey),

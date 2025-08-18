@@ -16,10 +16,10 @@ import (
 
 var _ types.EvmLogHandler = SendToIbcHandler{}
 
-const SendToIbcEventName = "__CronosSendToIbc"
+const SendToIbcEventName = "__ChainletSendToIbc"
 
 // SendToIbcEvent represent the signature of
-// `event __CronosSendToIbc(address sender, string recipient, uint256 amount)`
+// `event __ChainletSendToIbc(address sender, string recipient, uint256 amount)`
 var SendToIbcEvent abi.Event
 
 func init() {
@@ -47,7 +47,7 @@ func init() {
 	)
 }
 
-// SendToIbcHandler handles `__CronosSendToIbc` log
+// SendToIbcHandler handles `__ChainletSendToIbc` log
 type SendToIbcHandler struct {
 	bankKeeper   types.BankKeeper
 	chainletKeeper chainletkeeper.Keeper
@@ -96,7 +96,7 @@ func (h SendToIbcHandler) handle(
 		return fmt.Errorf("contract %s is not connected to native token", contract)
 	}
 
-	if !types.IsValidIBCDenom(denom) && !types.IsValidCronosDenom(denom) {
+	if !types.IsValidIBCDenom(denom) && !types.IsValidChainletDenom(denom) {
 		return fmt.Errorf("the native token associated with the contract %s is neither an ibc voucher or a chainlet token", contract)
 	}
 

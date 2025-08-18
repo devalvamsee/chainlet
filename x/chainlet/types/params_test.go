@@ -73,7 +73,7 @@ func Test_validateIsBool(t *testing.T) {
 
 func Test_validateIsAddress(t *testing.T) {
 	config := sdk.GetConfig()
-	config.SetBech32PrefixForAccount("crc", "crc"+sdk.PrefixPublic)
+	config.SetBech32PrefixForAccount("clt", "clt"+sdk.PrefixPublic)
 
 	type args struct {
 		i interface{}
@@ -84,8 +84,8 @@ func Test_validateIsAddress(t *testing.T) {
 		wantErr bool
 	}{
 		{"invalid address", args{"a"}, true},
-		{"invalid bech32 prefix", args{"tcrc12luku6uxehhak02py4rcz65zu0swh7wjsrw0pp"}, true},
-		{"correct bech32 address", args{"crc12luku6uxehhak02py4rcz65zu0swh7wjsrw0pp"}, false},
+		{"invalid bech32 prefix", args{"tclt12luku6uxehhak02py4rcz65zu0swh7wjsrw0pp"}, true},
+		{"correct bech32 address", args{"clt12luku6uxehhak02py4rcz65zu0swh7wjsrw0pp"}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

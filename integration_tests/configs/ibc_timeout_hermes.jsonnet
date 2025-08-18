@@ -20,7 +20,7 @@ ibc {
   },
   relayer+: {
     chains: [super.chains[0] {
-      fee_granter: 'crc16z0herz998946wr659lr84c8c556da55dc34hh', //signer1
+      fee_granter: 'clt16z0herz998946wr659lr84c8c556da55dc34hh', //signer1
     }] + super.chains[1:],
   },
 }

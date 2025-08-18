@@ -15,7 +15,7 @@ import (
 var _ types.EvmLogHandler = SendToIbcV2Handler{}
 
 // SendToIbcEventV2 represent the signature of
-// `event __CronosSendToIbc(address indexed sender, string indexed recipient, string indexed channel_id, uint256 amount, bytes extraData)`
+// `event __ChainletSendToIbc(address indexed sender, string indexed recipient, string indexed channel_id, uint256 amount, bytes extraData)`
 var SendToIbcEventV2 abi.Event
 
 func init() {
@@ -52,7 +52,7 @@ func init() {
 	)
 }
 
-// SendToIbcV2Handler handles `__CronosSendToIbc` log
+// SendToIbcV2Handler handles `__ChainletSendToIbc` log
 type SendToIbcV2Handler struct {
 	*SendToIbcHandler
 }

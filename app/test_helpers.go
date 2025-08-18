@@ -118,7 +118,7 @@ func SetupWithGenesisValSet(t *testing.T, chainletAdmin string, valSet *tmtypes.
 	require.NoError(t, err)
 
 	chainletGen := chainlettypes.DefaultGenesis()
-	chainletGen.Params.CronosAdmin = chainletAdmin
+	chainletGen.Params.ChainletAdmin = chainletAdmin
 	// enable auto deployment in test genesis
 	chainletGen.Params.EnableAutoDeployment = true
 	genesisState["chainlet"] = app.cdc.MustMarshalJSON(chainletGen)

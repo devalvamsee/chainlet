@@ -31,7 +31,7 @@ func GenIbcTimeout(r *rand.Rand) uint64 {
 	return timeout
 }
 
-func GenCronosAdmin(r *rand.Rand, simState *module.SimulationState) string {
+func GenChainletAdmin(r *rand.Rand, simState *module.SimulationState) string {
 	adminAccount, _ := simtypes.RandomAcc(r, simState.Accounts)
 	return adminAccount.Address.String()
 }
@@ -68,7 +68,7 @@ func RandomizedGenState(simState *module.SimulationState) {
 
 	simState.AppParams.GetOrGenerate(
 		chainletAdminKey, &chainletAdmin, simState.Rand,
-		func(r *rand.Rand) { chainletAdmin = GenCronosAdmin(r, simState) },
+		func(r *rand.Rand) { chainletAdmin = GenChainletAdmin(r, simState) },
 	)
 
 	simState.AppParams.GetOrGenerate(

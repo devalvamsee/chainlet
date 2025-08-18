@@ -47,7 +47,7 @@ chainletd genesis collect-gentxs
 # Run this to ensure everything worked and that the genesis file is setup correctly
 chainletd genesis validate
 
-echo "blocked-addresses = ['crc16z0herz998946wr659lr84c8c556da55dc34hh']" >> $HOME/.chainlet/config/app.toml
+echo "blocked-addresses = ['clt16z0herz998946wr659lr84c8c556da55dc34hh']" >> $HOME/.chainlet/config/app.toml
 
 # Start the node (remove the --pruning=nothing flag if historical queries are not needed)
 chainletd start --pruning=nothing --rpc.unsafe --log_level info --json-rpc.api eth,txpool,personal,net,debug,web3 --minimum-gas-prices 200000aphoton --api.enable

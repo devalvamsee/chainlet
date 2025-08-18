@@ -64,7 +64,7 @@ def check_auto_deployment(cli, denom, chainlet_w3, recipient, amount):
 def get_id_from_receipt(receipt):
     "check the id after sendToEvmChain call"
     target = HexBytes(
-        abi.event_signature_to_log_topic("__CronosSendToEvmChainResponse(uint256)")
+        abi.event_signature_to_log_topic("__ChainletSendToEvmChainResponse(uint256)")
     )
     for _, log in enumerate(receipt.logs):
         if log.topics[0] == target:
@@ -136,8 +136,8 @@ def test_gravity_transfer(gravity):
         txreceipt = send_transaction(chainlet_w3, tx, KEYS["community"])
         # CRC20 emit 3 logs for send_to_evm_chain:
         # burn
-        # __CronosSendToEvmChain
-        # __CronosSendToEvmChainResponse
+        # __ChainletSendToEvmChain
+        # __ChainletSendToEvmChainResponse
         assert len(txreceipt.logs) == 3
         data = "0x0000000000000000000000000000000000000000000000000000000000000001"
         match = get_id_from_receipt(txreceipt) == HexBytes(data)
@@ -385,7 +385,7 @@ def test_gravity_cancel_transfer(gravity):
         # deploy gravity cancellation contract
         cancel_contract = deploy_contract(
             chainlet_w3,
-            CONTRACTS["CronosGravityCancellation"],
+            CONTRACTS["ChainletGravityCancellation"],
         )
 
         balance = erc20.caller.balanceOf(ADDRS["validator"])
@@ -426,8 +426,8 @@ def test_gravity_cancel_transfer(gravity):
         txreceipt = send_transaction(chainlet_w3, tx, KEYS["community"])
         # CRC20 emit 3 logs for send_to_evm_chain:
         # burn
-        # __CronosSendToEvmChain
-        # __CronosSendToEvmChainResponse
+        # __ChainletSendToEvmChain
+        # __ChainletSendToEvmChainResponse
         assert len(txreceipt.logs) == 3
         tx_id = get_id_from_receipt(txreceipt)
         assert txreceipt.status == 1, "should success"

@@ -18,7 +18,7 @@ from . import transaction
 from .cli import ChainCommand
 from .echo import run_echo_server
 from .peer import (
-    CONTAINER_CRONOSD_PATH,
+    CONTAINER_CHAINLETD_PATH,
     FULLNODE_GROUP,
     VALIDATOR_GROUP,
     gen_genesis,
@@ -31,7 +31,7 @@ from .types import PeerPacket
 from .utils import Tee, block_height, block_txs, wait_for_block, wait_for_port
 
 # use chainletd on host machine
-LOCAL_CRONOSD_PATH = "chainletd"
+LOCAL_CHAINLETD_PATH = "chainletd"
 DEFAULT_CHAIN_ID = "chainlet_777-1"
 # the container must be deployed with the prefixed name
 HOSTNAME_TEMPLATE = "testplan-{index}"
@@ -94,7 +94,7 @@ def _gen(
     genesis_patch = genesis_patch or {}
 
     outdir = Path(outdir)
-    cli = ChainCommand(LOCAL_CRONOSD_PATH)
+    cli = ChainCommand(LOCAL_CHAINLETD_PATH)
     (outdir / VALIDATOR_GROUP).mkdir(parents=True, exist_ok=True)
     (outdir / FULLNODE_GROUP).mkdir(parents=True, exist_ok=True)
 
@@ -178,7 +178,7 @@ ADD ./out {dst}
 @cli.command()
 @click.option("--outdir", default="/outputs")
 @click.option("--datadir", default="/data")
-@click.option("--chainletd", default=CONTAINER_CRONOSD_PATH)
+@click.option("--chainletd", default=CONTAINER_CHAINLETD_PATH)
 @click.option("--global-seq", default=None, type=int)
 def run(outdir: str, datadir: str, chainletd, global_seq):
     datadir = Path(datadir)

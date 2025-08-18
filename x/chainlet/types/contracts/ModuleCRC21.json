@@ -163,7 +163,7 @@
           "type": "uint256"
         }
       ],
-      "name": "__CronosCancelSendToEvmChain",
+      "name": "__ChainletCancelSendToEvmChain",
       "type": "event"
     },
     {
@@ -206,7 +206,7 @@
           "type": "bytes"
         }
       ],
-      "name": "__CronosSendToEvmChain",
+      "name": "__ChainletSendToEvmChain",
       "type": "event"
     },
     {
@@ -243,7 +243,7 @@
           "type": "bytes"
         }
       ],
-      "name": "__CronosSendToIbc",
+      "name": "__ChainletSendToIbc",
       "type": "event"
     },
     {

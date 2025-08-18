@@ -101,7 +101,7 @@ func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 
 func (k msgServer) UpdatePermissions(goCtx context.Context, msg *types.MsgUpdatePermissions) (*types.MsgUpdatePermissionsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	admin := k.Keeper.GetParams(ctx).CronosAdmin
+	admin := k.Keeper.GetParams(ctx).ChainletAdmin
 	// if admin is empty, no sender could be equal to it
 	if admin != msg.From {
 		return nil, errors.Wrap(sdkerrors.ErrUnauthorized, "msg sender is not authorized")
@@ -117,7 +117,7 @@ func (k msgServer) UpdatePermissions(goCtx context.Context, msg *types.MsgUpdate
 
 func (k msgServer) StoreBlockList(goCtx context.Context, msg *types.MsgStoreBlockList) (*types.MsgStoreBlockListResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	admin := k.Keeper.GetParams(ctx).CronosAdmin
+	admin := k.Keeper.GetParams(ctx).ChainletAdmin
 	if admin != msg.From {
 		return nil, errors.Wrap(sdkerrors.ErrUnauthorized, "msg sender is not authorized")
 	}

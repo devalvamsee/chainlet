@@ -28,7 +28,7 @@ type Params struct {
 	IbcCroDenom string `protobuf:"bytes,1,opt,name=ibc_cro_denom,json=ibcCroDenom,proto3" json:"ibc_cro_denom,omitempty" yaml:"ibc_cro_denom,omitempty"`
 	IbcTimeout  uint64 `protobuf:"varint,2,opt,name=ibc_timeout,json=ibcTimeout,proto3" json:"ibc_timeout,omitempty"`
 	// the admin address who can update token mapping
-	CronosAdmin          string `protobuf:"bytes,3,opt,name=chainlet_admin,json=chainletAdmin,proto3" json:"chainlet_admin,omitempty"`
+	ChainletAdmin          string `protobuf:"bytes,3,opt,name=chainlet_admin,json=chainletAdmin,proto3" json:"chainlet_admin,omitempty"`
 	EnableAutoDeployment bool   `protobuf:"varint,4,opt,name=enable_auto_deployment,json=enableAutoDeployment,proto3" json:"enable_auto_deployment,omitempty"`
 	MaxCallbackGas       uint64 `protobuf:"varint,5,opt,name=max_callback_gas,json=maxCallbackGas,proto3" json:"max_callback_gas,omitempty"`
 }
@@ -79,9 +79,9 @@ func (m *Params) GetIbcTimeout() uint64 {
 	return 0
 }
 
-func (m *Params) GetCronosAdmin() string {
+func (m *Params) GetChainletAdmin() string {
 	if m != nil {
-		return m.CronosAdmin
+		return m.ChainletAdmin
 	}
 	return ""
 }
@@ -258,7 +258,7 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.MaxCallbackGas != 0 {
-		i = encodeVarintCronos(dAtA, i, uint64(m.MaxCallbackGas))
+		i = encodeVarintChainlet(dAtA, i, uint64(m.MaxCallbackGas))
 		i--
 		dAtA[i] = 0x28
 	}
@@ -272,22 +272,22 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x20
 	}
-	if len(m.CronosAdmin) > 0 {
-		i -= len(m.CronosAdmin)
-		copy(dAtA[i:], m.CronosAdmin)
-		i = encodeVarintCronos(dAtA, i, uint64(len(m.CronosAdmin)))
+	if len(m.ChainletAdmin) > 0 {
+		i -= len(m.ChainletAdmin)
+		copy(dAtA[i:], m.ChainletAdmin)
+		i = encodeVarintChainlet(dAtA, i, uint64(len(m.ChainletAdmin)))
 		i--
 		dAtA[i] = 0x1a
 	}
 	if m.IbcTimeout != 0 {
-		i = encodeVarintCronos(dAtA, i, uint64(m.IbcTimeout))
+		i = encodeVarintChainlet(dAtA, i, uint64(m.IbcTimeout))
 		i--
 		dAtA[i] = 0x10
 	}
 	if len(m.IbcCroDenom) > 0 {
 		i -= len(m.IbcCroDenom)
 		copy(dAtA[i:], m.IbcCroDenom)
-		i = encodeVarintCronos(dAtA, i, uint64(len(m.IbcCroDenom)))
+		i = encodeVarintChainlet(dAtA, i, uint64(len(m.IbcCroDenom)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -315,42 +315,42 @@ func (m *TokenMappingChangeProposal) MarshalToSizedBuffer(dAtA []byte) (int, err
 	var l int
 	_ = l
 	if m.Decimal != 0 {
-		i = encodeVarintCronos(dAtA, i, uint64(m.Decimal))
+		i = encodeVarintChainlet(dAtA, i, uint64(m.Decimal))
 		i--
 		dAtA[i] = 0x30
 	}
 	if len(m.Symbol) > 0 {
 		i -= len(m.Symbol)
 		copy(dAtA[i:], m.Symbol)
-		i = encodeVarintCronos(dAtA, i, uint64(len(m.Symbol)))
+		i = encodeVarintChainlet(dAtA, i, uint64(len(m.Symbol)))
 		i--
 		dAtA[i] = 0x2a
 	}
 	if len(m.Contract) > 0 {
 		i -= len(m.Contract)
 		copy(dAtA[i:], m.Contract)
-		i = encodeVarintCronos(dAtA, i, uint64(len(m.Contract)))
+		i = encodeVarintChainlet(dAtA, i, uint64(len(m.Contract)))
 		i--
 		dAtA[i] = 0x22
 	}
 	if len(m.Denom) > 0 {
 		i -= len(m.Denom)
 		copy(dAtA[i:], m.Denom)
-		i = encodeVarintCronos(dAtA, i, uint64(len(m.Denom)))
+		i = encodeVarintChainlet(dAtA, i, uint64(len(m.Denom)))
 		i--
 		dAtA[i] = 0x1a
 	}
 	if len(m.Description) > 0 {
 		i -= len(m.Description)
 		copy(dAtA[i:], m.Description)
-		i = encodeVarintCronos(dAtA, i, uint64(len(m.Description)))
+		i = encodeVarintChainlet(dAtA, i, uint64(len(m.Description)))
 		i--
 		dAtA[i] = 0x12
 	}
 	if len(m.Title) > 0 {
 		i -= len(m.Title)
 		copy(dAtA[i:], m.Title)
-		i = encodeVarintCronos(dAtA, i, uint64(len(m.Title)))
+		i = encodeVarintChainlet(dAtA, i, uint64(len(m.Title)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -380,22 +380,22 @@ func (m *TokenMapping) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if len(m.Contract) > 0 {
 		i -= len(m.Contract)
 		copy(dAtA[i:], m.Contract)
-		i = encodeVarintCronos(dAtA, i, uint64(len(m.Contract)))
+		i = encodeVarintChainlet(dAtA, i, uint64(len(m.Contract)))
 		i--
 		dAtA[i] = 0x12
 	}
 	if len(m.Denom) > 0 {
 		i -= len(m.Denom)
 		copy(dAtA[i:], m.Denom)
-		i = encodeVarintCronos(dAtA, i, uint64(len(m.Denom)))
+		i = encodeVarintChainlet(dAtA, i, uint64(len(m.Denom)))
 		i--
 		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func encodeVarintCronos(dAtA []byte, offset int, v uint64) int {
-	offset -= sovCronos(v)
+func encodeVarintChainlet(dAtA []byte, offset int, v uint64) int {
+	offset -= sovChainlet(v)
 	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -413,20 +413,20 @@ func (m *Params) Size() (n int) {
 	_ = l
 	l = len(m.IbcCroDenom)
 	if l > 0 {
-		n += 1 + l + sovCronos(uint64(l))
+		n += 1 + l + sovChainlet(uint64(l))
 	}
 	if m.IbcTimeout != 0 {
-		n += 1 + sovCronos(uint64(m.IbcTimeout))
+		n += 1 + sovChainlet(uint64(m.IbcTimeout))
 	}
-	l = len(m.CronosAdmin)
+	l = len(m.ChainletAdmin)
 	if l > 0 {
-		n += 1 + l + sovCronos(uint64(l))
+		n += 1 + l + sovChainlet(uint64(l))
 	}
 	if m.EnableAutoDeployment {
 		n += 2
 	}
 	if m.MaxCallbackGas != 0 {
-		n += 1 + sovCronos(uint64(m.MaxCallbackGas))
+		n += 1 + sovChainlet(uint64(m.MaxCallbackGas))
 	}
 	return n
 }
@@ -439,26 +439,26 @@ func (m *TokenMappingChangeProposal) Size() (n int) {
 	_ = l
 	l = len(m.Title)
 	if l > 0 {
-		n += 1 + l + sovCronos(uint64(l))
+		n += 1 + l + sovChainlet(uint64(l))
 	}
 	l = len(m.Description)
 	if l > 0 {
-		n += 1 + l + sovCronos(uint64(l))
+		n += 1 + l + sovChainlet(uint64(l))
 	}
 	l = len(m.Denom)
 	if l > 0 {
-		n += 1 + l + sovCronos(uint64(l))
+		n += 1 + l + sovChainlet(uint64(l))
 	}
 	l = len(m.Contract)
 	if l > 0 {
-		n += 1 + l + sovCronos(uint64(l))
+		n += 1 + l + sovChainlet(uint64(l))
 	}
 	l = len(m.Symbol)
 	if l > 0 {
-		n += 1 + l + sovCronos(uint64(l))
+		n += 1 + l + sovChainlet(uint64(l))
 	}
 	if m.Decimal != 0 {
-		n += 1 + sovCronos(uint64(m.Decimal))
+		n += 1 + sovChainlet(uint64(m.Decimal))
 	}
 	return n
 }
@@ -471,20 +471,20 @@ func (m *TokenMapping) Size() (n int) {
 	_ = l
 	l = len(m.Denom)
 	if l > 0 {
-		n += 1 + l + sovCronos(uint64(l))
+		n += 1 + l + sovChainlet(uint64(l))
 	}
 	l = len(m.Contract)
 	if l > 0 {
-		n += 1 + l + sovCronos(uint64(l))
+		n += 1 + l + sovChainlet(uint64(l))
 	}
 	return n
 }
 
-func sovCronos(x uint64) (n int) {
+func sovChainlet(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
-func sozCronos(x uint64) (n int) {
-	return sovCronos(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+func sozChainlet(x uint64) (n int) {
+	return sovChainlet(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
 func (m *Params) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -494,7 +494,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
 			if shift >= 64 {
-				return ErrIntOverflowCronos
+				return ErrIntOverflowChainlet
 			}
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
@@ -522,7 +522,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowCronos
+					return ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -536,11 +536,11 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -554,7 +554,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			m.IbcTimeout = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowCronos
+					return ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -568,12 +568,12 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			}
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CronosAdmin", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ChainletAdmin", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowCronos
+					return ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -587,16 +587,16 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.CronosAdmin = string(dAtA[iNdEx:postIndex])
+			m.ChainletAdmin = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
 			if wireType != 0 {
@@ -605,7 +605,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowCronos
+					return ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -625,7 +625,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			m.MaxCallbackGas = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowCronos
+					return ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -639,12 +639,12 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			}
 		default:
 			iNdEx = preIndex
-			skippy, err := skipCronos(dAtA[iNdEx:])
+			skippy, err := skipChainlet(dAtA[iNdEx:])
 			if err != nil {
 				return err
 			}
 			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
@@ -666,7 +666,7 @@ func (m *TokenMappingChangeProposal) Unmarshal(dAtA []byte) error {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
 			if shift >= 64 {
-				return ErrIntOverflowCronos
+				return ErrIntOverflowChainlet
 			}
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
@@ -694,7 +694,7 @@ func (m *TokenMappingChangeProposal) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowCronos
+					return ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -708,11 +708,11 @@ func (m *TokenMappingChangeProposal) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -726,7 +726,7 @@ func (m *TokenMappingChangeProposal) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowCronos
+					return ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -740,11 +740,11 @@ func (m *TokenMappingChangeProposal) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -758,7 +758,7 @@ func (m *TokenMappingChangeProposal) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowCronos
+					return ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -772,11 +772,11 @@ func (m *TokenMappingChangeProposal) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -790,7 +790,7 @@ func (m *TokenMappingChangeProposal) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowCronos
+					return ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -804,11 +804,11 @@ func (m *TokenMappingChangeProposal) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -822,7 +822,7 @@ func (m *TokenMappingChangeProposal) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowCronos
+					return ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -836,11 +836,11 @@ func (m *TokenMappingChangeProposal) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -854,7 +854,7 @@ func (m *TokenMappingChangeProposal) Unmarshal(dAtA []byte) error {
 			m.Decimal = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowCronos
+					return ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -868,12 +868,12 @@ func (m *TokenMappingChangeProposal) Unmarshal(dAtA []byte) error {
 			}
 		default:
 			iNdEx = preIndex
-			skippy, err := skipCronos(dAtA[iNdEx:])
+			skippy, err := skipChainlet(dAtA[iNdEx:])
 			if err != nil {
 				return err
 			}
 			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
@@ -895,7 +895,7 @@ func (m *TokenMapping) Unmarshal(dAtA []byte) error {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
 			if shift >= 64 {
-				return ErrIntOverflowCronos
+				return ErrIntOverflowChainlet
 			}
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
@@ -923,7 +923,7 @@ func (m *TokenMapping) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowCronos
+					return ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -937,11 +937,11 @@ func (m *TokenMapping) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -955,7 +955,7 @@ func (m *TokenMapping) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowCronos
+					return ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -969,11 +969,11 @@ func (m *TokenMapping) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -982,12 +982,12 @@ func (m *TokenMapping) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
-			skippy, err := skipCronos(dAtA[iNdEx:])
+			skippy, err := skipChainlet(dAtA[iNdEx:])
 			if err != nil {
 				return err
 			}
 			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthCronos
+				return ErrInvalidLengthChainlet
 			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
@@ -1001,7 +1001,7 @@ func (m *TokenMapping) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func skipCronos(dAtA []byte) (n int, err error) {
+func skipChainlet(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
 	depth := 0
@@ -1009,7 +1009,7 @@ func skipCronos(dAtA []byte) (n int, err error) {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
 			if shift >= 64 {
-				return 0, ErrIntOverflowCronos
+				return 0, ErrIntOverflowChainlet
 			}
 			if iNdEx >= l {
 				return 0, io.ErrUnexpectedEOF
@@ -1026,7 +1026,7 @@ func skipCronos(dAtA []byte) (n int, err error) {
 		case 0:
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return 0, ErrIntOverflowCronos
+					return 0, ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
@@ -1042,7 +1042,7 @@ func skipCronos(dAtA []byte) (n int, err error) {
 			var length int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return 0, ErrIntOverflowCronos
+					return 0, ErrIntOverflowChainlet
 				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
@@ -1055,14 +1055,14 @@ func skipCronos(dAtA []byte) (n int, err error) {
 				}
 			}
 			if length < 0 {
-				return 0, ErrInvalidLengthCronos
+				return 0, ErrInvalidLengthChainlet
 			}
 			iNdEx += length
 		case 3:
 			depth++
 		case 4:
 			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupCronos
+				return 0, ErrUnexpectedEndOfGroupChainlet
 			}
 			depth--
 		case 5:
@@ -1071,7 +1071,7 @@ func skipCronos(dAtA []byte) (n int, err error) {
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
 		if iNdEx < 0 {
-			return 0, ErrInvalidLengthCronos
+			return 0, ErrInvalidLengthChainlet
 		}
 		if depth == 0 {
 			return iNdEx, nil
@@ -1081,7 +1081,7 @@ func skipCronos(dAtA []byte) (n int, err error) {
 }
 
 var (
-	ErrInvalidLengthCronos        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowCronos          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupCronos = fmt.Errorf("proto: unexpected end of group")
+	ErrInvalidLengthChainlet        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowChainlet          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupChainlet = fmt.Errorf("proto: unexpected end of group")
 )

@@ -1,6 +1,6 @@
 <!--
 order: 0
-title: Cronos Overview
+title: Chainlet Overview
 parent:
   title: "cronos"
 -->

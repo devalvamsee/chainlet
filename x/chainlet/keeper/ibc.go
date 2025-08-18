@@ -130,7 +130,7 @@ func (k Keeper) IbcTransferCoins(ctx sdk.Context, from, destination string, coin
 			}
 
 		default:
-			if !types.IsValidIBCDenom(c.Denom) && !types.IsValidCronosDenom(c.Denom) {
+			if !types.IsValidIBCDenom(c.Denom) && !types.IsValidChainletDenom(c.Denom) {
 				return fmt.Errorf("the coin %s is neither an ibc voucher or a chainlet token", c.Denom)
 			}
 			_, found := k.GetContractByDenom(ctx, c.Denom)

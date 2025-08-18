@@ -50,7 +50,7 @@ import (
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 )
 
-const EnvPrefix = "CRONOS"
+const EnvPrefix = "CHAINLET"
 
 var ChainID string
 
@@ -87,7 +87,7 @@ func NewRootCmd() *cobra.Command {
 
 	rootCmd := &cobra.Command{
 		Use:   app.Name + "d",
-		Short: "Cronos Daemon",
+		Short: "Chainlet Daemon",
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
 			// set the default command outputs
 			cmd.SetOut(cmd.OutOrStdout())

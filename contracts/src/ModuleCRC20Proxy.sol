@@ -9,9 +9,9 @@ contract ModuleCRC20Proxy is DSMath {
     ModuleCRC20 crc20Contract;
     bool isSource;
 
-    event __CronosSendToIbc(address indexed sender, uint256 indexed channel_id, string recipient, uint256 amount, bytes extraData);
-    event __CronosSendToEvmChain(address indexed sender, address indexed recipient, uint256 indexed chain_id, uint256 amount, uint256 bridge_fee, bytes extraData);
-    event __CronosCancelSendToEvmChain(address indexed sender, uint256 id);
+    event __ChainletSendToIbc(address indexed sender, uint256 indexed channel_id, string recipient, uint256 amount, bytes extraData);
+    event __ChainletSendToEvmChain(address indexed sender, address indexed recipient, uint256 indexed chain_id, uint256 amount, uint256 bridge_fee, bytes extraData);
+    event __ChainletCancelSendToEvmChain(address indexed sender, uint256 id);
 
     /**
         Instantiate a ModuleCRC20Proxy contract. Need to set manually the crc20 contract authority to be the proxy
@@ -71,7 +71,7 @@ contract ModuleCRC20Proxy is DSMath {
         } else {
             crc20_burn(msg.sender, add(amount, bridge_fee));
         }
-        emit __CronosSendToEvmChain(msg.sender, recipient, chain_id, amount, bridge_fee, extraData);
+        emit __ChainletSendToEvmChain(msg.sender, recipient, chain_id, amount, bridge_fee, extraData);
     }
 
     // send an "amount" of the contract token to recipient through IBC
@@ -81,12 +81,12 @@ contract ModuleCRC20Proxy is DSMath {
         } else {
             crc20_burn(msg.sender, amount);
         }
-        emit __CronosSendToIbc(msg.sender, channel_id, recipient, amount, extraData);
+        emit __ChainletSendToIbc(msg.sender, channel_id, recipient, amount, extraData);
     }
 
     // cancel a send to chain transaction considering if it hasn't been batched yet.
     function cancel_send_to_evm_chain(uint256 id) external {
-        emit __CronosCancelSendToEvmChain(msg.sender, id);
+        emit __ChainletCancelSendToEvmChain(msg.sender, id);
     }
 
     /**

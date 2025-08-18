@@ -44,7 +44,7 @@ def test_evm_update_param(chainlet, tmp_path):
 
 def test_gov_update_params(chainlet):
     params = {
-        "chainlet_admin": "crc12luku6uxehhak02py4rcz65zu0swh7wjsrw0pp",
+        "chainlet_admin": "clt12luku6uxehhak02py4rcz65zu0swh7wjsrw0pp",
         "enable_auto_deployment": False,
         "ibc_cro_denom": "ibc/6411AE2ADA1E73DB59DB151"
         "A8988F9B7D5E7E233D8414DB6817F8F1A01600000",

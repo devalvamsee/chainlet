@@ -187,10 +187,10 @@ func benchmarkERC20Transfer(b *testing.B, db dbm.DB, appOpts servertypes.AppOpti
 
 	{
 		ctx, write := ctx.CacheContext()
-		contractAddr, err = app.CronosKeeper.DeployModuleCRC21(ctx, "test")
+		contractAddr, err = app.ChainletKeeper.DeployModuleCRC21(ctx, "test")
 		require.NoError(b, err)
 		for _, acc := range testAccounts {
-			_, err = app.CronosKeeper.CallModuleCRC21(ctx, contractAddr, "mint_by_chainlet_module", acc.Address, big.NewInt(amount))
+			_, err = app.ChainletKeeper.CallModuleCRC21(ctx, contractAddr, "mint_by_chainlet_module", acc.Address, big.NewInt(amount))
 			require.NoError(b, err)
 		}
 		write()
@@ -204,7 +204,7 @@ func benchmarkERC20Transfer(b *testing.B, db dbm.DB, appOpts servertypes.AppOpti
 
 	// check remaining balance
 	ctx = app.GetContextForCheckTx(nil).WithBlockHeader(cmtproto.Header{ProposerAddress: consAddress})
-	ret, err := app.CronosKeeper.CallModuleCRC21(ctx, contractAddr, "balanceOf", testAccounts[0].Address)
+	ret, err := app.ChainletKeeper.CallModuleCRC21(ctx, contractAddr, "balanceOf", testAccounts[0].Address)
 	require.NoError(b, err)
 	require.Equal(b, uint64(amount), binary.BigEndian.Uint64(ret[32-8:]))
 
@@ -263,7 +263,7 @@ func benchmarkERC20Transfer(b *testing.B, db dbm.DB, appOpts servertypes.AppOpti
 
 	// check remaining balance
 	ctx = app.GetContextForCheckTx(nil).WithBlockHeader(cmtproto.Header{ProposerAddress: consAddress})
-	ret, err = app.CronosKeeper.CallModuleCRC21(ctx, contractAddr, "balanceOf", testAccounts[0].Address)
+	ret, err = app.ChainletKeeper.CallModuleCRC21(ctx, contractAddr, "balanceOf", testAccounts[0].Address)
 	require.NoError(b, err)
 	require.Equal(b, uint64(amount)-testAccounts[0].Nonce, binary.BigEndian.Uint64(ret[32-8:]))
 }

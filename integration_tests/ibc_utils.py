@@ -13,7 +13,7 @@ from cprotobuf import Field, ProtoEntity
 from eth_utils import to_checksum_address
 from pystarport import cluster, ports
 
-from .network import Chainmain, Cronos, Hermes, setup_custom_chainlet
+from .network import Chainmain, Chainlet, Hermes, setup_custom_chainlet
 from .utils import (
     ADDRS,
     CONTRACTS,
@@ -44,7 +44,7 @@ class ChannelOrder(Enum):
 
 
 class IBCNetwork(NamedTuple):
-    chainlet: Cronos
+    chainlet: Chainlet
     chainmain: Chainmain
     hermes: Hermes | None
     incentivized: bool

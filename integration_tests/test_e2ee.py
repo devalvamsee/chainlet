@@ -5,11 +5,11 @@ from eth_utils import to_checksum_address
 from hexbytes import HexBytes
 from pystarport import ports
 
-from .network import Cronos
+from .network import Chainlet
 from .utils import ADDRS, bech32_to_eth, wait_for_new_blocks, wait_for_port
 
 
-def test_register(chainlet: Cronos):
+def test_register(chainlet: Chainlet):
     cli = chainlet.cosmos_cli()
     pubkey0 = cli.e2ee_keygen(keyring_name="key0")
     with pytest.raises(AssertionError) as exc:
@@ -18,7 +18,7 @@ def test_register(chainlet: Cronos):
     assert not cli.query_e2ee_key(cli.address("validator"))
 
 
-def gen_validator_identity(chainlet: Cronos):
+def gen_validator_identity(chainlet: Chainlet):
     for i in range(len(chainlet.config["validators"])):
         cli = chainlet.cosmos_cli(i)
         if cli.query_e2ee_key(cli.address("validator")):

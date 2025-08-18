@@ -14,7 +14,7 @@ import requests
 from dateutil.parser import isoparse
 from pystarport.utils import build_cli_args_safe, format_doc_string, interact
 
-from .utils import CRONOS_ADDRESS_PREFIX, get_sync_info
+from .utils import CHAINLET_ADDRESS_PREFIX, get_sync_info
 
 # the default initial base fee used by integration tests
 DEFAULT_GAS_PRICE = "100000000000basetcro"
@@ -34,7 +34,7 @@ class ModuleAccount(enum.Enum):
 @format_doc_string(
     options=",".join(v.value for v in ModuleAccount.__members__.values())
 )
-def module_address(name, prefix=CRONOS_ADDRESS_PREFIX):
+def module_address(name, prefix=CHAINLET_ADDRESS_PREFIX):
     """
     get address of module accounts
 

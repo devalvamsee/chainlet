@@ -199,13 +199,13 @@ def test_statesync(chainlet):
     # Load chainlet-devnet.yaml
     # Spawn pystarport with the yaml, port 26650
     # (multiple nodes will be created based on `validators`)
-    # Return a Cronos object (Defined in network.py)
+    # Return a Chainlet object (Defined in network.py)
     w3 = chainlet.w3
 
     # do some transactions
     # DEPRECATED: Do a tx bank transaction
-    # from_addr = "crc1q04jewhxw4xxu3vlg3rc85240h9q7ns6hglz0g"
-    # to_addr = "crc16z0herz998946wr659lr84c8c556da55dc34hh"
+    # from_addr = "clt1q04jewhxw4xxu3vlg3rc85240h9q7ns6hglz0g"
+    # to_addr = "clt16z0herz998946wr659lr84c8c556da55dc34hh"
     # coins = "10basetcro"
     # node = chainlet.node_rpc(0)
     # txhash_0 = chainlet.cosmos_cli(0).transfer(from_addr, to_addr, coins)["txhash"]

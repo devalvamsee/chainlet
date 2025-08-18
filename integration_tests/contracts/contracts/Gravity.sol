@@ -631,7 +631,7 @@ contract Gravity is ReentrancyGuard, AccessControl, Pausable, Ownable {
 		}
 	}
 
-	function sendToCronos(
+	function sendToChainlet(
 		address _tokenContract,
 		address _destination,
 		uint256 _amount

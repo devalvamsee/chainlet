@@ -5,7 +5,7 @@ import (
 	"github.com/devalvamsee/chainlet/x/chainlet/types"
 )
 
-func (suite *CronosTestSuite) TestInitGenesis() {
+func (suite *ChainletTestSuite) TestInitGenesis() {
 	testCases := []struct {
 		name     string
 		malleate func()
@@ -118,13 +118,13 @@ func (suite *CronosTestSuite) TestInitGenesis() {
 			if tc.expPanic {
 				suite.Require().Panics(
 					func() {
-						chainlet.InitGenesis(suite.ctx, suite.app.CronosKeeper, *tc.genState)
+						chainlet.InitGenesis(suite.ctx, suite.app.ChainletKeeper, *tc.genState)
 					},
 				)
 			} else {
 				suite.Require().NotPanics(
 					func() {
-						chainlet.InitGenesis(suite.ctx, suite.app.CronosKeeper, *tc.genState)
+						chainlet.InitGenesis(suite.ctx, suite.app.ChainletKeeper, *tc.genState)
 					},
 				)
 			}
@@ -132,7 +132,7 @@ func (suite *CronosTestSuite) TestInitGenesis() {
 	}
 }
 
-func (suite *CronosTestSuite) TestExportGenesis() {
-	genesisState := chainlet.ExportGenesis(suite.ctx, suite.app.CronosKeeper)
+func (suite *ChainletTestSuite) TestExportGenesis() {
+	genesisState := chainlet.ExportGenesis(suite.ctx, suite.app.ChainletKeeper)
 	suite.Require().Equal(genesisState.Params.IbcCroDenom, types.DefaultParams().IbcCroDenom)
 }

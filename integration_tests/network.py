@@ -13,7 +13,7 @@ from .cosmoscli import CosmosCLI
 from .utils import supervisorctl, w3_wait_for_block, wait_for_port
 
 
-class Cronos:
+class Chainlet:
     def __init__(self, base_dir, chain_binary="chainletd"):
         self._w3 = None
         self.base_dir = base_dir
@@ -25,7 +25,7 @@ class Cronos:
         self.chain_binary = chain_binary
 
     def copy(self):
-        return Cronos(self.base_dir)
+        return Chainlet(self.base_dir)
 
     def w3_http_endpoint(self, i=0):
         port = ports.evmrpc_port(self.base_port(i))
@@ -139,7 +139,7 @@ def setup_geth(path, base_port):
 
 
 class GravityBridge:
-    chainlet: Cronos
+    chainlet: Chainlet
     geth: Geth
     # gravity contract deployed on geth
     contract: web3.contract.Contract
@@ -186,7 +186,7 @@ def setup_custom_chainlet(
         if wait_port:
             wait_for_port(ports.evmrpc_port(base_port))
             wait_for_port(ports.evmrpc_ws_port(base_port))
-        c = Cronos(path / "chainlet_777-1", chain_binary=chain_binary or "chainletd")
+        c = Chainlet(path / "chainlet_777-1", chain_binary=chain_binary or "chainletd")
         w3_wait_for_block(c.w3, 1)
         yield c
     finally:

@@ -68,8 +68,8 @@ type EvmKeeper interface {
 	ChainID() *big.Int
 }
 
-// CronosKeeper defines the interface for chainlet keeper
-type CronosKeeper interface {
+// ChainletKeeper defines the interface for chainlet keeper
+type ChainletKeeper interface {
 	GetParams(ctx sdk.Context) (params Params)
 }
 

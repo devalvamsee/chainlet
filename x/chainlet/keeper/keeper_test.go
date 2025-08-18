@@ -138,7 +138,7 @@ func (suite *KeeperTestSuite) RegisterSourceToken(
 		Symbol:   symbol,
 		Decimal:  decimal,
 	}
-	return suite.app.CronosKeeper.RegisterOrUpdateTokenMapping(suite.ctx, &msg)
+	return suite.app.ChainletKeeper.RegisterOrUpdateTokenMapping(suite.ctx, &msg)
 }
 
 func (suite *KeeperTestSuite) TestDenomContractMap() {
@@ -155,7 +155,7 @@ func (suite *KeeperTestSuite) TestDenomContractMap() {
 		{
 			"success, happy path",
 			func() {
-				keeper := suite.app.CronosKeeper
+				keeper := suite.app.ChainletKeeper
 
 				_, found := keeper.GetContractByDenom(suite.ctx, denom1)
 				suite.Require().False(found)
@@ -177,7 +177,7 @@ func (suite *KeeperTestSuite) TestDenomContractMap() {
 		{
 			"failure, multiple denoms map to same contract",
 			func() {
-				keeper := suite.app.CronosKeeper
+				keeper := suite.app.ChainletKeeper
 				keeper.SetAutoContractForDenom(suite.ctx, denom1, autoContract)
 				err := keeper.SetExternalContractForDenom(suite.ctx, denom2, autoContract)
 				suite.Require().Error(err)
@@ -186,7 +186,7 @@ func (suite *KeeperTestSuite) TestDenomContractMap() {
 		{
 			"failure, multiple denoms map to same external contract",
 			func() {
-				keeper := suite.app.CronosKeeper
+				keeper := suite.app.ChainletKeeper
 				err := keeper.SetExternalContractForDenom(suite.ctx, denom1, externalContract)
 				suite.Require().NoError(err)
 				err = keeper.SetExternalContractForDenom(suite.ctx, denom2, externalContract)
@@ -275,7 +275,7 @@ func (suite *KeeperTestSuite) TestOnRecvVouchers() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest() // reset
-			// Create Cronos Keeper with mock transfer keeper
+			// Create Chainlet Keeper with mock transfer keeper
 			chainletKeeper := *chainletmodulekeeper.NewKeeper(
 				suite.app.EncodingConfig().Codec,
 				suite.app.GetKey(types.StoreKey),
@@ -286,10 +286,10 @@ func (suite *KeeperTestSuite) TestOnRecvVouchers() {
 				suite.app.AccountKeeper,
 				authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 			)
-			suite.app.CronosKeeper = chainletKeeper
+			suite.app.ChainletKeeper = chainletKeeper
 
 			tc.malleate()
-			suite.app.CronosKeeper.OnRecvVouchers(suite.ctx, tc.coins, address.String())
+			suite.app.ChainletKeeper.OnRecvVouchers(suite.ctx, tc.coins, address.String())
 			tc.postCheck()
 		})
 	}
@@ -353,7 +353,7 @@ func (suite *KeeperTestSuite) TestRegisterOrUpdateTokenMapping() {
 				Decimal:  0,
 			},
 			func() {
-				err := suite.app.CronosKeeper.SetExternalContractForDenom(
+				err := suite.app.ChainletKeeper.SetExternalContractForDenom(
 					suite.ctx,
 					"gravity0xf6d4fecb1a6fb7c2ca350169a050d483bd87b883",
 					common.HexToAddress(contractAddress))
@@ -405,7 +405,7 @@ func (suite *KeeperTestSuite) TestRegisterOrUpdateTokenMapping() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest() // reset
-			// Create Cronos Keeper with mock transfer keeper
+			// Create Chainlet Keeper with mock transfer keeper
 			chainletKeeper := *chainletmodulekeeper.NewKeeper(
 				suite.app.EncodingConfig().Codec,
 				suite.app.GetKey(types.StoreKey),
@@ -416,10 +416,10 @@ func (suite *KeeperTestSuite) TestRegisterOrUpdateTokenMapping() {
 				suite.app.AccountKeeper,
 				authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 			)
-			suite.app.CronosKeeper = chainletKeeper
+			suite.app.ChainletKeeper = chainletKeeper
 
 			tc.malleate()
-			err := suite.app.CronosKeeper.RegisterOrUpdateTokenMapping(suite.ctx, &tc.msg)
+			err := suite.app.ChainletKeeper.RegisterOrUpdateTokenMapping(suite.ctx, &tc.msg)
 			if tc.error {
 				suite.Require().Error(err)
 			} else {

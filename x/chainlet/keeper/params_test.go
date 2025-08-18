@@ -37,7 +37,7 @@ func (suite *KeeperTestSuite) TestGetSourceChannelID() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest() // reset
-			// Create Cronos Keeper with mock transfer keeper
+			// Create Chainlet Keeper with mock transfer keeper
 			chainletKeeper := *chainletmodulekeeper.NewKeeper(
 				suite.app.EncodingConfig().Codec,
 				suite.app.GetKey(types.StoreKey),
@@ -48,9 +48,9 @@ func (suite *KeeperTestSuite) TestGetSourceChannelID() {
 				suite.app.AccountKeeper,
 				authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 			)
-			suite.app.CronosKeeper = chainletKeeper
+			suite.app.ChainletKeeper = chainletKeeper
 
-			channelID, err := suite.app.CronosKeeper.GetSourceChannelID(suite.ctx, tc.ibcDenom)
+			channelID, err := suite.app.ChainletKeeper.GetSourceChannelID(suite.ctx, tc.ibcDenom)
 			if tc.expectedError != nil {
 				suite.Require().EqualError(err, tc.expectedError.Error())
 			} else {

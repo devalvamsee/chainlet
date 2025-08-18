@@ -41,7 +41,7 @@ func (bad BlockAddressesDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simula
 				}
 			}
 		}
-		admin := bad.getParams(ctx).CronosAdmin
+		admin := bad.getParams(ctx).ChainletAdmin
 		for _, msg := range tx.GetMsgs() {
 			if blocklistMsg, ok := msg.(*types.MsgStoreBlockList); ok {
 				if admin != blocklistMsg.From {

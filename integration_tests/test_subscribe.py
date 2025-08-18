@@ -9,7 +9,7 @@ from hexbytes import HexBytes
 from pystarport import ports
 from web3 import Web3
 
-from .network import Cronos
+from .network import Chainlet
 from .utils import (
     ADDRS,
     CONTRACTS,
@@ -80,7 +80,7 @@ class Client:
 TEST_EVENT_TOPIC = Web3.keccak(text="TestEvent(uint256)")
 
 
-def test_subscribe_basic(chainlet: Cronos):
+def test_subscribe_basic(chainlet: Chainlet):
     """
     test basic subscribe and unsubscribe
     """

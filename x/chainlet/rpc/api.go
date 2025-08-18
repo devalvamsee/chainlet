@@ -27,8 +27,8 @@ import (
 )
 
 const (
-	// CronosNamespace is the extension RPC namespace of chainlet module.
-	CronosNamespace = "chainlet"
+	// ChainletNamespace is the extension RPC namespace of chainlet module.
+	ChainletNamespace = "chainlet"
 
 	apiVersion = "1.0"
 
@@ -36,26 +36,26 @@ const (
 )
 
 func init() {
-	if err := evmrpc.RegisterAPINamespace(CronosNamespace, CreateCronosRPCAPIs); err != nil {
+	if err := evmrpc.RegisterAPINamespace(ChainletNamespace, CreateChainletRPCAPIs); err != nil {
 		panic(err)
 	}
 }
 
-// CreateCronosRPCAPIs creates extension json-rpc apis
-func CreateCronosRPCAPIs(ctx *server.Context, clientCtx client.Context, _ *stream.RPCStream, allowUnprotectedTxs bool, indexer ethermint.EVMTxIndexer) []rpc.API {
+// CreateChainletRPCAPIs creates extension json-rpc apis
+func CreateChainletRPCAPIs(ctx *server.Context, clientCtx client.Context, _ *stream.RPCStream, allowUnprotectedTxs bool, indexer ethermint.EVMTxIndexer) []rpc.API {
 	evmBackend := backend.NewBackend(ctx, ctx.Logger, clientCtx, allowUnprotectedTxs, indexer)
 	return []rpc.API{
 		{
-			Namespace: CronosNamespace,
+			Namespace: ChainletNamespace,
 			Version:   apiVersion,
-			Service:   NewCronosAPI(ctx.Logger, clientCtx, *evmBackend),
+			Service:   NewChainletAPI(ctx.Logger, clientCtx, *evmBackend),
 			Public:    true,
 		},
 	}
 }
 
-// CronosAPI is the extension jsonrpc apis prefixed with chainlet_.
-type CronosAPI struct {
+// ChainletAPI is the extension jsonrpc apis prefixed with chainlet_.
+type ChainletAPI struct {
 	ctx               context.Context
 	clientCtx         client.Context
 	queryClient       *rpctypes.QueryClient
@@ -65,17 +65,17 @@ type CronosAPI struct {
 	chainletQueryClient types.QueryClient
 }
 
-// NewCronosAPI creates an instance of the chainlet web3 extension apis.
-func NewCronosAPI(
+// NewChainletAPI creates an instance of the chainlet web3 extension apis.
+func NewChainletAPI(
 	logger log.Logger,
 	clientCtx client.Context,
 	backend backend.Backend,
-) *CronosAPI {
+) *ChainletAPI {
 	eip155ChainID, err := ethermint.ParseChainID(clientCtx.ChainID)
 	if err != nil {
 		panic(err)
 	}
-	return &CronosAPI{
+	return &ChainletAPI{
 		ctx:               context.Background(),
 		clientCtx:         clientCtx,
 		queryClient:       rpctypes.NewQueryClient(clientCtx),
@@ -86,7 +86,7 @@ func NewCronosAPI(
 	}
 }
 
-func (api *CronosAPI) getBlockDetail(blockNrOrHash rpctypes.BlockNumberOrHash) (
+func (api *ChainletAPI) getBlockDetail(blockNrOrHash rpctypes.BlockNumberOrHash) (
 	resBlock *coretypes.ResultBlock,
 	blockNumber int64,
 	blockHash string,
@@ -115,7 +115,7 @@ func (api *CronosAPI) getBlockDetail(blockNrOrHash rpctypes.BlockNumberOrHash) (
 }
 
 // GetTransactionReceiptsByBlock returns all the transaction receipts included in the block.
-func (api *CronosAPI) GetTransactionReceiptsByBlock(blockNrOrHash rpctypes.BlockNumberOrHash) ([]map[string]interface{}, error) {
+func (api *ChainletAPI) GetTransactionReceiptsByBlock(blockNrOrHash rpctypes.BlockNumberOrHash) ([]map[string]interface{}, error) {
 	api.logger.Debug("chainlet_getTransactionReceiptsByBlock", "blockNrOrHash", blockNrOrHash)
 	resBlock, blockNumber, blockHash, blockRes, baseFee, err := api.getBlockDetail(blockNrOrHash)
 	if err != nil {
@@ -229,7 +229,7 @@ func (api *CronosAPI) GetTransactionReceiptsByBlock(blockNrOrHash rpctypes.Block
 
 // ReplayBlock return tx receipts by replay all the eth transactions,
 // if postUpgrade is true, the tx that exceeded block gas limit is treated as reverted, otherwise as committed.
-func (api *CronosAPI) ReplayBlock(blockNrOrHash rpctypes.BlockNumberOrHash, postUpgrade bool) ([]map[string]interface{}, error) {
+func (api *ChainletAPI) ReplayBlock(blockNrOrHash rpctypes.BlockNumberOrHash, postUpgrade bool) ([]map[string]interface{}, error) {
 	api.logger.Debug("chainlet_replayBlock", "blockNrOrHash", blockNrOrHash)
 	resBlock, blockNumber, blockHash, blockRes, baseFee, err := api.getBlockDetail(blockNrOrHash)
 	if err != nil {
@@ -372,7 +372,7 @@ func (api *CronosAPI) ReplayBlock(blockNrOrHash rpctypes.BlockNumberOrHash, post
 }
 
 // getBlock returns the block from BlockNumberOrHash
-func (api *CronosAPI) getBlock(blockNrOrHash rpctypes.BlockNumberOrHash) (blk *coretypes.ResultBlock, err error) {
+func (api *ChainletAPI) getBlock(blockNrOrHash rpctypes.BlockNumberOrHash) (blk *coretypes.ResultBlock, err error) {
 	if blockNrOrHash.BlockHash != nil {
 		blk, err = api.backend.TendermintBlockByHash(*blockNrOrHash.BlockHash)
 	} else {
