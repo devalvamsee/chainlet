@@ -174,7 +174,7 @@ def approve_proposal(
     rsp = cli.gov_deposit(
         "community",
         proposal_id,
-        "100000000basetcro",
+        "100000000clt",
         event_query_tx=wait_tx,
         broadcast_mode=broadcast_mode,
     )
@@ -218,7 +218,7 @@ def submit_gov_proposal(chainlet, msg, **kwargs):
     proposal_json = {
         "title": "title",
         "summary": "summary",
-        "deposit": "1basetcro",
+        "deposit": "1clt",
         **kwargs,
     }
     rsp = chainlet.cosmos_cli().submit_gov_proposal(
@@ -618,7 +618,7 @@ def build_batch_tx(w3, cli, txs, key=KEYS["validator"]):
         "auth_info": {
             "signer_infos": [],
             "fee": {
-                "amount": [{"denom": "basetcro", "amount": str(fee)}],
+                "amount": [{"denom": "clt", "amount": str(fee)}],
                 "gas_limit": str(gas_limit),
                 "payer": "",
                 "granter": "",
@@ -737,7 +737,7 @@ def submit_any_proposal(chainlet):
     proposal_json = {
         "title": "title",
         "summary": "summary",
-        "deposit": "1basetcro",
+        "deposit": "1clt",
         "messages": [
             {
                 "@type": msg,

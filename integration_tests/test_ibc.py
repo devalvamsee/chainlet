@@ -45,7 +45,7 @@ def test_ibc_transfer(ibc):
     test ibc transfer tokens with hermes cli
     """
     ibc_transfer(ibc)
-    dst_denom = "basetcro"
+    dst_denom = "clt"
     # assert that the relayer transactions do enables the dynamic fee extension option.
     cli = ibc.chainlet.cosmos_cli()
     criteria = "message.action='/ibc.core.channel.v1.MsgChannelOpenInit'"
@@ -78,7 +78,7 @@ def test_ibc_incentivized_transfer(ibc, tmp_path):
         authority = module_address("gov")
         connid = "connection-0"
         channel_id = "channel-0"
-        deposit = "1basetcro"
+        deposit = "1clt"
         proposal_json = src_chain.ibc_upgrade_channels(
             version,
             community,
@@ -108,16 +108,16 @@ def test_ibc_incentivized_transfer(ibc, tmp_path):
 
 def test_chainlet_transfer_tokens(ibc):
     """
-    test sending basetcro from chainlet to crypto-org-chain using cli transfer_tokens.
+    test sending clt from chainlet to crypto-org-chain using cli transfer_tokens.
     depends on `test_ibc` to send the original coins.
     """
     dst_addr = ibc.chainmain.cosmos_cli().address("signer2")
     dst_amount = 2
-    dst_denom = "basecro"
+    dst_denom = "clt"
     cli = ibc.chainlet.cosmos_cli()
     src_amount = dst_amount * RATIO  # the decimal places difference
     src_addr = cli.address("signer2")
-    src_denom = "basetcro"
+    src_denom = "clt"
 
     # case 1: use chainlet cli
     old_src_balance = get_balance(ibc.chainlet, src_addr, src_denom)
@@ -143,7 +143,7 @@ def test_chainlet_transfer_tokens(ibc):
 
 def test_chainlet_transfer_tokens_acknowledgement_error(ibc):
     """
-    test sending basetcro from chainlet to crypto-org-chain using cli transfer_tokens
+    test sending clt from chainlet to crypto-org-chain using cli transfer_tokens
     with invalid receiver for acknowledgement error.
     depends on `test_ibc` to send the original coins.
     """
@@ -152,7 +152,7 @@ def test_chainlet_transfer_tokens_acknowledgement_error(ibc):
     cli = ibc.chainlet.cosmos_cli()
     src_amount = dst_amount * RATIO  # the decimal places difference
     src_addr = cli.address("signer2")
-    src_denom = "basetcro"
+    src_denom = "clt"
 
     old_src_balance = get_balance(ibc.chainlet, src_addr, src_denom)
     rsp = cli.transfer_tokens(
@@ -172,21 +172,21 @@ def test_chainlet_transfer_tokens_acknowledgement_error(ibc):
     new_src_balance = get_balance(ibc.chainlet, src_addr, src_denom)
 
 
-def test_cro_bridge_contract(ibc):
+def test_clt_bridge_contract(ibc):
     """
-    test sending basetcro from chainlet to crypto-org-chain using CroBridge contract.
+    test sending clt from chainlet to crypto-org-chain using CroBridge contract.
     depends on `test_ibc` to send the original coins.
     """
     dst_addr = ibc.chainmain.cosmos_cli().address("signer2")
     dst_amount = 2
-    dst_denom = "basecro"
+    dst_denom = "clt"
     src_amount = dst_amount * RATIO  # the decimal places difference
     old_dst_balance = get_balance(ibc.chainmain, dst_addr, dst_denom)
 
     # case 2: use CroBridge contract
     w3 = ibc.chainlet.w3
     contract = deploy_contract(w3, CONTRACTS["CroBridge"])
-    tx = contract.functions.send_cro_to_crypto_org(dst_addr).build_transaction(
+    tx = contract.functions.send_clt_to_crypto_org(dst_addr).build_transaction(
         {
             "from": ADDRS["signer2"],
             "value": src_amount,

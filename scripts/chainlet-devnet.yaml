@@ -3,7 +3,7 @@ chainlet_988-1:
   cmd: chainletd
   start-flags: "--trace"
   app-config:
-    minimum-gas-prices: 0basetcro
+    minimum-gas-prices: 0clt
     index-events:
       - ethereum_tx.ethereumTxHash
     json-rpc:
@@ -11,21 +11,21 @@ chainlet_988-1:
       ws-address: "127.0.0.1:{EVMRPC_PORT_WS}"
       api: "eth,net,web3,debug,chainlet"
   validators:
-    - coins: 1000000000000000000stake,10000000000000000000000basetcro
+    - coins: 1000000000000000000stake,10000000000000000000000clt
       staked: 1000000000000000000stake
       mnemonic: ${VALIDATOR1_MNEMONIC}
-    - coins: 1000000000000000000stake,10000000000000000000000basetcro
+    - coins: 1000000000000000000stake,10000000000000000000000clt
       staked: 1000000000000000000stake
       mnemonic: ${VALIDATOR2_MNEMONIC}
   accounts:
     - name: community
-      coins: 10000000000000000000000basetcro
+      coins: 10000000000000000000000clt
       mnemonic: ${COMMUNITY_MNEMONIC}
     - name: signer1
-      coins: 20000000000000000000000basetcro
+      coins: 20000000000000000000000clt
       mnemonic: ${SIGNER1_MNEMONIC}
     - name: signer2
-      coins: 30000000000000000000000basetcro
+      coins: 30000000000000000000000clt
       mnemonic: ${SIGNER2_MNEMONIC}
 
   genesis:
@@ -36,18 +36,18 @@ chainlet_988-1:
     app_state:
       evm:
         params:
-          evm_denom: basetcro
+          evm_denom: clt
       chainlet:
         params:
           chainlet_admin: ${CHAINLET_ADMIN}
           enable_auto_deployment: true
-          ibc_cro_denom: ${IBC_CRO_DENOM}
+          ibc_clt_denom: ${IBC_CRO_DENOM}
       gov:
         params:
           voting_period: "10s"
           max_deposit_period: "10s"
           min_deposit:
-            - denom: "basetcro"
+            - denom: "clt"
               amount: "1"
       transfer:
         params:

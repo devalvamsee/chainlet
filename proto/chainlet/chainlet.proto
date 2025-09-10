@@ -8,7 +8,7 @@ option go_package = "github.com/devalvamsee/chainlet/x/chainlet/types";
 // Params defines the parameters for the chainlet module.
 message Params {
   option (gogoproto.goproto_stringer) = false;
-  string ibc_cro_denom                = 1 [(gogoproto.moretags) = "yaml:\"ibc_cro_denom,omitempty\""];
+  string ibc_clt_denom                = 1 [(gogoproto.moretags) = "yaml:\"ibc_clt_denom,omitempty\""];
   uint64 ibc_timeout                  = 2;
   // the admin address who can update token mapping
   string chainlet_admin           = 3;

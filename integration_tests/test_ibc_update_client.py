@@ -132,7 +132,7 @@ def test_ibc_update_client_via_proposal(ibc):
             "from": "validator",
             "title": "update-client-title",
             "summary": "summary",
-            "deposit": "1basetcro",
+            "deposit": "1clt",
         },
     )
     assert rsp["code"] == 0, rsp["raw_log"]

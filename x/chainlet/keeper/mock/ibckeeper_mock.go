@@ -21,7 +21,7 @@ func (i IbcKeeperMock) GetDenom(ctx sdk.Context, denomTraceHash tmbytes.HexBytes
 			Trace: []types.Hop{
 				{PortId: "transfer", ChannelId: "channel-0"},
 			},
-			Base: "basetcro",
+			Base: "clt",
 		}, true
 	}
 	if denomTraceHash.String() == "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" {

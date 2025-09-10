@@ -21,7 +21,7 @@ func (suite *KeeperTestSuite) TestGetSourceChannelID() {
 		{
 			"wrong ibc denom",
 			"test",
-			errors.New("test is invalid: ibc cro denom is invalid"),
+			errors.New("test is invalid: ibc clt denom is invalid"),
 			func(channelID string) {},
 		},
 		{

@@ -26,16 +26,16 @@ def test_ibc(ibc):
 
 def test_chainlet_transfer_timeout(ibc):
     """
-    test sending basetcro from chainlet to crypto-org-chain using cli transfer_tokens.
+    test sending clt from chainlet to crypto-org-chain using cli transfer_tokens.
     depends on `test_ibc` to send the original coins.
     """
     dst_addr = ibc.chainmain.cosmos_cli().address("signer2")
     dst_amount = 2
-    dst_denom = "basecro"
+    dst_denom = "clt"
     cli = ibc.chainlet.cosmos_cli()
     src_amount = dst_amount * RATIO  # the decimal places difference
     src_addr = cli.address("signer2")
-    src_denom = "basetcro"
+    src_denom = "clt"
 
     # case 1: use chainlet cli
     old_src_balance = get_balance(ibc.chainlet, src_addr, src_denom)

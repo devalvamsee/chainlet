@@ -10,7 +10,7 @@ config {
     }] + [
       {
         name: 'user' + i,
-        coins: '30000000000000000000000basetcro',
+        coins: '30000000000000000000000clt',
       }
       for i in std.range(1, 50)
     ],
@@ -36,10 +36,10 @@ config {
   'chainmain-1': {
     cmd: 'chain-maind',
     'start-flags': '--trace',
-    'account-prefix': 'cro',
+    'account-prefix': 'clt',
     'coin-type': 394,
     'app-config': {
-      'minimum-gas-prices': '0basecro',
+      'minimum-gas-prices': '0clt',
     },
     validators: [
       {
@@ -49,8 +49,8 @@ config {
         base_port: 26800,
       },
       {
-        coins: '987870000000000000cro',
-        staked: '20000000000000cro',
+        coins: '987870000000000000clt',
+        staked: '20000000000000clt',
         mnemonic: '${VALIDATOR2_MNEMONIC}',
         base_port: 26810,
       },
@@ -58,23 +58,23 @@ config {
     accounts: [
       {
         name: 'community',
-        coins: '10000000000000cro',
+        coins: '10000000000000clt',
         mnemonic: '${COMMUNITY_MNEMONIC}',
       },
       {
         name: 'relayer',
-        coins: '10000000000000cro',
+        coins: '10000000000000clt',
         mnemonic: '${SIGNER1_MNEMONIC}',
       },
       {
         name: 'signer2',
-        coins: '10000000000000cro,100000000000ibcfee',
+        coins: '10000000000000clt,100000000000ibcfee',
         mnemonic: '${SIGNER2_MNEMONIC}',
       },
     ] + [
       {
         name: 'user' + i,
-        coins: '10000000000000cro',
+        coins: '10000000000000clt',
       }
       for i in std.range(1, 50)
     ],
@@ -93,7 +93,7 @@ config {
             max_deposit_period: '1814400s',
             min_deposit: [
               {
-                denom: 'basecro',
+                denom: 'clt',
                 amount: '10000000',
               },
             ],
@@ -155,7 +155,7 @@ config {
         },
         gas_price: {
           price: 10000000,
-          denom: 'basetcro',
+          denom: 'clt',
         },
         event_source: {
           batch_delay: '5000ms',
@@ -170,7 +170,7 @@ config {
         max_gas: 500000,
         gas_price: {
           price: 1000000,
-          denom: 'basecro',
+          denom: 'clt',
         },
         event_source: {
           batch_delay: '5000ms',

@@ -221,7 +221,7 @@ def test_multiple_attestation_processing(gravity):
 def submit_proposal(cli, tmp_path, is_legacy, denom, conctract):
     if is_legacy:
         return cli.gov_propose_token_mapping_change_legacy(
-            denom, conctract, "", 0, from_="community", deposit="1basetcro"
+            denom, conctract, "", 0, from_="community", deposit="1clt"
         )
     proposal = tmp_path / "proposal.json"
     # governance module account as signer
@@ -240,7 +240,7 @@ def submit_proposal(cli, tmp_path, is_legacy, denom, conctract):
                 "authority": signer,
             }
         ],
-        "deposit": "1basetcro",
+        "deposit": "1clt",
         "title": "title",
         "summary": "summary",
     }

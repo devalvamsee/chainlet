@@ -13,7 +13,7 @@ const (
 
 // x/chainlet module sentinel errors
 var (
-	ErrIbcCroDenomEmpty   = errors.Register(ModuleName, codeErrIbcCroDenomEmpty, "ibc cro denom is not set")
-	ErrIbcCroDenomInvalid = errors.Register(ModuleName, codeErrIbcCroDenomInvalid, "ibc cro denom is invalid")
+	ErrIbcCroDenomEmpty   = errors.Register(ModuleName, codeErrIbcCroDenomEmpty, "ibc clt denom is not set")
+	ErrIbcCroDenomInvalid = errors.Register(ModuleName, codeErrIbcCroDenomInvalid, "ibc clt denom is invalid")
 	// this line is used by starport scaffolding # ibc/errors
 )

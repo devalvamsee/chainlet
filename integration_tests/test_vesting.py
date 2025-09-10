@@ -8,7 +8,7 @@ def test_create_account(chainlet):
     cli = chainlet.cosmos_cli()
     src = "vesting"
     addr = cli.create_account(src)["address"]
-    denom = "basetcro"
+    denom = "clt"
     balance = cli.balance(addr, denom)
     assert balance == 0
     amount = 10000

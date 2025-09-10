@@ -25,7 +25,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the chainlet module.
 type Params struct {
-	IbcCroDenom string `protobuf:"bytes,1,opt,name=ibc_cro_denom,json=ibcCroDenom,proto3" json:"ibc_cro_denom,omitempty" yaml:"ibc_cro_denom,omitempty"`
+	IbcCroDenom string `protobuf:"bytes,1,opt,name=ibc_clt_denom,json=ibcCroDenom,proto3" json:"ibc_clt_denom,omitempty" yaml:"ibc_clt_denom,omitempty"`
 	IbcTimeout  uint64 `protobuf:"varint,2,opt,name=ibc_timeout,json=ibcTimeout,proto3" json:"ibc_timeout,omitempty"`
 	// the admin address who can update token mapping
 	ChainletAdmin          string `protobuf:"bytes,3,opt,name=chainlet_admin,json=chainletAdmin,proto3" json:"chainlet_admin,omitempty"`

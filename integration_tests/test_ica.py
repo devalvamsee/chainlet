@@ -50,7 +50,7 @@ def test_ica(ibc, order, tmp_path):
     balance = funds_ica(cli_host, ica_address, signer=signer)
     to = cli_host.address(signer)
     amount = 1000
-    denom = "basecro"
+    denom = "clt"
     jsonfile = CONTRACTS["TestICA"]
     tcontract = deploy_contract(ibc.chainlet.w3, jsonfile)
     timeout_in_ns = 6000000000
@@ -128,7 +128,7 @@ def test_ica(ibc, order, tmp_path):
         version_data = json.loads(channel["channel"]["version"])
         community = "community"
         authority = module_address("gov")
-        deposit = "1basetcro"
+        deposit = "1clt"
         proposal_json = cli_controller.ibc_upgrade_channels(
             json.loads(version_data["app_version"]),
             community,

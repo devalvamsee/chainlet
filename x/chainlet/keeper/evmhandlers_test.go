@@ -375,7 +375,7 @@ func (suite *KeeperTestSuite) TestSendCroToIbcHandler() {
 			errors.New("spendable balance 0aphoton is smaller than 10000000000000aphoton: insufficient funds"),
 		},
 		{
-			"success send cro to ibc",
+			"success send clt to ibc",
 			func() {
 				coin := sdk.NewCoin(suite.evmParam.EvmDenom, sdkmath.NewInt(1230000000500))
 				err := suite.MintCoins(contract.Bytes(), sdk.NewCoins(coin))
@@ -406,9 +406,9 @@ func (suite *KeeperTestSuite) TestSendCroToIbcHandler() {
 				// As we mock IBC module, we expect the token to be in user balance
 				ibcBalance := suite.app.BankKeeper.GetBalance(suite.ctx, sender.Bytes(), types.IbcCroDenomDefaultValue)
 				suite.Require().Equal(ibcCoin, ibcBalance)
-				croCoin := sdk.NewCoin(suite.evmParam.EvmDenom, sdkmath.NewInt(500))
-				croBalance := suite.app.BankKeeper.GetBalance(suite.ctx, sender.Bytes(), suite.evmParam.EvmDenom)
-				suite.Require().Equal(croCoin, croBalance)
+				cltCoin := sdk.NewCoin(suite.evmParam.EvmDenom, sdkmath.NewInt(500))
+				cltBalance := suite.app.BankKeeper.GetBalance(suite.ctx, sender.Bytes(), suite.evmParam.EvmDenom)
+				suite.Require().Equal(cltCoin, cltBalance)
 			},
 			nil,
 		},

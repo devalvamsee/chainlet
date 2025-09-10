@@ -40,9 +40,9 @@ method_with_seq = ["RecvPacket", "WriteAcknowledgement", "AcknowledgePacket"]
 chainlet_signer2 = ADDRS["signer2"]
 port_id = "transfer"
 src_amount = 10
-src_denom = "basecro"
+src_denom = "clt"
 dst_amount = src_amount * RATIO  # the decimal places difference
-dst_denom = "basetcro"
+dst_denom = "clt"
 channel = "channel-0"
 
 

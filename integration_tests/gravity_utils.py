@@ -25,7 +25,7 @@ def gorc_config(keystore, gravity_contract, eth_rpc, cosmos_grpc, metrics_listen
         "keystore": str(keystore),
         "gravity": {
             "contract": gravity_contract,
-            "fees_denom": "basetcro",
+            "fees_denom": "clt",
         },
         "ethereum": {
             "key_derivation_path": "m/44'/60'/0'/0/0",
@@ -34,7 +34,7 @@ def gorc_config(keystore, gravity_contract, eth_rpc, cosmos_grpc, metrics_listen
         "cosmos": {
             "gas_price": {
                 "amount": 5000000000000,
-                "denom": "basetcro",
+                "denom": "clt",
             },
             "gas_limit": 500000,
             "grpc": cosmos_grpc,
@@ -92,9 +92,9 @@ def prepare_gravity(custom_chainlet, custom_geth):
         print("fund 0.1 eth to address", eth_addr)
         send_transaction(w3, {"to": eth_addr, "value": 10**17}, KEYS["validator"])
         acc_addr = gorc.show_cosmos_addr("chainlet")
-        print("fund 100cro to address", acc_addr)
+        print("fund 100clt to address", acc_addr)
         rsp = custom_chainlet.cosmos_cli().transfer(
-            "community", acc_addr, "%dbasetcro" % (100 * (10**18))
+            "community", acc_addr, "%dclt" % (100 * (10**18))
         )
         assert rsp["code"] == 0, rsp["raw_log"]
 

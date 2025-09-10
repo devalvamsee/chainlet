@@ -34,7 +34,7 @@ def test_native_tx(chainlet):
         "accountNumber": int(src_account["account"]["value"]["account_number"]),
         "pubkey": json.loads(cli.address(src, "acc", "pubkey"))["key"],
     }
-    denom = "basetcro"
+    denom = "clt"
     dst_addr = cli.address("signer1")
     gas = 200000
     gas_price = 100000000000  # default base fee

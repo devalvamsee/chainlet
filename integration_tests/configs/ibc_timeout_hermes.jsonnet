@@ -5,7 +5,7 @@ ibc {
     key_name: 'signer3',
     accounts: super.accounts + [{
       name: 'signer3',
-      coins: '0basetcro',
+      coins: '0clt',
       mnemonic: '${SIGNER3_MNEMONIC}',
     }],
     genesis+: {

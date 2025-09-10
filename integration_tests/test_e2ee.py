@@ -89,11 +89,11 @@ def test_block_list(chainlet):
     encrypt_to_validators(cli, {"addresses": [user]})
 
     # normal tx works
-    cli.transfer(cli.address("validator"), user, "1basetcro")
+    cli.transfer(cli.address("validator"), user, "1clt")
 
     # blocked tx can be included into mempool
     rsp = cli.transfer(
-        user, cli.address("validator"), "1basetcro", event_query_tx=False
+        user, cli.address("validator"), "1clt", event_query_tx=False
     )
     assert rsp["code"] == 0, rsp["raw_log"]
 

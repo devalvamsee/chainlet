@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	ibcCroDenomKey          = "ibc_cro_denom"
+	ibcCroDenomKey          = "ibc_clt_denom"
 	ibcTimeoutKey           = "ibc_timeout"
 	chainletAdminKey          = "chainlet_admin"
 	enableAutoDeploymentKey = "enable_auto_deployment"

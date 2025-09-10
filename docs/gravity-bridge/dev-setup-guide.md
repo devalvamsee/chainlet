@@ -44,14 +44,14 @@ keystore = "/tmp/keystore"
 
 [gravity]
 contract = "0x0000000000000000000000000000000000000000" # TO BE UPDATED - gravity contract address on Ethereum network
-fees_denom = "basetcro"
+fees_denom = "clt"
 
 [ethereum]
 key_derivation_path = "m/44'/60'/0'/0/0"
 rpc = "http://localhost:8545" # TO BE UPDATED - EVM RPC of Ethereum node
 
 [cosmos]
-gas_price = { amount = 5000000000000, denom = "basetcro" }
+gas_price = { amount = 5000000000000, denom = "clt" }
 grpc = "http://localhost:9090" # TO BE UPDATED - GRPC of Cronos node
 key_derivation_path = "m/44'/60'/0'/0/0"
 prefix = "tcrc"

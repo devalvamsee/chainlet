@@ -6,7 +6,7 @@ contract CroBridge {
 
     // Pay the contract a certain CRO amount and trigger a CRO transfer
     // from the contract to recipient through IBC
-    function send_cro_to_crypto_org(string memory recipient) public payable {
+    function send_clt_to_crypto_org(string memory recipient) public payable {
         emit __ChainletSendCroToIbc(msg.sender, recipient, msg.value);
     }
 }

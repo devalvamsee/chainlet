@@ -39,7 +39,7 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 			expErrMsg: "invalid authority",
 		},
 		{
-			name: "set invalid ibc cro denomination",
+			name: "set invalid ibc clt denomination",
 			req: &types.MsgUpdateParams{
 				Authority: suite.app.ChainletKeeper.GetAuthority(),
 				Params: types.Params{

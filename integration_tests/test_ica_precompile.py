@@ -34,7 +34,7 @@ pytestmark = pytest.mark.ica
 CONTRACT = "0x0000000000000000000000000000000000000066"
 connid = "connection-0"
 no_timeout = 300000000000
-denom = "basecro"
+denom = "clt"
 validator = "validator"
 amt = 1000
 

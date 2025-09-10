@@ -11,7 +11,7 @@ config {
     },
     accounts: [{
       name: 'community',
-      coins: '10000000000000000000000basetcro',
+      coins: '10000000000000000000000clt',
       mnemonic: '${COMMUNITY_MNEMONIC}',
     }],
     genesis+: {

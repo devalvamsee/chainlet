@@ -12,7 +12,7 @@
     'app-config': {
       chain_id: 'chainlet_988-1',
       'app-db-backend': 'rocksdb',
-      'minimum-gas-prices': '0basetcro',
+      'minimum-gas-prices': '0clt',
       'index-events': ['ethereum_tx.ethereumTxHash'],
       'iavl-lazy-loading': true,
       'json-rpc': {
@@ -31,7 +31,7 @@
       },
     },
     validators: [{
-      coins: '1000000000000000000stake,10000000000000000000000basetcro',
+      coins: '1000000000000000000stake,10000000000000000000000clt',
       staked: '1000000000000000000stake',
       mnemonic: '${VALIDATOR1_MNEMONIC}',
       client_config: {
@@ -54,7 +54,7 @@
         },
       },
     }, {
-      coins: '1000000000000000000stake,10000000000000000000000basetcro',
+      coins: '1000000000000000000stake,10000000000000000000000clt',
       staked: '1000000000000000000stake',
       mnemonic: '${VALIDATOR2_MNEMONIC}',
       client_config: {
@@ -67,7 +67,7 @@
         'app-db-backend': 'pebbledb',
       },
     }, {
-      coins: '1000000000000000000stake,10000000000000000000000basetcro',
+      coins: '1000000000000000000stake,10000000000000000000000clt',
       staked: '1000000000000000000stake',
       mnemonic: '${VALIDATOR3_MNEMONIC}',
       client_config: {
@@ -82,15 +82,15 @@
     }],
     accounts: [{
       name: 'community',
-      coins: '10000000000000000000000basetcro',
+      coins: '10000000000000000000000clt',
       mnemonic: '${COMMUNITY_MNEMONIC}',
     }, {
       name: 'signer1',
-      coins: '20000000000000000000000basetcro',
+      coins: '20000000000000000000000clt',
       mnemonic: '${SIGNER1_MNEMONIC}',
     }, {
       name: 'signer2',
-      coins: '30000000000000000000000basetcro',
+      coins: '30000000000000000000000clt',
       mnemonic: '${SIGNER2_MNEMONIC}',
     }],
     genesis: {
@@ -105,7 +105,7 @@
       app_state: {
         evm: {
           params: {
-            evm_denom: 'basetcro',
+            evm_denom: 'clt',
           },
         },
         chainlet: {
@@ -128,7 +128,7 @@
             max_deposit_period: '10s',
             min_deposit: [
               {
-                denom: 'basetcro',
+                denom: 'clt',
                 amount: '1',
               },
             ],

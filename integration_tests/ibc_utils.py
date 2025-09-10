@@ -185,7 +185,7 @@ def prepare_network(
             grantee_addr = cli.address(grantee)
             max_gas = 1000000
             gas_price = 10000000000000000
-            limit = f"{max_gas*gas_price*2}basetcro"
+            limit = f"{max_gas*gas_price*2}clt"
             rsp = cli.grant(granter_addr, grantee_addr, limit)
             assert rsp["code"] == 0, rsp["raw_log"]
             grant_detail = cli.query_grant(granter_addr, grantee_addr)
@@ -272,7 +272,7 @@ def register_fee_payee(src_chain, dst_chain, contract=None, acc=None):
         relayer1,
         relayer0,
         from_=relayer1,
-        fees="100000000basecro",
+        fees="100000000clt",
     )
     assert rsp["code"] == 0, rsp["raw_log"]
     if contract is None:
@@ -282,7 +282,7 @@ def register_fee_payee(src_chain, dst_chain, contract=None, acc=None):
             relayer0,
             relayer0,
             from_="signer1",
-            fees="100000000basetcro",
+            fees="100000000clt",
         )
         assert rsp["code"] == 0, rsp["raw_log"]
         rsp = chains[0].register_counterparty_payee(
@@ -291,7 +291,7 @@ def register_fee_payee(src_chain, dst_chain, contract=None, acc=None):
             relayer0,
             relayer1,
             from_=relayer0,
-            fees="100000000basetcro",
+            fees="100000000clt",
         )
         assert rsp["code"] == 0, rsp["raw_log"]
     else:
@@ -324,7 +324,7 @@ def hermes_transfer(ibc):
     my_channel = "channel-0"
     dst_addr = eth_to_bech32(ADDRS["signer2"])
     src_amount = 10
-    src_denom = "basecro"
+    src_denom = "clt"
     # dstchainid srcchainid srcportid srchannelid
     cmd = (
         f"hermes --config {ibc.hermes.configpath} tx ft-transfer "
@@ -344,7 +344,7 @@ def rly_transfer(ibc):
     channel = "channel-0"
     dst_addr = eth_to_bech32(ADDRS["signer2"])
     src_amount = 10
-    src_denom = "basecro"
+    src_denom = "clt"
     path = ibc.chainlet.base_dir.parent / "relayer"
     # srcchainid dstchainid amount dst_addr srchannelid
     cmd = (
@@ -389,7 +389,7 @@ def find_duplicate(attributes):
 def ibc_transfer(ibc, transfer_fn=hermes_transfer):
     src_amount = transfer_fn(ibc)
     dst_amount = src_amount * RATIO  # the decimal places difference
-    dst_denom = "basetcro"
+    dst_denom = "clt"
     dst_addr = eth_to_bech32(ADDRS["signer2"])
     old_dst_balance = get_balance(ibc.chainlet, dst_addr, dst_denom)
 
@@ -419,8 +419,8 @@ def ibc_multi_transfer(ibc):
     users = [f"user{i}" for i in range(1, 50)]
     addrs0 = [chains[0].address(user) for user in users]
     addrs1 = [chains[1].address(user) for user in users]
-    denom0 = "basetcro"
-    denom1 = "basecro"
+    denom0 = "clt"
+    denom1 = "clt"
     channel0 = "channel-0"
     channel1 = "channel-0"
     old_balance0 = 30000000000000000000000
@@ -497,8 +497,8 @@ def ibc_incentivized_transfer(ibc):
     relayer1 = chains[1].address("relayer")
     amount = 1000
     fee_denom = "ibcfee"
-    base_denom0 = "basetcro"
-    base_denom1 = "basecro"
+    base_denom0 = "clt"
+    base_denom1 = "clt"
     old_relayer0_fee = chains[0].balance(relayer0, fee_denom)
     old_user0_fee = chains[0].balance(user0, fee_denom)
     old_user0_base = chains[0].balance(user0, base_denom0)
@@ -677,7 +677,7 @@ def chainlet_transfer_source_tokens(ibc):
     chainlet_receiver = eth_to_bech32(ADDRS["signer2"])
 
     coin = "1000" + dest_denom
-    fees = "100000000basecro"
+    fees = "100000000clt"
     rsp = chainmain_cli.ibc_transfer(
         chainmain_receiver, chainlet_receiver, coin, "channel-0", fees=fees
     )
@@ -779,7 +779,7 @@ def chainlet_transfer_source_tokens_with_proxy(ibc):
     chainlet_receiver = eth_to_bech32(ADDRS["signer2"])
 
     coin = f"{amount}{dest_denom}"
-    fees = "100000000basecro"
+    fees = "100000000clt"
     rsp = chainmain_cli.ibc_transfer(
         chainmain_receiver, chainlet_receiver, coin, "channel-0", fees=fees
     )
@@ -898,12 +898,12 @@ def funds_ica(cli, adr, signer="signer2"):
     assert cli.balance(adr) == 0
 
     # send some funds to interchain account
-    rsp = cli.transfer(signer, adr, "1cro", gas_prices="1000000basecro")
+    rsp = cli.transfer(signer, adr, "1cro", gas_prices="1000000clt")
     assert rsp["code"] == 0, rsp["raw_log"]
     wait_for_new_blocks(cli, 1)
     amt = 100000000
     # check if the funds are received in interchain account
-    assert cli.balance(adr, denom="basecro") == amt
+    assert cli.balance(adr, denom="clt") == amt
     return amt
 
 
@@ -985,7 +985,7 @@ class QueryBalanceRequest(ProtoEntity):
 
 
 def gen_query_balance_packet(cli, ica_address):
-    query = QueryBalanceRequest(address=ica_address, denom="basecro")
+    query = QueryBalanceRequest(address=ica_address, denom="clt")
     data = json.dumps(
         {
             "@type": "/ibc.applications.interchain_accounts.host.v1.MsgModuleQuerySafe",

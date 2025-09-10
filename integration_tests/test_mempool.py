@@ -77,7 +77,7 @@ def test_mempool(chainlet_mempool):
 
 def test_blocked_address(chainlet_mempool):
     cli = chainlet_mempool.cosmos_cli(0)
-    rsp = cli.transfer("signer1", cli.address("validator"), "1basecro")
+    rsp = cli.transfer("signer1", cli.address("validator"), "1clt")
     assert rsp["code"] != 0
     assert "signer is blocked" in rsp["raw_log"]
 

@@ -145,7 +145,7 @@ def exec(c, tmp_path_factory):
     base_port = c.base_port(0)
     port = ports.api_port(base_port)
     send_enable = [
-        {"denom": "basetcro", "enabled": False},
+        {"denom": "clt", "enabled": False},
         {"denom": "stake", "enabled": True},
     ]
     p = get_send_enable(port)
@@ -177,7 +177,7 @@ def exec(c, tmp_path_factory):
                     "note": "ditto",
                     "upgrade-height": target,
                     "summary": "summary",
-                    "deposit": "10000basetcro",
+                    "deposit": "10000clt",
                 },
                 broadcast_mode="sync",
             )
@@ -194,7 +194,7 @@ def exec(c, tmp_path_factory):
                     "title": "upgrade test",
                     "description": "ditto",
                     "upgrade-height": target,
-                    "deposit": "10000basetcro",
+                    "deposit": "10000clt",
                 },
                 mode=mode,
             )
@@ -279,7 +279,7 @@ def exec(c, tmp_path_factory):
     e1 = cli.query_params("evm", height=target_height1 - 1)
     f0 = cli.query_params("feemarket", height=target_height0 - 1)
     f1 = cli.query_params("feemarket", height=target_height1 - 1)
-    assert e0["evm_denom"] == e1["evm_denom"] == "basetcro"
+    assert e0["evm_denom"] == e1["evm_denom"] == "clt"
 
     # update the genesis time = current time + 5 secs
     newtime = datetime.utcnow() + timedelta(seconds=5)

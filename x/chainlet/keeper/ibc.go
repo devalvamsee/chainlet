@@ -38,7 +38,7 @@ func (k Keeper) ConvertVouchersToEvmCoins(ctx sdk.Context, from string, coins sd
 			if err != nil {
 				return err
 			}
-			// Compute new amount, because basecro is a 8 decimals token, we need to multiply by 10^10 to make it
+			// Compute new amount, because clt is a 8 decimals token, we need to multiply by 10^10 to make it
 			// a 18 decimals token
 			amount18dec := sdk.NewCoin(evmParams.EvmDenom, c.Amount.Mul(sdkmath.NewIntFromBigInt(types.TenPowTen)))
 

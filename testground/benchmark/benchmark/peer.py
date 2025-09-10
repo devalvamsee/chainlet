@@ -146,7 +146,7 @@ def patch_configs(home: Path, peers: str, config_patch: dict, app_patch: dict):
         "tx_index": {"indexer": "null"},
     }
     default_app_patch = {
-        "minimum-gas-prices": "0basecro",
+        "minimum-gas-prices": "0clt",
         "index-events": ["ethereum_tx.ethereumTxHash"],
         "memiavl": {
             "enable": True,

@@ -4,7 +4,7 @@ config {
   'chainlet_988-1'+: {
     'app-config'+: {
       'app-db-backend': 'rocksdb',
-      'minimum-gas-prices': '100000000000basetcro',
+      'minimum-gas-prices': '100000000000clt',
       'iavl-lazy-loading':: super['iavl-lazy-loading'],
     },
     validators: [super.validators[0] {
@@ -24,7 +24,7 @@ config {
                 enabled: true,
               },
               {
-                denom: 'basetcro',
+                denom: 'clt',
                 enabled: false,
               },
             ],
@@ -44,7 +44,7 @@ config {
             max_deposit_period: '10s',
             min_deposit: [
               {
-                denom: 'basetcro',
+                denom: 'clt',
                 amount: '1',
               },
             ],

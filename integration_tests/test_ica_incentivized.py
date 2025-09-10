@@ -39,13 +39,13 @@ def test_incentivized(ibc):
         cli_host.address("relayer"),
         relayer,
         from_="relayer",
-        fees="100000000basecro",
+        fees="100000000clt",
     )
     assert rsp["code"] == 0, rsp["raw_log"]
     ibc.chainlet.supervisorctl("start", "relayer-demo")
     to = cli_host.address("signer2")
     amount = 1000
-    denom = "basecro"
+    denom = "clt"
     sender = cli_controller.address("signer2")
     fee_denom = "ibcfee"
     old_amt_fee = cli_controller.balance(relayer, fee_denom)
@@ -74,7 +74,7 @@ def test_incentivized(ibc):
         to,
         denom,
         amount,
-        fees="0basecro",
+        fees="0clt",
         incentivized_cb=incentivized_cb,
     )
     balance -= amount * msg_num

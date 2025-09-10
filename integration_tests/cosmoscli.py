@@ -17,7 +17,7 @@ from pystarport.utils import build_cli_args_safe, format_doc_string, interact
 from .utils import CHAINLET_ADDRESS_PREFIX, get_sync_info
 
 # the default initial base fee used by integration tests
-DEFAULT_GAS_PRICE = "100000000000basetcro"
+DEFAULT_GAS_PRICE = "100000000000clt"
 DEFAULT_GAS = "250000"
 
 
@@ -194,7 +194,7 @@ class CosmosCLI:
             )
         )["balances"]
 
-    def balance(self, addr, denom="basetcro", height=0):
+    def balance(self, addr, denom="clt", height=0):
         denoms = {
             coin["denom"]: int(coin["amount"])
             for coin in self.balances(addr, height=height)

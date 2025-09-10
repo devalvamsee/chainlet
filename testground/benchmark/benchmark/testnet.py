@@ -19,7 +19,7 @@ GAS_PRICE = 5050000000000
 CHAIN_ID = 338
 TESTNET_JSONRPC = "https://evm-t3.chainlet.org"
 TESTNET_RPC = "https://rpc-t3.chainlet.org"
-TESTNET_EVM_DENOM = "basetcro"
+TESTNET_EVM_DENOM = "clt"
 
 
 @click.group()

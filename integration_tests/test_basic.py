@@ -78,7 +78,7 @@ def test_ica_enabled(chainlet, tmp_path):
                 "params": p,
             }
         ],
-        deposit="5basetcro",
+        deposit="5clt",
         expedited=True,
     )
     p = cli.query_ica_params()
@@ -206,7 +206,7 @@ def test_statesync(chainlet):
     # DEPRECATED: Do a tx bank transaction
     # from_addr = "clt1q04jewhxw4xxu3vlg3rc85240h9q7ns6hglz0g"
     # to_addr = "clt16z0herz998946wr659lr84c8c556da55dc34hh"
-    # coins = "10basetcro"
+    # coins = "10clt"
     # node = chainlet.node_rpc(0)
     # txhash_0 = chainlet.cosmos_cli(0).transfer(from_addr, to_addr, coins)["txhash"]
 
@@ -949,10 +949,10 @@ def test_submit_any_proposal(chainlet):
 def test_submit_send_enabled(chainlet):
     # check bank send enable
     cli = chainlet.cosmos_cli()
-    denoms = ["basetcro", "stake"]
+    denoms = ["clt", "stake"]
     assert len(cli.query_bank_send(*denoms)) == 0, "should be empty"
     send_enable = [
-        {"denom": "basetcro"},
+        {"denom": "clt"},
         {"denom": "stake", "enabled": True},
     ]
     authority = module_address("gov")
@@ -1013,7 +1013,7 @@ def test_multi_acc(chainlet):
     cli.make_multisig("multitest1", "signer1", "signer2")
     multi_addr = cli.address("multitest1")
     signer1 = cli.address("signer1")
-    cli.transfer(signer1, multi_addr, "1basetcro")
+    cli.transfer(signer1, multi_addr, "1clt")
     acc = cli.account(multi_addr)
     res = cli.account_by_num(acc["account"]["value"]["base_account"]["account_number"])
     assert res["account_address"] == multi_addr
@@ -1024,7 +1024,7 @@ def test_textual(chainlet):
     rsp = cli.transfer(
         cli.address("validator"),
         cli.address("signer2"),
-        "1basetcro",
+        "1clt",
         sign_mode="textual",
     )
     assert rsp["code"] == 0, rsp["raw_log"]

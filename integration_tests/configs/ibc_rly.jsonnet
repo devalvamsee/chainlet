@@ -4,8 +4,8 @@ ibc {
   'chainmain-1'+: {
     validators: [
       {
-        coins: '987870000000000000cro',
-        staked: '20000000000000cro',
+        coins: '987870000000000000clt',
+        staked: '20000000000000clt',
         mnemonic: '${VALIDATOR' + i + '_MNEMONIC}',
         base_port: 26800 + i * 10,
       }

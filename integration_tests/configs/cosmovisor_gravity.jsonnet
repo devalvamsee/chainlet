@@ -4,7 +4,7 @@ config {
   'chainlet_988-1'+: {
     'app-config'+: {
       'app-db-backend': 'rocksdb',
-      'minimum-gas-prices': '100000000000basetcro',
+      'minimum-gas-prices': '100000000000clt',
       memiavl:: super.memiavl,
       store:: super.store,
       streamers:: super.streamers,
