@@ -1,7 +1,7 @@
 local config = import 'default.jsonnet';
 
 config {
-  'chainlet_777-1'+: {
+  'chainlet_988-1'+: {
     validators: [validator {
       gas_prices: '10000000000000basetcro',
     } for validator in super.validators],

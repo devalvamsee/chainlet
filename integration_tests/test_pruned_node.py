@@ -108,7 +108,7 @@ def test_pruned_node(chainlet):
             "value": 0,
             "type": 2,
             "accessList": [],
-            "chainId": 777,
+            "chainId": 988,
         }
     )
     assert tx1 == tx2

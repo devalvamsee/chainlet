@@ -1,7 +1,7 @@
 local ibc = import 'ibc.jsonnet';
 
 ibc {
-  'chainlet_777-1'+: {
+  'chainlet_988-1'+: {
     key_name: 'signer3',
     accounts: super.accounts + [{
       name: 'signer3',

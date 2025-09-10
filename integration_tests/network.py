@@ -186,7 +186,7 @@ def setup_custom_chainlet(
         if wait_port:
             wait_for_port(ports.evmrpc_port(base_port))
             wait_for_port(ports.evmrpc_ws_port(base_port))
-        c = Chainlet(path / "chainlet_777-1", chain_binary=chain_binary or "chainletd")
+        c = Chainlet(path / "chainlet_988-1", chain_binary=chain_binary or "chainletd")
         w3_wait_for_block(c.w3, 1)
         yield c
     finally:

@@ -1,7 +1,7 @@
 local config = import 'default.jsonnet';
 
 config {
-  'chainlet_777-1'+: {
+  'chainlet_988-1'+: {
     'account-prefix': 'clt',
     'coin-type': 60,
     key_name: 'signer1',
@@ -144,7 +144,7 @@ config {
     },
     chains: [
       {
-        id: 'chainlet_777-1',
+        id: 'chainlet_988-1',
         max_gas: 2500000,
         gas_multiplier: 1.1,
         address_type: {

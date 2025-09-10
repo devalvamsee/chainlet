@@ -32,7 +32,7 @@ from .utils import Tee, block_height, block_txs, wait_for_block, wait_for_port
 
 # use chainletd on host machine
 LOCAL_CHAINLETD_PATH = "chainletd"
-DEFAULT_CHAIN_ID = "chainlet_777-1"
+DEFAULT_CHAIN_ID = "chainlet_988-1"
 # the container must be deployed with the prefixed name
 HOSTNAME_TEMPLATE = "testplan-{index}"
 ECHO_SERVER_PORT = 26659

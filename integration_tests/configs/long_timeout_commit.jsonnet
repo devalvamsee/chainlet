@@ -1,7 +1,7 @@
 local default = import 'default.jsonnet';
 
 default {
-  'chainlet_777-1'+: {
+  'chainlet_988-1'+: {
     config+: {
       consensus+: {
         timeout_commit: '15s',

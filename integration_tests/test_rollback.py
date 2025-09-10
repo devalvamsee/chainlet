@@ -17,7 +17,7 @@ def update_node_cmd(path, cmd, i):
     ini = configparser.RawConfigParser()
     ini.read(ini_path)
     for section in ini.sections():
-        if section == f"program:chainlet_777-1-node{i}":
+        if section == f"program:chainlet_988-1-node{i}":
             ini[section].update(
                 {
                     "command": f"{cmd} start --home %(here)s/node{i}",
@@ -30,7 +30,7 @@ def update_node_cmd(path, cmd, i):
 
 def post_init(broken_binary):
     def inner(path, base_port, config):
-        chain_id = "chainlet_777-1"
+        chain_id = "chainlet_988-1"
         update_node_cmd(path / chain_id, broken_binary, 3)
         update_node_cmd(path / chain_id, broken_binary, 4)
 
@@ -88,7 +88,7 @@ def test_rollback(custom_chainlet):
 
         print(f"stop node {i}")
         supervisorctl(
-            custom_chainlet.base_dir / "../tasks.ini", "stop", f"chainlet_777-1-node{i}"
+            custom_chainlet.base_dir / "../tasks.ini", "stop", f"chainlet_988-1-node{i}"
         )
 
         print(f"do rollback on node{i}")

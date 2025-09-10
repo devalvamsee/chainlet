@@ -19,7 +19,7 @@ from .erc20 import CONTRACT_ADDRESS
 from .utils import DEFAULT_DENOM, LOCAL_RPC, gen_account, split, split_batch
 
 GAS_PRICE = 1000000000
-CHAIN_ID = 777
+CHAIN_ID = 988
 CONNECTION_POOL_SIZE = 1024
 TXS_DIR = "txs"
 

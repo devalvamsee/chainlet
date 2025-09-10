@@ -1,5 +1,5 @@
 dotenv: .env
-chainlet_777-1:
+chainlet_988-1:
   cmd: chainletd
   start-flags: "--trace"
   app-config:

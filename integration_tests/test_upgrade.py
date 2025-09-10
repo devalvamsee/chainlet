@@ -60,7 +60,7 @@ def post_init(path, base_port, config):
     """
     prepare cosmovisor for each node
     """
-    chain_id = "chainlet_777-1"
+    chain_id = "chainlet_988-1"
     data = path / chain_id
     cfg = json.loads((data / "config.json").read_text())
     for i, _ in enumerate(cfg["validators"]):
@@ -160,7 +160,7 @@ def exec(c, tmp_path_factory):
         fp.flush()
 
     c.supervisorctl(
-        "start", "chainlet_777-1-node0", "chainlet_777-1-node1", "chainlet_777-1-node2"
+        "start", "chainlet_988-1-node0", "chainlet_988-1-node1", "chainlet_988-1-node2"
     )
     wait_for_port(ports.evmrpc_port(base_port))
     wait_for_new_blocks(cli, 1)
@@ -292,7 +292,7 @@ def exec(c, tmp_path_factory):
         file = c.cosmos_cli(i).data_dir / "config/genesis.json"
         file.write_text(json.dumps(genesis))
     c.supervisorctl(
-        "start", "chainlet_777-1-node0", "chainlet_777-1-node1", "chainlet_777-1-node2"
+        "start", "chainlet_988-1-node0", "chainlet_988-1-node1", "chainlet_988-1-node2"
     )
     wait_for_new_blocks(c.cosmos_cli(), 1)
 
@@ -303,11 +303,11 @@ def exec(c, tmp_path_factory):
 
     gov_param = cli.query_params("gov")
 
-    c.supervisorctl("stop", "chainlet_777-1-node0")
+    c.supervisorctl("stop", "chainlet_988-1-node0")
     time.sleep(3)
     cli.changeset_fixdata(f"{c.base_dir}/node0/data/versiondb")
     print(cli.changeset_fixdata(f"{c.base_dir}/node0/data/versiondb", dry_run=True))
-    c.supervisorctl("start", "chainlet_777-1-node0")
+    c.supervisorctl("start", "chainlet_988-1-node0")
     wait_for_port(ports.evmrpc_port(c.base_port(0)))
 
     to = "0x2D5B6C193C39D2AECb4a99052074E6F325258a0f"

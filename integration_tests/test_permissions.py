@@ -31,9 +31,9 @@ def test_permissions_updates(chainlet):
     assert rsp["can_change_token_mapping"] is True
     assert rsp["can_turn_bridge"] is True
 
-    chainlet.supervisorctl("stop", "chainlet_777-1-node2")
+    chainlet.supervisorctl("stop", "chainlet_988-1-node2")
     print(cli.prune())
-    chainlet.supervisorctl("start", "chainlet_777-1-node2")
+    chainlet.supervisorctl("start", "chainlet_988-1-node2")
 
     rsp = cli.update_permissions(acc, 4, from_="admin")
     assert rsp["code"] == 0, rsp["raw_log"]

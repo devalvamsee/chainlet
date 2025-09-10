@@ -1,7 +1,7 @@
 local config = import 'min_gas_price.jsonnet';
 
 config {
-  'chainlet_777-1'+: {
+  'chainlet_988-1'+: {
     genesis+: {
       app_state+: {
         feemarket+: {

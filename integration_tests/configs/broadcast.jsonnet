@@ -1,7 +1,7 @@
 local config = import 'default.jsonnet';
 
 config {
-  'chainlet_777-1'+: {
+  'chainlet_988-1'+: {
     validators: [validator {
       client_config: {
         'broadcast-mode': 'sync',

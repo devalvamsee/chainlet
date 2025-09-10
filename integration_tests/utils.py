@@ -518,7 +518,7 @@ def dump_toml(obj):
 class Contract:
     "General contract."
 
-    def __init__(self, contract_path, private_key=KEYS["validator"], chain_id=777):
+    def __init__(self, contract_path, private_key=KEYS["validator"], chain_id=988):
         self.chain_id = chain_id
         self.account = Account.from_key(private_key)
         self.address = self.account.address

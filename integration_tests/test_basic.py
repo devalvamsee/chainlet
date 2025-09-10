@@ -87,7 +87,7 @@ def test_ica_enabled(chainlet, tmp_path):
 
 def test_basic(cluster):
     w3 = cluster.w3
-    assert w3.eth.chain_id == 777
+    assert w3.eth.chain_id == 988
 
 
 def test_send_transaction(cluster):
@@ -319,7 +319,7 @@ def test_local_statesync(chainlet, tmp_path_factory):
     wait_for_block(cli0, 6)
 
     sync_info = get_sync_info(cli0.status())
-    chainlet.supervisorctl("stop", "chainlet_777-1-node0")
+    chainlet.supervisorctl("stop", "chainlet_988-1-node0")
     tarball = cli0.data_dir / "snapshot.tar.gz"
     height = int(sync_info["latest_block_height"])
     # round down to multiples of memiavl.snapshot-interval
@@ -329,7 +329,7 @@ def test_local_statesync(chainlet, tmp_path_factory):
         cli0.export_snapshot(height)
 
     cli0.dump_snapshot(height, tarball)
-    chainlet.supervisorctl("start", "chainlet_777-1-node0")
+    chainlet.supervisorctl("start", "chainlet_988-1-node0")
     wait_for_port(ports.evmrpc_port(chainlet.base_port(0)))
 
     home = tmp_path_factory.mktemp("local_statesync")
@@ -343,7 +343,7 @@ def test_local_statesync(chainlet, tmp_path_factory):
         Path(home),
         node_rpc,
         chainlet.chain_binary,
-        "chainlet_777-1",
+        "chainlet_988-1",
     )
 
     # init the configs

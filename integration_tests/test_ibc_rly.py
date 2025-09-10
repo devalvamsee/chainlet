@@ -245,7 +245,7 @@ def filter_logs_since(w3, start, name, seq):
 
 
 def test_ibc(ibc):
-    # chainmain-1 relayer -> chainlet_777-1 signer2
+    # chainmain-1 relayer -> chainlet_988-1 signer2
     w3 = ibc.chainlet.w3
     wait_for_new_blocks(ibc.chainlet.cosmos_cli(), 1)
     start = w3.eth.get_block_number()

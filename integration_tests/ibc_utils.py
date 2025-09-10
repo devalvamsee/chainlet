@@ -66,7 +66,7 @@ def call_hermes_cmd(
                 "create",
                 "connection",
                 "--a-chain",
-                "chainlet_777-1",
+                "chainlet_988-1",
                 "--b-chain",
                 "chainmain-1",
             ]
@@ -84,7 +84,7 @@ def call_hermes_cmd(
                 "--b-port",
                 "transfer",
                 "--a-chain",
-                "chainlet_777-1",
+                "chainlet_988-1",
                 "--b-chain",
                 "chainmain-1",
                 "--new-client-connection",
@@ -106,7 +106,7 @@ def call_rly_cmd(path, connection_only, incentivized, version, hostchain="chainm
         "rly",
         "pth",
         "new",
-        "chainlet_777-1",
+        "chainlet_988-1",
         hostchain,
         "chainmain-chainlet",
         "--home",
@@ -197,7 +197,7 @@ def prepare_network(
                         "rly",
                         "keys",
                         "restore",
-                        "chainlet_777-1",
+                        "chainlet_988-1",
                         granter_addr,
                         os.getenv("SIGNER1_MNEMONIC"),
                         "--home",
@@ -318,9 +318,9 @@ def assert_ready(ibc):
 
 def hermes_transfer(ibc):
     assert_ready(ibc)
-    # chainmain-1 -> chainlet_777-1
+    # chainmain-1 -> chainlet_988-1
     my_ibc0 = "chainmain-1"
-    my_ibc1 = "chainlet_777-1"
+    my_ibc1 = "chainlet_988-1"
     my_channel = "channel-0"
     dst_addr = eth_to_bech32(ADDRS["signer2"])
     src_amount = 10
@@ -338,9 +338,9 @@ def hermes_transfer(ibc):
 
 
 def rly_transfer(ibc):
-    # chainmain-1 -> chainlet_777-1
+    # chainmain-1 -> chainlet_988-1
     my_ibc0 = "chainmain-1"
-    my_ibc1 = "chainlet_777-1"
+    my_ibc1 = "chainlet_988-1"
     channel = "channel-0"
     dst_addr = eth_to_bech32(ADDRS["signer2"])
     src_amount = 10
@@ -461,7 +461,7 @@ def ibc_multi_transfer(ibc):
     for i, _ in enumerate(users):
         wait_for_fn("assert balance", lambda: assert_trace_balance(addrs1[i]))
 
-    # chainmain-1 -> chainlet_777-1
+    # chainmain-1 -> chainlet_988-1
     amt = amount // 2
 
     def assert_balance(addr):

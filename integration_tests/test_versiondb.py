@@ -80,7 +80,7 @@ def test_versiondb_migration(chainlet: Chainlet):
     print("start all nodes")
     print(
         chainlet.supervisorctl(
-            "start", "chainlet_777-1-node0", "chainlet_777-1-node1", "chainlet_777-1-node2"
+            "start", "chainlet_988-1-node0", "chainlet_988-1-node1", "chainlet_988-1-node2"
         )
     )
     for i in range(len(chainlet.config["validators"])):

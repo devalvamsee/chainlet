@@ -1,7 +1,7 @@
 local config = import 'default.jsonnet';
 
 config {
-  'chainlet_777-1'+: {
+  'chainlet_988-1'+: {
     'app-config'+: {
       'app-db-backend': 'rocksdb',
       'minimum-gas-prices': '100000000000basetcro',

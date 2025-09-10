@@ -1,6 +1,6 @@
 {
   dotenv: '../../scripts/.env',
-  'chainlet_777-1': {
+  'chainlet_988-1': {
     cmd: 'chainletd',
     'start-flags': '--trace',
     config: {
@@ -10,7 +10,7 @@
       },
     },
     'app-config': {
-      chain_id: 'chainlet_777-1',
+      chain_id: 'chainlet_988-1',
       'app-db-backend': 'rocksdb',
       'minimum-gas-prices': '0basetcro',
       'index-events': ['ethereum_tx.ethereumTxHash'],

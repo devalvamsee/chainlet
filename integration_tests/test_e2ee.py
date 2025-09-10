@@ -28,7 +28,7 @@ def gen_validator_identity(chainlet: Chainlet):
         cli.register_e2ee_key(pubkey, _from="validator")
         assert cli.query_e2ee_key(cli.address("validator")) == pubkey
 
-        chainlet.supervisorctl("restart", f"chainlet_777-1-node{i}")
+        chainlet.supervisorctl("restart", f"chainlet_988-1-node{i}")
 
     wait_for_new_blocks(chainlet.cosmos_cli(), 1)
 

@@ -61,7 +61,7 @@ def prepare_gravity(custom_chainlet, custom_geth):
     - deploy gravity contract
     - start orchestrator
     """
-    chain_id = "chainlet_777-1"
+    chain_id = "chainlet_988-1"
     w3 = custom_geth.w3
     # set-delegate-keys
     for i, val in enumerate(custom_chainlet.config["validators"]):

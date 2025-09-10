@@ -421,7 +421,7 @@ func MigrateGenesisCmd() *cobra.Command {
 		Long: fmt.Sprintf(`Migrate the source genesis into the target version and print to STDOUT.
 
 Example:
-$ %s migrate v1.0 /path/to/genesis.json --chain-id=chainlet_777-1 --genesis-time=2019-04-22T17:00:00Z
+$ %s migrate v1.0 /path/to/genesis.json --chain-id=chainlet_988-1 --genesis-time=2019-04-22T17:00:00Z
 `, version.AppName),
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
