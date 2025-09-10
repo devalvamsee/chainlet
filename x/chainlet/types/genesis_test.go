@@ -23,7 +23,7 @@ func TestGenesisStateValidate(t *testing.T) {
 			"valid invalid IBC param",
 			GenesisState{
 				Params: Params{
-					IbcCroDenom: "aaa",
+					IbcCltDenom: "aaa",
 				},
 			},
 			true,

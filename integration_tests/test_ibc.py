@@ -174,7 +174,7 @@ def test_chainlet_transfer_tokens_acknowledgement_error(ibc):
 
 def test_clt_bridge_contract(ibc):
     """
-    test sending clt from chainlet to crypto-org-chain using CroBridge contract.
+    test sending clt from chainlet to crypto-org-chain using CltBridge contract.
     depends on `test_ibc` to send the original coins.
     """
     dst_addr = ibc.chainmain.cosmos_cli().address("signer2")
@@ -183,9 +183,9 @@ def test_clt_bridge_contract(ibc):
     src_amount = dst_amount * RATIO  # the decimal places difference
     old_dst_balance = get_balance(ibc.chainmain, dst_addr, dst_denom)
 
-    # case 2: use CroBridge contract
+    # case 2: use CltBridge contract
     w3 = ibc.chainlet.w3
-    contract = deploy_contract(w3, CONTRACTS["CroBridge"])
+    contract = deploy_contract(w3, CONTRACTS["CltBridge"])
     tx = contract.functions.send_clt_to_crypto_org(dst_addr).build_transaction(
         {
             "from": ADDRS["signer2"],

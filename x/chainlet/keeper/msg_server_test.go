@@ -21,7 +21,7 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 			req: &types.MsgUpdateParams{
 				Authority: authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 				Params: types.Params{
-					IbcCroDenom:          types.IbcCroDenomDefaultValue,
+					IbcCltDenom:          types.IbcCltDenomDefaultValue,
 					IbcTimeout:           10,
 					ChainletAdmin:          sdk.AccAddress(suite.address.Bytes()).String(),
 					EnableAutoDeployment: true,
@@ -43,7 +43,7 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 			req: &types.MsgUpdateParams{
 				Authority: suite.app.ChainletKeeper.GetAuthority(),
 				Params: types.Params{
-					IbcCroDenom:          "foo",
+					IbcCltDenom:          "foo",
 					IbcTimeout:           10,
 					ChainletAdmin:          sdk.AccAddress(suite.address.Bytes()).String(),
 					EnableAutoDeployment: true,
@@ -57,7 +57,7 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 			req: &types.MsgUpdateParams{
 				Authority: suite.app.ChainletKeeper.GetAuthority(),
 				Params: types.Params{
-					IbcCroDenom:          types.IbcCroDenomDefaultValue,
+					IbcCltDenom:          types.IbcCltDenomDefaultValue,
 					IbcTimeout:           10,
 					ChainletAdmin:          "foo",
 					EnableAutoDeployment: true,

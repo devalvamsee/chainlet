@@ -19,21 +19,21 @@ func (suite *ChainletTestSuite) TestInitGenesis() {
 			false,
 		},
 		{
-			"Wrong ibcCroDenom length",
+			"Wrong ibcCltDenom length",
 			func() {},
 			&types.GenesisState{
 				Params: types.Params{
-					IbcCroDenom: "ibc/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD5D19762F541EC971ACB086534",
+					IbcCltDenom: "ibc/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD5D19762F541EC971ACB086534",
 				},
 			},
 			true,
 		},
 		{
-			"Wrong ibcCroDenom prefix",
+			"Wrong ibcCltDenom prefix",
 			func() {},
 			&types.GenesisState{
 				Params: types.Params{
-					IbcCroDenom: "aaa/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD5D19762F541EC971ACB0865",
+					IbcCltDenom: "aaa/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD5D19762F541EC971ACB0865",
 				},
 			},
 			true,
@@ -134,5 +134,5 @@ func (suite *ChainletTestSuite) TestInitGenesis() {
 
 func (suite *ChainletTestSuite) TestExportGenesis() {
 	genesisState := chainlet.ExportGenesis(suite.ctx, suite.app.ChainletKeeper)
-	suite.Require().Equal(genesisState.Params.IbcCroDenom, types.DefaultParams().IbcCroDenom)
+	suite.Require().Equal(genesisState.Params.IbcCltDenom, types.DefaultParams().IbcCltDenom)
 }

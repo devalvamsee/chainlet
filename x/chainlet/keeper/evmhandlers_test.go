@@ -344,7 +344,7 @@ func (suite *KeeperTestSuite) TestSendToIbcV2Handler() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestSendCroToIbcHandler() {
+func (suite *KeeperTestSuite) TestSendCltToIbcHandler() {
 	contract := common.BigToAddress(big.NewInt(1))
 	sender := common.BigToAddress(big.NewInt(2))
 	var data []byte
@@ -361,9 +361,9 @@ func (suite *KeeperTestSuite) TestSendCroToIbcHandler() {
 			func() {
 				coin := sdk.NewCoin(suite.evmParam.EvmDenom, sdkmath.NewInt(10000000000000))
 				topics = []common.Hash{
-					evmhandlers.SendCroToIbcEvent.ID,
+					evmhandlers.SendCltToIbcEvent.ID,
 				}
-				input, err := evmhandlers.SendCroToIbcEvent.Inputs.NonIndexed().Pack(
+				input, err := evmhandlers.SendCltToIbcEvent.Inputs.NonIndexed().Pack(
 					sender,
 					"recipient",
 					coin.Amount.BigInt(),
@@ -385,10 +385,10 @@ func (suite *KeeperTestSuite) TestSendCroToIbcHandler() {
 				suite.Require().Equal(coin, balance)
 
 				// Mint coin for the module
-				err = suite.MintCoinsToModule(types.ModuleName, sdk.NewCoins(sdk.NewCoin(types.IbcCroDenomDefaultValue, sdkmath.NewInt(123))))
+				err = suite.MintCoinsToModule(types.ModuleName, sdk.NewCoins(sdk.NewCoin(types.IbcCltDenomDefaultValue, sdkmath.NewInt(123))))
 				suite.Require().NoError(err)
 				topics = []common.Hash{
-					evmhandlers.SendCroToIbcEvent.ID,
+					evmhandlers.SendCltToIbcEvent.ID,
 				}
 				input, _ := evmhandlers.SendToIbcEvent.Inputs.NonIndexed().Pack(
 					sender,
@@ -399,12 +399,12 @@ func (suite *KeeperTestSuite) TestSendCroToIbcHandler() {
 			},
 			func() {
 				// Verify balance post operation
-				coin := sdk.NewCoin(types.IbcCroDenomDefaultValue, sdkmath.NewInt(0))
-				balance := suite.app.BankKeeper.GetBalance(suite.ctx, sdk.AccAddress(types.ModuleName), types.IbcCroDenomDefaultValue)
+				coin := sdk.NewCoin(types.IbcCltDenomDefaultValue, sdkmath.NewInt(0))
+				balance := suite.app.BankKeeper.GetBalance(suite.ctx, sdk.AccAddress(types.ModuleName), types.IbcCltDenomDefaultValue)
 				suite.Require().Equal(coin, balance)
-				ibcCoin := sdk.NewCoin(types.IbcCroDenomDefaultValue, sdkmath.NewInt(123))
+				ibcCoin := sdk.NewCoin(types.IbcCltDenomDefaultValue, sdkmath.NewInt(123))
 				// As we mock IBC module, we expect the token to be in user balance
-				ibcBalance := suite.app.BankKeeper.GetBalance(suite.ctx, sender.Bytes(), types.IbcCroDenomDefaultValue)
+				ibcBalance := suite.app.BankKeeper.GetBalance(suite.ctx, sender.Bytes(), types.IbcCltDenomDefaultValue)
 				suite.Require().Equal(ibcCoin, ibcBalance)
 				cltCoin := sdk.NewCoin(suite.evmParam.EvmDenom, sdkmath.NewInt(500))
 				cltBalance := suite.app.BankKeeper.GetBalance(suite.ctx, sender.Bytes(), suite.evmParam.EvmDenom)
@@ -428,7 +428,7 @@ func (suite *KeeperTestSuite) TestSendCroToIbcHandler() {
 				suite.app.AccountKeeper,
 				authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 			)
-			handler := evmhandlers.NewSendCroToIbcHandler(suite.app.BankKeeper, chainletKeeper)
+			handler := evmhandlers.NewSendCltToIbcHandler(suite.app.BankKeeper, chainletKeeper)
 			tc.malleate()
 			err := handler.Handle(suite.ctx, contract, topics, data, func(contractAddress common.Address, logSig common.Hash, logData []byte) {})
 			if tc.error != nil {

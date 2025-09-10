@@ -42,7 +42,7 @@ func TestRandomizedGenState(t *testing.T) {
 	var chainletGenesis types.GenesisState
 	simState.Cdc.MustUnmarshalJSON(simState.GenState[types.ModuleName], &chainletGenesis)
 
-	require.Equal(t, "ibc/7939cb6694d2c422acd208a0072939487f6999eb9d18a44784045d87f3c67cf2", chainletGenesis.Params.GetIbcCroDenom())
+	require.Equal(t, "ibc/7939cb6694d2c422acd208a0072939487f6999eb9d18a44784045d87f3c67cf2", chainletGenesis.Params.GetIbcCltDenom())
 	require.Equal(t, uint64(0x68255aaf95e94627), chainletGenesis.Params.GetIbcTimeout())
 	require.Equal(t, "cosmos1tnh2q55v8wyygtt9srz5safamzdengsnqeycj3", chainletGenesis.Params.GetChainletAdmin())
 	require.Equal(t, true, chainletGenesis.Params.GetEnableAutoDeployment())

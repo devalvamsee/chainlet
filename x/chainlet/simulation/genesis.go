@@ -13,14 +13,14 @@ import (
 )
 
 const (
-	ibcCroDenomKey          = "ibc_clt_denom"
+	ibcCltDenomKey          = "ibc_clt_denom"
 	ibcTimeoutKey           = "ibc_timeout"
 	chainletAdminKey          = "chainlet_admin"
 	enableAutoDeploymentKey = "enable_auto_deployment"
 	maxCallbackGasKey       = "max_callback_gas"
 )
 
-func GenIbcCroDenom(r *rand.Rand) string {
+func GenIbcCltDenom(r *rand.Rand) string {
 	randDenom := make([]byte, 32)
 	r.Read(randDenom)
 	return fmt.Sprintf("ibc/%s", hex.EncodeToString(randDenom))
@@ -49,7 +49,7 @@ func GenMaxCallbackGas(r *rand.Rand) uint64 {
 func RandomizedGenState(simState *module.SimulationState) {
 	// chainlet params
 	var (
-		ibcCroDenom          string
+		ibcCltDenom          string
 		ibcTimeout           uint64
 		chainletAdmin          string
 		enableAutoDeployment bool
@@ -57,8 +57,8 @@ func RandomizedGenState(simState *module.SimulationState) {
 	)
 
 	simState.AppParams.GetOrGenerate(
-		ibcCroDenomKey, &ibcCroDenom, simState.Rand,
-		func(r *rand.Rand) { ibcCroDenom = GenIbcCroDenom(r) },
+		ibcCltDenomKey, &ibcCltDenom, simState.Rand,
+		func(r *rand.Rand) { ibcCltDenom = GenIbcCltDenom(r) },
 	)
 
 	simState.AppParams.GetOrGenerate(
@@ -81,7 +81,7 @@ func RandomizedGenState(simState *module.SimulationState) {
 		func(r *rand.Rand) { maxCallbackGas = GenIbcTimeout(r) },
 	)
 
-	params := types.NewParams(ibcCroDenom, ibcTimeout, chainletAdmin, enableAutoDeployment, maxCallbackGas)
+	params := types.NewParams(ibcCltDenom, ibcTimeout, chainletAdmin, enableAutoDeployment, maxCallbackGas)
 	chainletGenesis := &types.GenesisState{
 		Params:            params,
 		ExternalContracts: nil,

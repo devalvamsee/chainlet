@@ -13,22 +13,22 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var _ types.EvmLogHandler = SendCroToIbcHandler{}
+var _ types.EvmLogHandler = SendCltToIbcHandler{}
 
-const SendCroToIbcEventName = "__ChainletSendCroToIbc"
+const SendCltToIbcEventName = "__ChainletSendCltToIbc"
 
-// SendCroToIbcEvent represent the signature of
-// `event __ChainletSendCroToIbc(string recipient, uint256 amount)`
-var SendCroToIbcEvent abi.Event
+// SendCltToIbcEvent represent the signature of
+// `event __ChainletSendCltToIbc(string recipient, uint256 amount)`
+var SendCltToIbcEvent abi.Event
 
 func init() {
 	addressType, _ := abi.NewType("address", "", nil)
 	uint256Type, _ := abi.NewType("uint256", "", nil)
 	stringType, _ := abi.NewType("string", "", nil)
 
-	SendCroToIbcEvent = abi.NewEvent(
-		SendCroToIbcEventName,
-		SendCroToIbcEventName,
+	SendCltToIbcEvent = abi.NewEvent(
+		SendCltToIbcEventName,
+		SendCltToIbcEventName,
 		false,
 		abi.Arguments{abi.Argument{
 			Name:    "sender",
@@ -46,31 +46,31 @@ func init() {
 	)
 }
 
-// SendCroToIbcHandler handles `__ChainletSendCroToIbc` log
-type SendCroToIbcHandler struct {
+// SendCltToIbcHandler handles `__ChainletSendCltToIbc` log
+type SendCltToIbcHandler struct {
 	bankKeeper   types.BankKeeper
 	chainletKeeper chainletkeeper.Keeper
 }
 
-func NewSendCroToIbcHandler(bankKeeper types.BankKeeper, chainletKeeper chainletkeeper.Keeper) *SendCroToIbcHandler {
-	return &SendCroToIbcHandler{
+func NewSendCltToIbcHandler(bankKeeper types.BankKeeper, chainletKeeper chainletkeeper.Keeper) *SendCltToIbcHandler {
+	return &SendCltToIbcHandler{
 		bankKeeper:   bankKeeper,
 		chainletKeeper: chainletKeeper,
 	}
 }
 
-func (h SendCroToIbcHandler) EventID() common.Hash {
-	return SendCroToIbcEvent.ID
+func (h SendCltToIbcHandler) EventID() common.Hash {
+	return SendCltToIbcEvent.ID
 }
 
-func (h SendCroToIbcHandler) Handle(
+func (h SendCltToIbcHandler) Handle(
 	ctx sdk.Context,
 	contract common.Address,
 	topics []common.Hash,
 	data []byte,
 	_ func(contractAddress common.Address, logSig common.Hash, logData []byte),
 ) error {
-	unpacked, err := SendCroToIbcEvent.Inputs.Unpack(data)
+	unpacked, err := SendCltToIbcEvent.Inputs.Unpack(data)
 	if err != nil {
 		// log and ignore
 		h.chainletKeeper.Logger(ctx).Error("log signature matches but failed to decode", "error", err)

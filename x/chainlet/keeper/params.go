@@ -47,15 +47,15 @@ func (k Keeper) GetSourceChannelID(ctx sdk.Context, ibcVoucherDenom string) (cha
 	// remove the ibc
 	hash := strings.Split(ibcVoucherDenom, "/")
 	if len(hash) != 2 {
-		return "", errors.Wrapf(types.ErrIbcCroDenomInvalid, "%s is invalid", ibcVoucherDenom)
+		return "", errors.Wrapf(types.ErrIbcCltDenomInvalid, "%s is invalid", ibcVoucherDenom)
 	}
 	hexDenomBytes, err := transferTypes.ParseHexHash(hash[1])
 	if err != nil {
-		return "", errors.Wrapf(types.ErrIbcCroDenomInvalid, "%s is invalid", ibcVoucherDenom)
+		return "", errors.Wrapf(types.ErrIbcCltDenomInvalid, "%s is invalid", ibcVoucherDenom)
 	}
 	denomTrace, exists := k.transferKeeper.GetDenom(ctx, hexDenomBytes)
 	if !exists {
-		return "", errors.Wrapf(types.ErrIbcCroDenomInvalid, "%s is invalid", ibcVoucherDenom)
+		return "", errors.Wrapf(types.ErrIbcCltDenomInvalid, "%s is invalid", ibcVoucherDenom)
 	}
 
 	// the path has for format port/channelId

@@ -16,7 +16,7 @@ func TestDecodeStore(t *testing.T) {
 	dec := NewDecodeStore()
 
 	contract := common.HexToAddress("0xabc")
-	denom := types.IbcCroDenomDefaultValue
+	denom := types.IbcCltDenomDefaultValue
 
 	kvPairs := kv.Pairs{
 		Pairs: []kv.Pair{

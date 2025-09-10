@@ -691,7 +691,7 @@ func New(
 	app.EvmKeeper.SetHooks(chainletkeeper.NewLogProcessEvmHook(
 		evmhandlers.NewSendToAccountHandler(app.BankKeeper, app.ChainletKeeper),
 		evmhandlers.NewSendToIbcHandler(app.BankKeeper, app.ChainletKeeper),
-		evmhandlers.NewSendCroToIbcHandler(app.BankKeeper, app.ChainletKeeper),
+		evmhandlers.NewSendCltToIbcHandler(app.BankKeeper, app.ChainletKeeper),
 		evmhandlers.NewSendToIbcV2Handler(app.BankKeeper, app.ChainletKeeper),
 	))
 

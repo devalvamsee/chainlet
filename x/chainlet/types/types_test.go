@@ -14,7 +14,7 @@ func Test_IsValidIBCDenom(t *testing.T) {
 	}{
 		{"wrong length", "ibc/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD", false},
 		{"invalid denom", "aaa/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD5D19762F541EC971ACB0865", false},
-		{"correct IBC denom", IbcCroDenomDefaultValue, true},
+		{"correct IBC denom", IbcCltDenomDefaultValue, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -65,7 +65,7 @@ func Test_IsValidCoinDenom(t *testing.T) {
 	}{
 		{"wrong length", "ibc/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD", false},
 		{"invalid denom", "aaa/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD5D19762F541EC971ACB0865", false},
-		{"correct IBC denom", IbcCroDenomDefaultValue, true},
+		{"correct IBC denom", IbcCltDenomDefaultValue, true},
 		{"wrong length", "gravity0x/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD", false},
 		{"invalid denom", "aaa0xb7a4F3E9097C08dA09517b5aB877F7a917224ede", false},
 		{"correct gravity denom", "gravity0xb7a4F3E9097C08dA09517b5aB877F7a917224ede", true},

@@ -219,7 +219,7 @@ func (im IBCConversionModule) convertVouchers(
 
 func (im IBCConversionModule) canBeConverted(ctx sdk.Context, denom string) bool {
 	params := im.chainletkeeper.GetParams(ctx)
-	if denom == params.IbcCroDenom {
+	if denom == params.IbcCltDenom {
 		return true
 	}
 	_, found := im.chainletkeeper.GetContractByDenom(ctx, denom)

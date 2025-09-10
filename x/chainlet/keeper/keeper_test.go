@@ -228,21 +228,21 @@ func (suite *KeeperTestSuite) TestOnRecvVouchers() {
 	}{
 		{
 			"state reverted after error",
-			sdk.NewCoins(sdk.NewCoin(types.IbcCroDenomDefaultValue, sdkmath.NewInt(123)), sdk.NewCoin("bad", sdkmath.NewInt(10))),
+			sdk.NewCoins(sdk.NewCoin(types.IbcCltDenomDefaultValue, sdkmath.NewInt(123)), sdk.NewCoin("bad", sdkmath.NewInt(10))),
 			func() {
-				err := suite.MintCoins(address, sdk.NewCoins(sdk.NewCoin(types.IbcCroDenomDefaultValue, sdkmath.NewInt(123))))
+				err := suite.MintCoins(address, sdk.NewCoins(sdk.NewCoin(types.IbcCltDenomDefaultValue, sdkmath.NewInt(123))))
 				suite.Require().NoError(err)
 				// Verify balance IBC coin pre operation
-				ibcCroCoin := suite.GetBalance(address, types.IbcCroDenomDefaultValue)
-				suite.Require().Equal(sdkmath.NewInt(123), ibcCroCoin.Amount)
+				ibcCltCoin := suite.GetBalance(address, types.IbcCltDenomDefaultValue)
+				suite.Require().Equal(sdkmath.NewInt(123), ibcCltCoin.Amount)
 				// Verify balance EVM coin pre operation
 				evmCoin := suite.GetBalance(address, suite.evmParam.EvmDenom)
 				suite.Require().Equal(sdkmath.NewInt(0), evmCoin.Amount)
 			},
 			func() {
 				// Verify balance IBC coin post operation
-				ibcCroCoin := suite.GetBalance(address, types.IbcCroDenomDefaultValue)
-				suite.Require().Equal(sdkmath.NewInt(123), ibcCroCoin.Amount)
+				ibcCltCoin := suite.GetBalance(address, types.IbcCltDenomDefaultValue)
+				suite.Require().Equal(sdkmath.NewInt(123), ibcCltCoin.Amount)
 				// Verify balance EVM coin post operation
 				evmCoin := suite.GetBalance(address, suite.evmParam.EvmDenom)
 				suite.Require().Equal(sdkmath.NewInt(0), evmCoin.Amount)
@@ -250,21 +250,21 @@ func (suite *KeeperTestSuite) TestOnRecvVouchers() {
 		},
 		{
 			"state committed upon success",
-			sdk.NewCoins(sdk.NewCoin(types.IbcCroDenomDefaultValue, sdkmath.NewInt(123))),
+			sdk.NewCoins(sdk.NewCoin(types.IbcCltDenomDefaultValue, sdkmath.NewInt(123))),
 			func() {
-				err := suite.MintCoins(address, sdk.NewCoins(sdk.NewCoin(types.IbcCroDenomDefaultValue, sdkmath.NewInt(123))))
+				err := suite.MintCoins(address, sdk.NewCoins(sdk.NewCoin(types.IbcCltDenomDefaultValue, sdkmath.NewInt(123))))
 				suite.Require().NoError(err)
 				// Verify balance IBC coin pre operation
-				ibcCroCoin := suite.GetBalance(address, types.IbcCroDenomDefaultValue)
-				suite.Require().Equal(sdkmath.NewInt(123), ibcCroCoin.Amount)
+				ibcCltCoin := suite.GetBalance(address, types.IbcCltDenomDefaultValue)
+				suite.Require().Equal(sdkmath.NewInt(123), ibcCltCoin.Amount)
 				// Verify balance EVM coin pre operation
 				evmCoin := suite.GetBalance(address, suite.evmParam.EvmDenom)
 				suite.Require().Equal(sdkmath.NewInt(0), evmCoin.Amount)
 			},
 			func() {
 				// Verify balance IBC coin post operation
-				ibcCroCoin := suite.GetBalance(address, types.IbcCroDenomDefaultValue)
-				suite.Require().Equal(sdkmath.NewInt(0), ibcCroCoin.Amount)
+				ibcCltCoin := suite.GetBalance(address, types.IbcCltDenomDefaultValue)
+				suite.Require().Equal(sdkmath.NewInt(0), ibcCltCoin.Amount)
 				// Verify balance EVM coin post operation
 				evmCoin := suite.GetBalance(address, suite.evmParam.EvmDenom)
 				suite.Require().Equal(sdkmath.NewInt(1230000000000), evmCoin.Amount)

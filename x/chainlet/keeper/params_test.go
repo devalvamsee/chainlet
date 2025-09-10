@@ -26,7 +26,7 @@ func (suite *KeeperTestSuite) TestGetSourceChannelID() {
 		},
 		{
 			"correct ibc denom",
-			types.IbcCroDenomDefaultValue,
+			types.IbcCltDenomDefaultValue,
 			nil,
 			func(channelID string) {
 				suite.Require().Equal(channelID, "channel-0")

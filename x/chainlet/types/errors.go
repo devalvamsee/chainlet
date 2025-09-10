@@ -7,13 +7,13 @@ import (
 )
 
 const (
-	codeErrIbcCroDenomEmpty = uint32(iota) + 2 // NOTE: code 1 is reserved for internal errors
-	codeErrIbcCroDenomInvalid
+	codeErrIbcCltDenomEmpty = uint32(iota) + 2 // NOTE: code 1 is reserved for internal errors
+	codeErrIbcCltDenomInvalid
 )
 
 // x/chainlet module sentinel errors
 var (
-	ErrIbcCroDenomEmpty   = errors.Register(ModuleName, codeErrIbcCroDenomEmpty, "ibc clt denom is not set")
-	ErrIbcCroDenomInvalid = errors.Register(ModuleName, codeErrIbcCroDenomInvalid, "ibc clt denom is invalid")
+	ErrIbcCltDenomEmpty   = errors.Register(ModuleName, codeErrIbcCltDenomEmpty, "ibc clt denom is not set")
+	ErrIbcCltDenomInvalid = errors.Register(ModuleName, codeErrIbcCltDenomInvalid, "ibc clt denom is invalid")
 	// this line is used by starport scaffolding # ibc/errors
 )

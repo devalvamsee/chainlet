@@ -39,7 +39,7 @@ func (suite *KeeperTestSuite) TestConvertVouchersToEvmCoins() {
 		{
 			"Wrong from address",
 			"test",
-			sdk.NewCoins(sdk.NewCoin(types.IbcCroDenomDefaultValue, sdkmath.NewInt(1))),
+			sdk.NewCoins(sdk.NewCoin(types.IbcCltDenomDefaultValue, sdkmath.NewInt(1))),
 			func() {},
 			errors.New("decoding bech32 failed: invalid bech32 string length 4"),
 			func() {},
@@ -47,7 +47,7 @@ func (suite *KeeperTestSuite) TestConvertVouchersToEvmCoins() {
 		{
 			"Empty address",
 			"",
-			sdk.NewCoins(sdk.NewCoin(types.IbcCroDenomDefaultValue, sdkmath.NewInt(1))),
+			sdk.NewCoins(sdk.NewCoin(types.IbcCltDenomDefaultValue, sdkmath.NewInt(1))),
 			func() {},
 			errors.New("empty address string is not allowed"),
 			func() {},
@@ -63,7 +63,7 @@ func (suite *KeeperTestSuite) TestConvertVouchersToEvmCoins() {
 		{
 			"Correct address with not enough IBC CRO token",
 			address.String(),
-			sdk.NewCoins(sdk.NewCoin(types.IbcCroDenomDefaultValue, sdkmath.NewInt(123))),
+			sdk.NewCoins(sdk.NewCoin(types.IbcCltDenomDefaultValue, sdkmath.NewInt(123))),
 			func() {},
 			errors.New("spendable balance 0ibc/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD5D19762F541EC971ACB0865 is smaller than 123ibc/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD5D19762F541EC971ACB0865: insufficient funds"),
 			func() {},
@@ -71,13 +71,13 @@ func (suite *KeeperTestSuite) TestConvertVouchersToEvmCoins() {
 		{
 			"Correct address with enough IBC CRO token : Should receive CRO tokens",
 			address.String(),
-			sdk.NewCoins(sdk.NewCoin(types.IbcCroDenomDefaultValue, sdkmath.NewInt(123))),
+			sdk.NewCoins(sdk.NewCoin(types.IbcCltDenomDefaultValue, sdkmath.NewInt(123))),
 			func() {
-				err := suite.MintCoins(address, sdk.NewCoins(sdk.NewCoin(types.IbcCroDenomDefaultValue, sdkmath.NewInt(123))))
+				err := suite.MintCoins(address, sdk.NewCoins(sdk.NewCoin(types.IbcCltDenomDefaultValue, sdkmath.NewInt(123))))
 				suite.Require().NoError(err)
 				// Verify balance IBC coin pre operation
-				ibcCroCoin := suite.GetBalance(address, types.IbcCroDenomDefaultValue)
-				suite.Require().Equal(sdkmath.NewInt(123), ibcCroCoin.Amount)
+				ibcCltCoin := suite.GetBalance(address, types.IbcCltDenomDefaultValue)
+				suite.Require().Equal(sdkmath.NewInt(123), ibcCltCoin.Amount)
 				// Verify balance EVM coin pre operation
 				evmCoin := suite.GetBalance(address, suite.evmParam.EvmDenom)
 				suite.Require().Equal(sdkmath.NewInt(0), evmCoin.Amount)
@@ -85,8 +85,8 @@ func (suite *KeeperTestSuite) TestConvertVouchersToEvmCoins() {
 			nil,
 			func() {
 				// Verify balance IBC coin post operation
-				ibcCroCoin := suite.GetBalance(address, types.IbcCroDenomDefaultValue)
-				suite.Require().Equal(sdkmath.NewInt(0), ibcCroCoin.Amount)
+				ibcCltCoin := suite.GetBalance(address, types.IbcCltDenomDefaultValue)
+				suite.Require().Equal(sdkmath.NewInt(0), ibcCltCoin.Amount)
 				// Verify balance EVM coin post operation
 				evmCoin := suite.GetBalance(address, suite.evmParam.EvmDenom)
 				suite.Require().Equal(sdkmath.NewInt(1230000000000), evmCoin.Amount)
@@ -108,14 +108,14 @@ func (suite *KeeperTestSuite) TestConvertVouchersToEvmCoins() {
 				err := suite.MintCoins(address, sdk.NewCoins(sdk.NewCoin(CorrectIbcDenom, sdkmath.NewInt(123))))
 				suite.Require().NoError(err)
 				// Verify balance IBC coin pre operation
-				ibcCroCoin := suite.GetBalance(address, CorrectIbcDenom)
-				suite.Require().Equal(sdkmath.NewInt(123), ibcCroCoin.Amount)
+				ibcCltCoin := suite.GetBalance(address, CorrectIbcDenom)
+				suite.Require().Equal(sdkmath.NewInt(123), ibcCltCoin.Amount)
 			},
 			nil,
 			func() {
 				// Verify balance IBC coin post operation
-				ibcCroCoin := suite.GetBalance(address, CorrectIbcDenom)
-				suite.Require().Equal(sdkmath.NewInt(0), ibcCroCoin.Amount)
+				ibcCltCoin := suite.GetBalance(address, CorrectIbcDenom)
+				suite.Require().Equal(sdkmath.NewInt(0), ibcCltCoin.Amount)
 				// Verify CRC20 balance post operation
 				contract, found := suite.app.ChainletKeeper.GetContractByDenom(suite.ctx, CorrectIbcDenom)
 				suite.Require().True(found)
@@ -227,11 +227,11 @@ func (suite *KeeperTestSuite) TestIbcTransferCoins() {
 				// Mint Coin to user and module
 				err := suite.MintCoins(address, sdk.NewCoins(sdk.NewCoin(suite.evmParam.EvmDenom, sdkmath.NewInt(1230000000000))))
 				suite.Require().NoError(err)
-				err = suite.MintCoinsToModule(types.ModuleName, sdk.NewCoins(sdk.NewCoin(types.IbcCroDenomDefaultValue, sdkmath.NewInt(123))))
+				err = suite.MintCoinsToModule(types.ModuleName, sdk.NewCoins(sdk.NewCoin(types.IbcCltDenomDefaultValue, sdkmath.NewInt(123))))
 				suite.Require().NoError(err)
 				// Verify balance IBC coin pre operation
-				ibcCroCoin := suite.GetBalance(address, types.IbcCroDenomDefaultValue)
-				suite.Require().Equal(sdkmath.NewInt(0), ibcCroCoin.Amount)
+				ibcCltCoin := suite.GetBalance(address, types.IbcCltDenomDefaultValue)
+				suite.Require().Equal(sdkmath.NewInt(0), ibcCltCoin.Amount)
 				// Verify balance EVM coin pre operation
 				evmCoin := suite.GetBalance(address, suite.evmParam.EvmDenom)
 				suite.Require().Equal(sdkmath.NewInt(1230000000000), evmCoin.Amount)
@@ -239,8 +239,8 @@ func (suite *KeeperTestSuite) TestIbcTransferCoins() {
 			nil,
 			func() {
 				// Verify balance IBC coin post operation
-				ibcCroCoin := suite.GetBalance(address, types.IbcCroDenomDefaultValue)
-				suite.Require().Equal(sdkmath.NewInt(123), ibcCroCoin.Amount)
+				ibcCltCoin := suite.GetBalance(address, types.IbcCltDenomDefaultValue)
+				suite.Require().Equal(sdkmath.NewInt(123), ibcCltCoin.Amount)
 				// Verify balance EVM coin post operation
 				evmCoin := suite.GetBalance(address, suite.evmParam.EvmDenom)
 				suite.Require().Equal(sdkmath.NewInt(0), evmCoin.Amount)

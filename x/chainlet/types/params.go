@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	// KeyIbcCroDenom is store's key for the IBC Cro denomination
-	KeyIbcCroDenom = []byte("IbcCroDenom")
+	// KeyIbcCltDenom is store's key for the IBC Clt denomination
+	KeyIbcCltDenom = []byte("IbcCltDenom")
 	// KeyIbcTimeout is store's key for the IBC Timeout
 	KeyIbcTimeout = []byte("IbcTimeout")
 	// KeyChainletAdmin is store's key for the admin address
@@ -23,7 +23,7 @@ var (
 )
 
 const (
-	IbcCroDenomDefaultValue    = "ibc/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD5D19762F541EC971ACB0865"
+	IbcCltDenomDefaultValue    = "ibc/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD5D19762F541EC971ACB0865"
 	IbcTimeoutDefaultValue     = uint64(86400000000000) // 1 day
 	MaxCallbackGasDefaultValue = uint64(50000)
 )
@@ -34,9 +34,9 @@ func ParamKeyTable() paramtypes.KeyTable {
 }
 
 // NewParams creates a new parameter configuration for the chainlet module
-func NewParams(ibcCroDenom string, ibcTimeout uint64, chainletAdmin string, enableAutoDeployment bool, maxCallbackGas uint64) Params {
+func NewParams(ibcCltDenom string, ibcTimeout uint64, chainletAdmin string, enableAutoDeployment bool, maxCallbackGas uint64) Params {
 	return Params{
-		IbcCroDenom:          ibcCroDenom,
+		IbcCltDenom:          ibcCltDenom,
 		IbcTimeout:           ibcTimeout,
 		ChainletAdmin:          chainletAdmin,
 		EnableAutoDeployment: enableAutoDeployment,
@@ -47,7 +47,7 @@ func NewParams(ibcCroDenom string, ibcTimeout uint64, chainletAdmin string, enab
 // DefaultParams is the default parameter configuration for the chainlet module
 func DefaultParams() Params {
 	return Params{
-		IbcCroDenom:          IbcCroDenomDefaultValue,
+		IbcCltDenom:          IbcCltDenomDefaultValue,
 		IbcTimeout:           IbcTimeoutDefaultValue,
 		ChainletAdmin:          "",
 		EnableAutoDeployment: false,
@@ -60,7 +60,7 @@ func (p Params) Validate() error {
 	if err := validateIsUint64(p.IbcTimeout); err != nil {
 		return err
 	}
-	if err := validateIsIbcDenom(p.IbcCroDenom); err != nil {
+	if err := validateIsIbcDenom(p.IbcCltDenom); err != nil {
 		return err
 	}
 	if len(p.ChainletAdmin) > 0 {
@@ -83,7 +83,7 @@ func (p Params) String() string {
 // ParamSetPairs implements params.ParamSet
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 	return paramtypes.ParamSetPairs{
-		paramtypes.NewParamSetPair(KeyIbcCroDenom, &p.IbcCroDenom, validateIsIbcDenom),
+		paramtypes.NewParamSetPair(KeyIbcCltDenom, &p.IbcCltDenom, validateIsIbcDenom),
 		paramtypes.NewParamSetPair(KeyIbcTimeout, &p.IbcTimeout, validateIsUint64),
 		paramtypes.NewParamSetPair(KeyChainletAdmin, &p.ChainletAdmin, validateIsAddress),
 		paramtypes.NewParamSetPair(KeyEnableAutoDeployment, &p.EnableAutoDeployment, validateIsBool),

@@ -53,7 +53,7 @@ TEST_CONTRACTS = {
     "TestERC20Utility": "TestERC20Utility.sol",
     "TestMessageCall": "TestMessageCall.sol",
     "TestBlackListERC20": "TestBlackListERC20.sol",
-    "CroBridge": "CroBridge.sol",
+    "CltBridge": "CltBridge.sol",
     "ChainletGravityCancellation": "ChainletGravityCancellation.sol",
     "TestCRC20": "TestCRC20.sol",
     "TestCRC20Proxy": "TestCRC20Proxy.sol",

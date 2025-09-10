@@ -28,9 +28,9 @@ func (k Keeper) ConvertVouchersToEvmCoins(ctx sdk.Context, from string, coins sd
 	evmParams := k.GetEvmParams(ctx)
 	for _, c := range coins {
 		switch c.Denom {
-		case params.IbcCroDenom:
-			if params.IbcCroDenom == "" {
-				return errorsmod.Wrap(types.ErrIbcCroDenomEmpty, "ibc is disabled")
+		case params.IbcCltDenom:
+			if params.IbcCltDenom == "" {
+				return errorsmod.Wrap(types.ErrIbcCltDenomEmpty, "ibc is disabled")
 			}
 
 			// Send ibc tokens to escrow address
@@ -116,7 +116,7 @@ func (k Keeper) IbcTransferCoins(ctx sdk.Context, from, destination string, coin
 			// Transfer ibc tokens back to the user
 			// We divide by 10^10 to come back to an 8decimals token
 			amount8dec := c.Amount.Quo(sdkmath.NewIntFromBigInt(types.TenPowTen))
-			ibcCoin := sdk.NewCoin(params.IbcCroDenom, amount8dec)
+			ibcCoin := sdk.NewCoin(params.IbcCltDenom, amount8dec)
 			if err := k.bankKeeper.SendCoinsFromModuleToAccount(
 				ctx, types.ModuleName, acc, sdk.NewCoins(ibcCoin),
 			); err != nil {

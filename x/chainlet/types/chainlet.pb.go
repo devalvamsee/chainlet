@@ -25,7 +25,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the chainlet module.
 type Params struct {
-	IbcCroDenom string `protobuf:"bytes,1,opt,name=ibc_clt_denom,json=ibcCroDenom,proto3" json:"ibc_clt_denom,omitempty" yaml:"ibc_clt_denom,omitempty"`
+	IbcCltDenom string `protobuf:"bytes,1,opt,name=ibc_clt_denom,json=ibcCltDenom,proto3" json:"ibc_clt_denom,omitempty" yaml:"ibc_clt_denom,omitempty"`
 	IbcTimeout  uint64 `protobuf:"varint,2,opt,name=ibc_timeout,json=ibcTimeout,proto3" json:"ibc_timeout,omitempty"`
 	// the admin address who can update token mapping
 	ChainletAdmin          string `protobuf:"bytes,3,opt,name=chainlet_admin,json=chainletAdmin,proto3" json:"chainlet_admin,omitempty"`
@@ -65,9 +65,9 @@ func (m *Params) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Params proto.InternalMessageInfo
 
-func (m *Params) GetIbcCroDenom() string {
+func (m *Params) GetIbcCltDenom() string {
 	if m != nil {
-		return m.IbcCroDenom
+		return m.IbcCltDenom
 	}
 	return ""
 }
@@ -284,10 +284,10 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x10
 	}
-	if len(m.IbcCroDenom) > 0 {
-		i -= len(m.IbcCroDenom)
-		copy(dAtA[i:], m.IbcCroDenom)
-		i = encodeVarintChainlet(dAtA, i, uint64(len(m.IbcCroDenom)))
+	if len(m.IbcCltDenom) > 0 {
+		i -= len(m.IbcCltDenom)
+		copy(dAtA[i:], m.IbcCltDenom)
+		i = encodeVarintChainlet(dAtA, i, uint64(len(m.IbcCltDenom)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -411,7 +411,7 @@ func (m *Params) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.IbcCroDenom)
+	l = len(m.IbcCltDenom)
 	if l > 0 {
 		n += 1 + l + sovChainlet(uint64(l))
 	}
@@ -517,7 +517,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IbcCroDenom", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field IbcCltDenom", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -545,7 +545,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.IbcCroDenom = string(dAtA[iNdEx:postIndex])
+			m.IbcCltDenom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {

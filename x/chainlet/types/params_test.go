@@ -23,7 +23,7 @@ func Test_validateIsIbcDenomParam(t *testing.T) {
 
 		{"wrong length", args{"ibc/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD"}, true},
 		{"invalid denom", args{"aaa/6B5A664BF0AF4F71B2F0BAA33141E2F1321242FBD5D19762F541EC971ACB0865"}, true},
-		{"correct IBC denom", args{IbcCroDenomDefaultValue}, false},
+		{"correct IBC denom", args{IbcCltDenomDefaultValue}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

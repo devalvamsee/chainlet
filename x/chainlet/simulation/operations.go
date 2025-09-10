@@ -68,7 +68,7 @@ func SimulateUpdateTokenMapping(ak types.AccountKeeper, bk types.BankKeeper, k *
 			simAccount, _ = simtypes.RandomAcc(r, accs)
 		}
 
-		denom := GenIbcCroDenom(r)
+		denom := GenIbcCltDenom(r)
 		contractBytes := make([]byte, 20)
 		r.Read(contractBytes)
 		contract := common.BytesToAddress(contractBytes).String()
